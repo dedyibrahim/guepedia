@@ -45,7 +45,7 @@ $this->datatables->select('id_file_naskah,'
 $this->datatables->where('file_naskah_penulis.id_account',$this->session->userdata('id_account'));
 $this->datatables->from('file_naskah_penulis');
 $this->datatables->join('kategori_naskah','kategori_naskah.id_kategori_naskah = file_naskah_penulis.id_kategori_naskah');
-$this->datatables->add_column('view','<a class="btn btn-sm btn-danger fa fa-trash " href="'.base_url().'P_produk/hapus_produk/$1"></a>', 'id_produk,base64_encode(id_produk)');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'Halaman_penulis/lihat_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
 return $this->datatables->generate();
 
 

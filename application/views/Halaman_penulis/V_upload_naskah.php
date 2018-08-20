@@ -16,7 +16,7 @@
 <label>Judul :</label>
 <input type="text" id="judul" placeholder="Judul . . ." value="" class="form-control">
 <label>Penulis :</label>
-<input type="text" id="penulis" placeholder="Penulis . . ."  value="" class="form-control">
+<input type="text" id="penulis" placeholder="Penulis . . ."  value="<?php echo $this->session->userdata('nama_lengkap'); ?>" class="form-control">
 <label>File Naskah :</label> <i class="text-right"  style="color:#dc3545;">Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu</i>
 <input type="file" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." class="form-control">
 <label>File Cover :</label> <i class="text-right"  style="color:#dc3545;">Note :Jika ada</i>

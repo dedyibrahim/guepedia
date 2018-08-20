@@ -101,7 +101,9 @@ $data = array(
 'id_kategori_naskah'=> $input['id_kategori_naskah'],
 'file_naskah'       => $file_naskah,
 'file_cover'        => $this->upload->data('file_name'),
-'tanggal_upload'    =>date('d/m/Y'),
+'tanggal_upload'    => date('d/m/Y'),
+'status'           => 'pending',
+    
     );
 
 $this->M_halaman_penulis->simpan_naskah($data);
@@ -117,6 +119,7 @@ $data = array(
 'id_kategori_naskah'=> $input['id_kategori_naskah'],
 'file_naskah'       => $file_naskah,
 'tanggal_upload'    =>date('d/m/Y'),
+'status'           => 'pending',
 );
 
 $this->M_halaman_penulis->simpan_naskah($data);
