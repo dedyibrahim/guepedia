@@ -1,11 +1,4 @@
 
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-
-<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
 <script type="text/javascript">
 $(document).ready(function() {
 $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
@@ -75,7 +68,7 @@ $('td:eq(0)', row).html(index);
 <div class="col" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
 <h4 align="center"> My Project <?php echo $this->session->userdata('nama_lengkap') ?></h4><hr>
 
-<table id="data_file_naskah" class="table table-striped table-condensed table-bordered table-hover table-sm"><thead>
+<table id="data_file_naskah" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
 <th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Tgl Upload</th>

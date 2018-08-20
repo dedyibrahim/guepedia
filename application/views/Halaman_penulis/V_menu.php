@@ -48,7 +48,7 @@
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff; ">
 <span class="fa fa-book fa-4x " style="position:absolute; "> </span>
 <h3 class="text-right">Naskah</h3><br>
-<div class="text-center">0</div>
+<div class="text-center"><?php echo $this->db->get_where('file_naskah_penulis',array('id_account'=>$this->session->userdata('id_account')))->num_rows(); ?></div>
 </div>
 </div>
 
