@@ -107,5 +107,16 @@ $this->load->view('Umum/V_footer');
     
     
 }
+public function lihat_naskah(){
+$query = $this->M_dashboard->lihat_naskah($this->uri->segment(3));    
+
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_lihat_naskah',['data_naskah'=>$query]);
+$this->load->view('Umum/V_footer');
+    
+    
+}
+
 
 }

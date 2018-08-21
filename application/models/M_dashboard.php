@@ -53,7 +53,7 @@ $this->datatables->select('id_file_naskah,'
 
 $this->datatables->from('file_naskah_penulis');
 $this->datatables->join('kategori_naskah','kategori_naskah.id_kategori_naskah = file_naskah_penulis.id_kategori_naskah');
-$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'Halaman_penulis/lihat_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/lihat_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
 return $this->datatables->generate();
 
 
@@ -82,7 +82,18 @@ $this->datatables->select('id_admin,'
 $this->datatables->from('user');
 $this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'Halaman_penulis/lihat_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
 return $this->datatables->generate();
-
-
 }
+
+function lihat_naskah($id_file_naskah){
+ 
+$this->db->select('*');
+$this->db->from('file_naskah_penulis');
+$this->db->where('id_file_naskah',base64_decode($id_file_naskah));
+$this->db->join('kategori_naskah', 'kategori_naskah.id_kategori_naskah = file_naskah_penulis.id_kategori_naskah');
+
+$query = $this->db->get();
+ 
+ return $query;    
+}
+
 }
