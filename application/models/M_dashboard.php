@@ -69,7 +69,7 @@ $this->datatables->select('id_account,'
 );
 
 $this->datatables->from('akun_penulis');
-$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'Halaman_penulis/lihat_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/data_penulis/$1"></a>', 'base64_encode(id_account)');
 return $this->datatables->generate();
 }
 
@@ -94,6 +94,16 @@ $this->db->join('kategori_naskah', 'kategori_naskah.id_kategori_naskah = file_na
 $query = $this->db->get();
  
  return $query;    
+}
+function update_status_naskah($data,$param){
+    
+$this->db->update('file_naskah_penulis',$data,array('id_file_naskah'=> base64_decode($param)));    
+}
+
+function data_penulis($id_account){   
+$query = $this->db->get_where('akun_penulis',array('id_account'=> base64_decode($id_account)));
+
+return $query;
 }
 
 }

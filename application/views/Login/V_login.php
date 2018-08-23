@@ -22,8 +22,16 @@ $("#btn_login").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"   
 var email= $("#email_login").val();    
 var password= $("#password_login").val();     
-
-
+if (email == '' && password == ''){
+ 
+swal({
+title:"", 
+text:"Email atau Password Masih Kosong",
+timer:1500,
+icon:"error",
+button:false,
+}); 
+} else {    
 $.ajax({
 type:"POST",
 url:"<?php echo base_url('G_login/login') ?>",
@@ -56,7 +64,7 @@ location.href = '<?php echo base_url('G_login') ?>';
 }
     
 });
-    
+}    
 });        
 });
 

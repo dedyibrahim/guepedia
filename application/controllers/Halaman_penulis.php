@@ -89,7 +89,14 @@ echo $this->upload->display_errors();
 
 }else{  
 
+    
 $file_naskah = $this->upload->data('file_name');
+
+$config2['upload_path']          = './uploads/file_cover/';
+$config2['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
+$config2['file_size']            = "2004800";
+$config2['encrypt_name']         = TRUE;
+$this->upload->initialize($config2);
 
 if($this->upload->do_upload('file_cover') != NULL){
 
@@ -102,9 +109,8 @@ $data = array(
 'file_naskah'       => $file_naskah,
 'file_cover'        => $this->upload->data('file_name'),
 'tanggal_upload'    => date('d/m/Y'),
-'status'           => 'pending',
-    
-    );
+'status'           => 'Pending',
+ );
 
 $this->M_halaman_penulis->simpan_naskah($data);
 
@@ -119,7 +125,7 @@ $data = array(
 'id_kategori_naskah'=> $input['id_kategori_naskah'],
 'file_naskah'       => $file_naskah,
 'tanggal_upload'    =>date('d/m/Y'),
-'status'           => 'pending',
+'status'           => 'Pending',
 );
 
 $this->M_halaman_penulis->simpan_naskah($data);

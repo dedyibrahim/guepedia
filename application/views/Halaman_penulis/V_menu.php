@@ -20,7 +20,7 @@
 <ul class="menu_penulis">
     <li class="text-center"><a href="<?php echo base_url('Halaman_penulis'); ?>">My Profile <span class="fa fa-user fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('Halaman_penulis/upload_naskah'); ?>">Upload Naskah <span class="fa fa-upload fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('Halaman_penulis/my_project'); ?>">My Project <span class="fa fa-folder-open fa-3x"></span></a></li>   
+<li class="text-center"><a href="<?php echo base_url('Halaman_penulis/my_project'); ?>">Naskah saya <span class="fa fa-folder-open fa-3x"></span></a></li>   
 <li class="text-center"><a href="">Laporan Penjualan <span class="fa fa-bar-chart-o fa-3x"></span></a></li>   
 <li class="text-center"><a href="">With Draw <span class="fa fa-money fa-3x"></span></a></li>   
 <li class="text-center"><a href="">Kontak Cepat <span class="fa fa-comments fa-3x"></span></a></li>   
