@@ -30,7 +30,7 @@ sProcessing: "loading..."
 },
 processing: true,
 serverSide: true,
-ajax: {"url": "<?php echo base_url('G_dashboard/json_user') ?> ", 
+ajax: {"url": "<?php echo base_url('G_dashboard/json_naskah_penulis/'.$this->uri->segment(3)) ?> ", 
 "type": "POST",
 data: function ( d ) {
 d.token = '<?php echo $this->security->get_csrf_hash(); ?>';
@@ -38,12 +38,17 @@ d.token = '<?php echo $this->security->get_csrf_hash(); ?>';
 },
 columns: [
 {
-"data": "id_admin",
+"data": "id_file_naskah",
 "orderable": false
 },
-{"data": "nama_admin"},
-{"data": "email"},
+{"data": "penulis"},
+{"data": "judul"},
+{"data": "harga"},
+{"data": "status"},
+{"data": "tanggal_upload"},
+{"data": "nama_kategori"},
 {"data": "view"},
+
 
 
 ],
@@ -111,7 +116,11 @@ $('td:eq(0)', row).html(index);
 <tr role="row">
 <th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nama Penulis</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Email</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Judul</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Harga</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Status</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Tanggal upload</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Kategori</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
 </thead>
 <tbody align="center">

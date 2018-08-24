@@ -4,7 +4,7 @@ import Util from './util'
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.1.3): dropdown.js
+ * Bootstrap (v4.0.0): dropdown.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -17,7 +17,7 @@ const Dropdown = (($) => {
    */
 
   const NAME                     = 'dropdown'
-  const VERSION                  = '4.1.3'
+  const VERSION                  = '4.0.0'
   const DATA_KEY                 = 'bs.dropdown'
   const EVENT_KEY                = `.${DATA_KEY}`
   const DATA_API_KEY             = '.data-api'
@@ -57,7 +57,7 @@ const Dropdown = (($) => {
     FORM_CHILD    : '.dropdown form',
     MENU          : '.dropdown-menu',
     NAVBAR_NAV    : '.navbar-nav',
-    VISIBLE_ITEMS : '.dropdown-menu .dropdown-item:not(.disabled):not(:disabled)'
+    VISIBLE_ITEMS : '.dropdown-menu .dropdown-item:not(.disabled)'
   }
 
   const AttachmentMap = {
@@ -74,17 +74,13 @@ const Dropdown = (($) => {
   const Default = {
     offset      : 0,
     flip        : true,
-    boundary    : 'scrollParent',
-    reference   : 'toggle',
-    display     : 'dynamic'
+    boundary    : 'scrollParent'
   }
 
   const DefaultType = {
     offset      : '(number|string|function)',
     flip        : 'boolean',
-    boundary    : '(string|element)',
-    reference   : '(string|element)',
-    display     : 'string'
+    boundary    : '(string|element)'
   }
 
   /**
@@ -154,27 +150,20 @@ const Dropdown = (($) => {
         if (typeof Popper === 'undefined') {
           throw new TypeError('Bootstrap dropdown require Popper.js (https://popper.js.org)')
         }
-
-        let referenceElement = this._element
-
-        if (this._config.reference === 'parent') {
-          referenceElement = parent
-        } else if (Util.isElement(this._config.reference)) {
-          referenceElement = this._config.reference
-
-          // Check if it's jQuery element
-          if (typeof this._config.reference.jquery !== 'undefined') {
-            referenceElement = this._config.reference[0]
+        let element = this._element
+        // For dropup with alignment we use the parent as popper container
+        if ($(parent).hasClass(ClassName.DROPUP)) {
+          if ($(this._menu).hasClass(ClassName.MENULEFT) || $(this._menu).hasClass(ClassName.MENURIGHT)) {
+            element = parent
           }
         }
-
         // If boundary is not `scrollParent`, then set position to `static`
         // to allow the menu to "escape" the scroll parent's boundaries
         // https://github.com/twbs/bootstrap/issues/24251
         if (this._config.boundary !== 'scrollParent') {
           $(parent).addClass(ClassName.POSITION_STATIC)
         }
-        this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig())
+        this._popper = new Popper(element, this._menu, this._getPopperConfig())
       }
 
       // If this is a touch-enabled device we add extra
@@ -183,7 +172,7 @@ const Dropdown = (($) => {
       // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
       if ('ontouchstart' in document.documentElement &&
          $(parent).closest(Selector.NAVBAR_NAV).length === 0) {
-        $(document.body).children().on('mouseover', null, $.noop)
+        $('body').children().on('mouseover', null, $.noop)
       }
 
       this._element.focus()
@@ -242,15 +231,13 @@ const Dropdown = (($) => {
     _getMenuElement() {
       if (!this._menu) {
         const parent = Dropdown._getParentFromElement(this._element)
-        if (parent) {
-          this._menu = parent.querySelector(Selector.MENU)
-        }
+        this._menu = $(parent).find(Selector.MENU)[0]
       }
       return this._menu
     }
 
     _getPlacement() {
-      const $parentDropdown = $(this._element.parentNode)
+      const $parentDropdown = $(this._element).parent()
       let placement = AttachmentMap.BOTTOM
 
       // Handle dropup
@@ -286,7 +273,6 @@ const Dropdown = (($) => {
       } else {
         offsetConf.offset = this._config.offset
       }
-
       const popperConfig = {
         placement: this._getPlacement(),
         modifiers: {
@@ -300,12 +286,6 @@ const Dropdown = (($) => {
         }
       }
 
-      // Disable Popper.js if we have a static display
-      if (this._config.display === 'static') {
-        popperConfig.modifiers.applyStyle = {
-          enabled: false
-        }
-      }
       return popperConfig
     }
 
@@ -336,16 +316,12 @@ const Dropdown = (($) => {
         return
       }
 
-      const toggles = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE))
-      for (let i = 0, len = toggles.length; i < len; i++) {
+      const toggles = $.makeArray($(Selector.DATA_TOGGLE))
+      for (let i = 0; i < toggles.length; i++) {
         const parent = Dropdown._getParentFromElement(toggles[i])
         const context = $(toggles[i]).data(DATA_KEY)
         const relatedTarget = {
           relatedTarget: toggles[i]
-        }
-
-        if (event && event.type === 'click') {
-          relatedTarget.clickEvent = event
         }
 
         if (!context) {
@@ -372,7 +348,7 @@ const Dropdown = (($) => {
         // If this is a touch-enabled device we remove the extra
         // empty mouseover listeners we added for iOS support
         if ('ontouchstart' in document.documentElement) {
-          $(document.body).children().off('mouseover', null, $.noop)
+          $('body').children().off('mouseover', null, $.noop)
         }
 
         toggles[i].setAttribute('aria-expanded', 'false')
@@ -389,7 +365,7 @@ const Dropdown = (($) => {
       const selector = Util.getSelectorFromElement(element)
 
       if (selector) {
-        parent = document.querySelector(selector)
+        parent = $(selector)[0]
       }
 
       return parent || element.parentNode
@@ -424,7 +400,7 @@ const Dropdown = (($) => {
       if (!isActive && (event.which !== ESCAPE_KEYCODE || event.which !== SPACE_KEYCODE) ||
            isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
         if (event.which === ESCAPE_KEYCODE) {
-          const toggle = parent.querySelector(Selector.DATA_TOGGLE)
+          const toggle = $(parent).find(Selector.DATA_TOGGLE)[0]
           $(toggle).trigger('focus')
         }
 
@@ -432,7 +408,7 @@ const Dropdown = (($) => {
         return
       }
 
-      const items = [].slice.call(parent.querySelectorAll(Selector.VISIBLE_ITEMS))
+      const items = $(parent).find(Selector.VISIBLE_ITEMS).get()
 
       if (items.length === 0) {
         return

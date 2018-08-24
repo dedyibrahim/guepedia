@@ -2,7 +2,7 @@ import $ from 'jquery'
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.1.3): button.js
+ * Bootstrap (v4.0.0): button.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -15,7 +15,7 @@ const Button = (($) => {
    */
 
   const NAME                = 'button'
-  const VERSION             = '4.1.3'
+  const VERSION             = '4.0.0'
   const DATA_KEY            = 'bs.button'
   const EVENT_KEY           = `.${DATA_KEY}`
   const DATA_API_KEY        = '.data-api'
@@ -68,15 +68,15 @@ const Button = (($) => {
       )[0]
 
       if (rootElement) {
-        const input = this._element.querySelector(Selector.INPUT)
+        const input = $(this._element).find(Selector.INPUT)[0]
 
         if (input) {
           if (input.type === 'radio') {
             if (input.checked &&
-              this._element.classList.contains(ClassName.ACTIVE)) {
+              $(this._element).hasClass(ClassName.ACTIVE)) {
               triggerChangeEvent = false
             } else {
-              const activeElement = rootElement.querySelector(Selector.ACTIVE)
+              const activeElement = $(rootElement).find(Selector.ACTIVE)[0]
 
               if (activeElement) {
                 $(activeElement).removeClass(ClassName.ACTIVE)
@@ -91,7 +91,7 @@ const Button = (($) => {
               rootElement.classList.contains('disabled')) {
               return
             }
-            input.checked = !this._element.classList.contains(ClassName.ACTIVE)
+            input.checked = !$(this._element).hasClass(ClassName.ACTIVE)
             $(input).trigger('change')
           }
 
@@ -102,7 +102,7 @@ const Button = (($) => {
 
       if (addAriaPressed) {
         this._element.setAttribute('aria-pressed',
-          !this._element.classList.contains(ClassName.ACTIVE))
+          !$(this._element).hasClass(ClassName.ACTIVE))
       }
 
       if (triggerChangeEvent) {

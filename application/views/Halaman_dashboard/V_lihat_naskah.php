@@ -15,6 +15,7 @@
 <label>Status: </label>
 <select disabled="" class="form-control" id="status">
     <option><?php echo $data['status'] ?></option>    
+    <option>Tolak</option>    
     <option>Pending</option>    
     <option>Proses</option>    
     <option>Publish</option>    

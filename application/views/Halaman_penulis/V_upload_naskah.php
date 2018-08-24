@@ -10,22 +10,22 @@
 </div>
 
 
-<div class="col-md-7" style="background-color: #eee; margin-left: 1%;  padding:1%; ">
+<div class="col-md-6" style="background-color: #eee; margin-left: 1%;  padding:1%; ">
 <h4  class="text-center">Form upload </h4>
 <hr>   
 <label>Judul :</label>
-<input type="text" id="judul" placeholder="Judul . . ." value="" class="form-control">
+<input type="text" id="judul" placeholder="Judul . . ." value="" class="form-control"  data-toggle="tooltip" title="Judul Buku yang ditulis">
 <label>Penulis :</label>
-<input type="text" id="penulis" placeholder="Penulis . . ."  value="<?php echo $this->session->userdata('nama_lengkap'); ?>" class="form-control">
-<label>File Naskah :</label> <i class="text-right"  style="color:#dc3545;">Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu</i>
-<input type="file" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." class="form-control">
-<label>File Cover :</label> <i class="text-right"  style="color:#dc3545;">Note :Jika ada</i>
-<input type="file" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."class="form-control">
+<input type="text" id="penulis" placeholder="Penulis . . ."  value="<?php echo $this->session->userdata('nama_lengkap'); ?>" class="form-control" data-toggle="tooltip" title="Nama Penulis ">
+<label>File Naskah :</label>
+<input type="file" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." class="form-control" data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu">
+<label>File Cover :</label>
+<input type="file" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."class="form-control" data-toggle="tooltip" title="Note : Jika ada" >
 
 <label>Sinopsis :</label>
-<textarea id="sinopsis" placeholder="Sinopsis . . ." value="" class="form-control"></textarea>
+<textarea id="sinopsis" placeholder="Sinopsis . . ." value="" class="form-control" data-toggle="tooltip" title="Untuk dibelakang Buku dan untuk Promosi"></textarea>
 <label>Kategori :</label>
-<select class="form-control" id="kategori">
+<select class="form-control" id="kategori" data-toggle="tooltip" title="Kategori Buku">
 <?php 
 foreach ($kategori->result_array() as $kate){
 echo "<option value=".$kate['id_kategori_naskah'].">".$kate['nama_kategori']."</option>";    
@@ -35,7 +35,7 @@ echo "<option value=".$kate['id_kategori_naskah'].">".$kate['nama_kategori']."</
 <hr>
 <div class="checkbox">
 <label>
-<input type="checkbox" id="ketentuan"  data-toggle="modal" data-target=".bd-example-modal-lg" value="setuju"  > Saya menyetujui dan mematuhi <a href="syarat_ketentuan.php" target="_blank"><strong><u>syarat dan ketentuan</u></strong></a> dari guepedia.com<br>
+<input type="checkbox" id="ketentuan"  data-toggle="modal" data-target=".bd-example-modal-lg" value="setuju"  > Saya menyetujui dan mematuhi <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><strong><u>syarat dan ketentuan </u></strong></a> ( Perjanjian Guepedia dan Penulis ) dari guepedia.com<br>
 Jika Anda sudah memberikan centang pada pernyataan di atas, kami anggap Anda sudah membaca dan memahami segala syarat dan ketentuan yang diberlakukan di guepedia.com.
 </label>
 </div>
@@ -88,7 +88,7 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Upload produk berhasil",
-timer:1500,
+timer:2000,
 icon:"success",
 button:false,
 }).then(function() {
@@ -100,7 +100,7 @@ swal({
 title:"", 
 html:true,
 text:data,
-timer:1500,
+timer:2000,
 icon:"error",
 button:false,
 }).then(function() {
@@ -119,7 +119,7 @@ swal({
 title:"", 
 text:"Syarat dan ketentuan Belum di pilih.",
 icon:"error",
-timer:1500,
+timer:2000,
 button:false,
 });   
 }
@@ -129,7 +129,7 @@ swal({
 title:"", 
 text:"Masih ada data yg harus di isi",
 icon:"error",
-timer:1500,
+timer:2000,
 button:false,
 });      
 
@@ -145,7 +145,11 @@ window.location="<?php echo base_url('Halaman_penulis/download_tamplate'); ?>"
 });
 
 
+
 });
+
+
+
 </script>    
 </div>
 </div>

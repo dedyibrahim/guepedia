@@ -8,9 +8,9 @@
 </div>
 <div style="background-color:#eee; padding:5%; ">    
 <label>Email :</label>
-<input type="text" class="form-control" value="" id="email_login" placeholder="Masukan Email . . .">
+<input type="text" class="form-control" value="" id="email_login" placeholder="Masukan Email . . ." data-toggle="tooltip" title="Email yang didaftarkan">
 <label>Password :</label>
-<input type="password" class="form-control" value="" id="password_login" placeholder="Masukan Password . . .">
+<input type="password" class="form-control" value="" id="password_login" placeholder="Masukan Password . . ." data-toggle="tooltip" title="Password yang di buat">
 <hr>
 <button class="btn btn-success float-right" id="btn_login" >Sign in <span class="fa fa-sign-in"></span></button>
 <div class="clearfix"></div><br>

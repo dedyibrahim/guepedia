@@ -3,7 +3,7 @@ import Util from './util'
 
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.1.3): alert.js
+ * Bootstrap (v4.0.0): alert.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -16,11 +16,12 @@ const Alert = (($) => {
    */
 
   const NAME                = 'alert'
-  const VERSION             = '4.1.3'
+  const VERSION             = '4.0.0'
   const DATA_KEY            = 'bs.alert'
   const EVENT_KEY           = `.${DATA_KEY}`
   const DATA_API_KEY        = '.data-api'
   const JQUERY_NO_CONFLICT  = $.fn[NAME]
+  const TRANSITION_DURATION = 150
 
   const Selector = {
     DISMISS : '[data-dismiss="alert"]'
@@ -58,11 +59,9 @@ const Alert = (($) => {
     // Public
 
     close(element) {
-      let rootElement = this._element
-      if (element) {
-        rootElement = this._getRootElement(element)
-      }
+      element = element || this._element
 
+      const rootElement = this._getRootElement(element)
       const customEvent = this._triggerCloseEvent(rootElement)
 
       if (customEvent.isDefaultPrevented()) {
@@ -84,7 +83,7 @@ const Alert = (($) => {
       let parent     = false
 
       if (selector) {
-        parent = document.querySelector(selector)
+        parent = $(selector)[0]
       }
 
       if (!parent) {
@@ -104,16 +103,15 @@ const Alert = (($) => {
     _removeElement(element) {
       $(element).removeClass(ClassName.SHOW)
 
-      if (!$(element).hasClass(ClassName.FADE)) {
+      if (!Util.supportsTransitionEnd() ||
+          !$(element).hasClass(ClassName.FADE)) {
         this._destroyElement(element)
         return
       }
 
-      const transitionDuration = Util.getTransitionDurationFromElement(element)
-
       $(element)
         .one(Util.TRANSITION_END, (event) => this._destroyElement(element, event))
-        .emulateTransitionEnd(transitionDuration)
+        .emulateTransitionEnd(TRANSITION_DURATION)
     }
 
     _destroyElement(element) {

@@ -9,19 +9,19 @@
 </div>
 <div style="background-color:#eee; padding:5%; ">    
 <label>Nama Lengkap :</label>
-<input type="text" class="form-control" id="nama_lengkap" value="" placeholder="Nama Lengkap . . . ">
+<input type="text" class="form-control" id="nama_lengkap" value="" placeholder="Nama Lengkap . . . " data-toggle="tooltip" title="Harus sesuai dengan Nama Asli sesuai dengan KTP atau AKTE">
 <label>Nomor Kontak :</label>
-<input type="text" class="form-control" id="nomor_kontak" value="" placeholder="Nomor Kontak . . .">
+<input type="text" class="form-control" id="nomor_kontak" value="" placeholder="Nomor Kontak . . ." data-toggle="tooltip" title="Pastikan Nomor kontak yang dimasukan masih aktif">
 <label>Alamat lengkap :</label>
-<textarea class="form-control" id="alamat_lengkap" value="" placeholder="Alamat lengkap . . ."></textarea>
+<textarea class="form-control" id="alamat_lengkap" value="" placeholder="Alamat lengkap . . ." data-toggle="tooltip" title="Alamat lengkap yang di masukan mencakupi Provinsi,Kota,Kec,Kel,Nama JL/Desa,RT,RW "></textarea>
 <label>Email :</label>
-<input type="text" class="form-control" id="email_daftar" value="" placeholder="Masukan Email . . .">
+<input type="text" class="form-control" id="email_daftar" value="" placeholder="Masukan Email . . ." data-toggle="tooltip" title="Pastikan email yang dimasukan masih aktif karena untuk proses aktivasi akun">
 <label>Password :</label>
-<input type="password" class="form-control" id="password_daftar" value="" placeholder="Masukan Password . . .">
+<input type="password" class="form-control" id="password_daftar" value="" placeholder="Masukan Password . . ." data-toggle="tooltip" title="Catet dengan baik password yang anda buat">
 <label>Ulangi Password :</label>
-<input type="password" class="form-control" id="password_daftar1" value="" placeholder="Masukan ulang Password . . .">
+<input type="password" class="form-control" id="password_daftar1" value="" placeholder="Masukan ulang Password . . ." data-toggle="tooltip" title="Masukan Ulang Password anda">
 <hr>
-<a href="#" id="sudah_punnya" >Sudah punnya akun ?</a>
+<a href="#" id="sudah_punnya" >Sudah punya akun ?</a>
 <button class="btn btn-success float-right" id="btn_daftar">Sign up <span class="fa fa-pencil"></span></button>
 <div class="clearfix"></div><br>
 </div>
@@ -36,11 +36,11 @@
 </div>
 <div style="background-color:#eee; padding:5%; ">    
 <label>Email :</label>
-<input type="text" class="form-control" value="" id="email_login" placeholder="Masukan Email . . .">
+<input type="text" class="form-control" value="" id="email_login" placeholder="Masukan Email . . ." data-toggle="tooltip" title="Email yang didaftarkan">
 <label>Password :</label>
-<input type="password" class="form-control" value="" id="password_login" placeholder="Masukan Password . . .">
+<input type="password" class="form-control" value="" id="password_login" placeholder="Masukan Password . . ." data-toggle="tooltip" title="Password yang di buat">
 <hr>
-<a href="#" id="belum_punnya" >Belum Punnya akun ?</a>
+<a href="#" id="belum_punnya" >Belum Punya akun ?</a>
 <button class="btn btn-success float-right" id="btn_login" >Sign in <span class="fa fa-sign-in"></span></button>
 <div class="clearfix"></div><br>
 </div>

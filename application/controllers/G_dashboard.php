@@ -81,6 +81,10 @@ public function json_user(){
 echo $this->M_dashboard->json_user();       
 }
 
+public function json_naskah_penulis($id_penulis){
+echo $this->M_dashboard->lihat_naskah_penulis($id_penulis);       
+}
+
 public function data_file_naskah(){
 
 $this->load->view('Umum/V_header');
@@ -202,6 +206,32 @@ $this->load->view('Halaman_dashboard/V_menu');
 $this->load->view('Halaman_dashboard/V_data_penulis',['data_penulis'=>$data_penulis]);
 $this->load->view('Umum/V_footer');
 
+
+}
+public function tambah_user(){
+    
+if($this->input->post('nama_admin')){
+
+$input= $this->input->post();
+$data = array(
+'nama_admin'=>$input['nama_admin'],
+'email'     =>$input['email'],
+'password'  => md5($input['password']),
+);
+$this->M_dashboard->simpan_user($data);    
+echo "berhasil";    
+}else{
+    
+redirect(404);   
+    
+}    
+    
+}
+
+public function hapus_user(){
+$id_admin = base64_decode($this->uri->segment(3));
+$this->M_dashboard->hapus_user($id_admin);
+redirect('G_dashboard/user');
 
 }
 

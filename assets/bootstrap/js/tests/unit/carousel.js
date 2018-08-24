@@ -16,7 +16,6 @@ $(function () {
     afterEach: function () {
       $.fn.carousel = $.fn.bootstrapCarousel
       delete $.fn.bootstrapCarousel
-      $('#qunit-fixture').html('')
     }
   })
 

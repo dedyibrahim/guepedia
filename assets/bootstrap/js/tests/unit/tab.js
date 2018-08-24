@@ -16,7 +16,6 @@ $(function () {
     afterEach: function () {
       $.fn.tab = $.fn.bootstrapTab
       delete $.fn.bootstrapTab
-      $('#qunit-fixture').html('')
     }
   })
 

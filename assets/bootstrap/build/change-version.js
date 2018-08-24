@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict'
+
 /*!
  * Script to update version number references in the project.
  * Copyright 2017-2018 The Bootstrap Authors
@@ -7,7 +9,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
-'use strict'
+/* global Set */
 
 const fs = require('fs')
 const path = require('path')
