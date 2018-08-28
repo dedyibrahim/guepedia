@@ -3,7 +3,7 @@
 <?php foreach ($kategori->result_array() as $kate ){ ?>
 <div class="col-lg-3 col-md-6 mb-4">
 <div class="card">
-    <img class="card-img-top" style="max-height:185px;" src="<?php echo base_url('uploads/file_cover/'.$kate['file_cover']) ?>" alt="">
+<img class="card-img-top" style="max-height:185px;" src="<?php echo base_url('uploads/file_cover/'.$kate['file_cover']) ?>" alt="">
 <div class="card-body" >
 <p class="card-text" style="height:50px; text-align: center;"><?php echo $kate['judul'] ?></p>
 </div>
@@ -16,4 +16,11 @@
 </div>
 <?php } ?>
 </div>    
+<hr>
+
+<?php 
+echo $this->pagination->create_links();
+?>
+<div class="clearfix"></div>  
 </div>
+

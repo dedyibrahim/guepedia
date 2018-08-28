@@ -29,9 +29,10 @@ return $query;
 
 }
 
-function lihat_kategori($id_kategori){
+function lihat_kategori($id_kategori,$number,$offset){
 
-$query = $this->db->get_where('file_naskah_penulis',array('id_kategori_naskah'=> base64_decode($id_kategori),'status'=>'Publish'));    
+         $this->db->where(array('id_kategori_naskah'=> base64_decode($id_kategori),'status'=>'Publish')); 
+$query = $this->db->get('file_naskah_penulis',$number,$offset);    
 
     
 return $query;
@@ -47,6 +48,15 @@ $query = $this->db->get('file_naskah_penulis');
 return $query;
    
     
+}
+
+
+function jumlah_buku($id_kategori){
+    
+         $this->db->where('id_kategori_naskah', base64_decode($id_kategori));
+$query = $this->db->get('file_naskah_penulis')->num_rows();    
+
+return $query;
 }
 
 }

@@ -160,6 +160,20 @@ return $query->result();
 }
 
 }
+public function cari_buku($term){
+$this->db->from("file_naskah_penulis");
+$this->db->limit(15);
+$this->db->where('status','Publish');
+$array = array('judul' => $term);
+$this->db->like($array);
+$query = $this->db->get();
+
+if($query->num_rows() >0 ){
+
+return $query->result();
+}
+
+}
 
 function data_penulis($id_account){
     
@@ -187,6 +201,33 @@ $this->db->insert('file_naskah_penulis',$data);
 function hapus_penulis($id_account){
 $this->db->delete('akun_penulis',array('id_account'=> base64_decode($id_account)));    
     
+}
+
+
+function set_laris($data){
+$this->db->insert('buku_terlaris',$data);   
+    
+}
+
+function data_produk_laris(){
+$this->db->select('buku_terlaris.id_file_naskah');
+$this->db->select('judul');
+$this->db->from('buku_terlaris');
+$this->db->join('file_naskah_penulis', 'file_naskah_penulis.id_file_naskah = buku_terlaris.id_file_naskah');
+$query = $this->db->get();
+    
+return $query;    
+}
+
+function hapus_terlaris($param){
+    
+$this->db->delete('buku_terlaris',array('id_file_naskah'=> base64_decode($param)));    
+}
+
+function total_naskah(){
+$query = $this->db->get('file_naskah_penulis');    
+
+return $query;
 }
 
 }

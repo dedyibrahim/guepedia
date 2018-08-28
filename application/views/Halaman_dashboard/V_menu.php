@@ -25,7 +25,7 @@
 <li class="text-center"><a href="">Laporan Penjualan <span class="fa fa-bar-chart-o fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/penulis'); ?>">Penulis <span class="fa fa-users fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/user'); ?>">User <span class="fa fa-user fa-3x"></span></a></li>   
- </ul> 
+</ul> 
 </div>
 
 <div class="container" style="background-color:#eee; border-radius:5px;  margin-top:1%;  ">

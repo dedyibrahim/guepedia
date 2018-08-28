@@ -15,10 +15,11 @@ redirect(base_url());
 
 public function index(){
 $nama_kategori = $this->M_dashboard->kategori_naskah(); 
+$jumlah_naskah = $this->M_dashboard->total_naskah();
 
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
-$this->load->view('Halaman_dashboard/V_kategori',['nama_kategori'=>$nama_kategori]);
+$this->load->view('Halaman_dashboard/V_kategori',['nama_kategori'=>$nama_kategori,'jumlah_naskah','jumlah_naskah'=>$jumlah_naskah]);
 $this->load->view('Umum/V_footer');
 }
 
@@ -316,6 +317,22 @@ $json[]= array(
 
 echo json_encode($json);
 }
+public function cari_buku(){
+$term = strtolower($this->input->get('term'));    
+
+$query = $this->M_dashboard->cari_buku($term);
+
+foreach ($query as $d) {
+$json[]= array(
+'label'                    => $d->judul,   
+'id_file_naskah'           => $d->id_file_naskah,
+);   
+
+}
+
+echo json_encode($json);
+}
+
 
 public function edit_penulis(){
 $id_account = $this->uri->segment(3);
@@ -394,6 +411,48 @@ $id_account = $this->uri->segment(3);
 $this->M_dashboard->hapus_penulis($id_account);
 
 redirect('G_dashboard/penulis');
+}
+
+function pengaturan_toko(){
+
+$produk_laris = $this->M_dashboard->data_produk_laris();
+
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_menu_toko');
+$this->load->view('Halaman_dashboard/V_set_produk_laris',['produk_laris'=>$produk_laris]);
+$this->load->view('Umum/V_footer');
+
+
+}
+
+function set_laris(){
+if($this->input->post('id_file_naskah')){
+    
+$data = array('id_file_naskah'=>$this->input->post('id_file_naskah'));
+
+$this->M_dashboard->set_laris($data);
+
+echo "berhasil";
+}else{
+    
+redirect(404);    
+}    
+    
+}
+function hapus_terlaris(){
+if($this->uri->segment(3) !=''){
+$param = $this->uri->segment(3);
+
+$this->M_dashboard->hapus_terlaris($param);
+ 
+redirect(base_url('G_dashboard/pengaturan_toko'));
+
+}else{
+    
+ redirect(404);    
+}    
+    
 }
 
 }

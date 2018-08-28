@@ -45,10 +45,10 @@
 <div class="col">
 <h5 align="center">Guepedia tersedia di <span class="fa fa-home"></span><hr></h5>
 <ul class="list-inline">
-<li><a href="#"> <img src="<?php echo base_url('assets/img/tokopedia.png') ?>"> Tokopedia.com</a></li>   
-<li><a href="#"> <img src="<?php echo base_url('assets/img/bukalapak.png') ?>">  Bukalapak.com</a></li>   
-<li><a href="#"> <img src="<?php echo base_url('assets/img/lazada.png') ?>">  Lazada.com</a></li>   
-<li><a href="#"> <img src="<?php echo base_url('assets/img/blibli.png') ?>">  Blibli.com</a></li>   
+<li><a href="https://www.tokopedia.com/guepedia"> <img src="<?php echo base_url('assets/img/tokopedia.png') ?>"> Tokopedia.com</a></li>   
+<li><a href="https://www.bukalapak.com/u/guepedia"> <img src="<?php echo base_url('assets/img/bukalapak.png') ?>">  Bukalapak.com</a></li>   
+<li><a href="https://www.lazada.co.id/guepedia/"> <img src="<?php echo base_url('assets/img/lazada.png') ?>">  Lazada.com</a></li>   
+<li><a href="https://www.blibli.com/merchant/guepedia/GUA-29035"> <img src="<?php echo base_url('assets/img/blibli.png') ?>">  Blibli.com</a></li>   
 </ul>
 </div>
 

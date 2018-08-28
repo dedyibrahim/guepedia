@@ -14,27 +14,28 @@
 <div class="col-md-7" style="background-color:#eee; margin-left:1%;  padding:1%;  ">
 <h4 align="center">Data Kategori <span class="fa fa-list"></span></h4><hr>
 <table class="table table-bordered table-condensed table-striped table-sm table-hover">
-    <tr>
-        <th>No</th>
-        <th>Nama Kategori</th>
-        <th>Jumlah Buku</th>
-        <th>Aksi</th>
-    </tr>    
+<tr>
+<th>No</th>
+<th>Nama Kategori</th>
+<th>Jumlah Buku</th>
+<th>Aksi</th>
+</tr>    
 <?php $no=1; foreach ($nama_kategori->result_array() as $kategori){ 
-    
-    $jumlah_buku = $this->db->get_where('file_naskah_penulis',array('id_kategori_naskah'=>$kategori['id_kategori_naskah']))->num_rows();
-    ?>
-    
-    
-    <tr>
-    <td><?php echo $no++ ?></td>
-    <td><?php echo $kategori['nama_kategori'] ?></td>
-    <td><?php echo $jumlah_buku ?></td>
-    <td align="center"><a href="<?php echo base_url('G_dashboard/lihat_kategori/'.base64_encode($kategori['id_kategori_naskah']).'') ?>"><button class="btn btn-success btn-sm"><span class="fa fa-eye"></span></button></a> <a href="<?php echo base_url('G_dashboard/hapus_kategori/'.base64_encode($kategori['id_kategori']).'') ?>"><button class="btn btn-danger btn-sm"><span class="fa fa-close"></span></button></a></td>
-    </tr>
-    
+
+$jumlah_buku = $this->db->get_where('file_naskah_penulis',array('id_kategori_naskah'=>$kategori['id_kategori_naskah']))->num_rows();
+?>
+
+
+<tr>
+<td><?php echo $no++ ?></td>
+<td><?php echo $kategori['nama_kategori'] ?></td>
+<td><?php echo $jumlah_buku ?></td>
+<td align="center"><a href="<?php echo base_url('G_dashboard/lihat_kategori/'.base64_encode($kategori['id_kategori_naskah']).'') ?>"><button class="btn btn-success btn-sm"><span class="fa fa-eye"></span></button></a> <a href="<?php echo base_url('G_dashboard/hapus_kategori/'.base64_encode($kategori['id_kategori']).'') ?>"><button class="btn btn-danger btn-sm"><span class="fa fa-close"></span></button></a></td>
+</tr>
+
 
 <?php } ?>
+<tr><td colspan="2" >Total Naskah</td> <td colspan="2"  ><?php echo $jumlah_naskah->num_rows() ?></td></tr>    
 </table>
 </div>
 </div>
@@ -47,7 +48,7 @@ var nama_kategori = $("#nama_kategori").val();
 
 if(nama_kategori !=''){
 $.ajax({
-    
+
 type:"POST",
 url:"<?php echo base_url('G_dashboard/simpan_kategori') ?>",
 data:"token="+token+"&nama_kategori="+nama_kategori,
@@ -62,12 +63,12 @@ button:false,
 }).then(function() {
 location.href = '<?php echo base_url('G_dashboard') ?>';
 });     
-    
+
 }    
-    
+
 }
 
-    
+
 });
 }else{    
 swal({
@@ -78,7 +79,7 @@ timer:1500,
 button:false,
 })
 }
-    
+
 });    
 });
 
