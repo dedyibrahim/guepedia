@@ -46,6 +46,7 @@ columns: [
 {"data": "nomor_kontak"},
 {"data": "nomor_rekening"},
 {"data": "nama_bank"},
+{"data": "status_akun"},
 {"data": "view"},
 
 
@@ -75,7 +76,8 @@ $('td:eq(0)', row).html(index);
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nomor Kontak</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nomor Rekening</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nama Bank</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
+<th   align="center"     aria-controls="datatable-fixed-header"  >Status</th>
+<th style="width: 15%;" align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
 </thead>
 <tbody align="center">
 </table>

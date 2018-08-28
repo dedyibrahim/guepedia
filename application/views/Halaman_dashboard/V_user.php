@@ -141,9 +141,11 @@ button:false,
 });
 
 </script>    
-<div class="container">
-<div class="col" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-<h4 align="center" class="fa-color"> Tambahkan user Dashboard <span class="fa fa-plus-circle"></span> </h4><hr>
+<div class="container" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;  ">
+    <div class="row">
+    <div class="col-md-6">
+
+ <h4 align="center" class="fa-color"> Tambahkan user Dashboard <span class="fa fa-plus-circle"></span> </h4><hr>
 <label>Nama admin</label>
 <input type="text" class="form-control" value="" name="nama_admin" id="nama_admin" placeholder="Nama admin . . .">
 <label>Email</label>
@@ -155,14 +157,11 @@ button:false,
 <hr>
 <button class="btn btn-success float-right" id="simpan_user">Simpan <span class="fa fa-save"></span></button>
 <div class="clearfix"></div>
-</div>
-</div>
 
-<div class="container">
-<div class="col" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-<h4 align="center" class="fa-color" > Data User </h4><hr>
-
-<table id="data_user" class="table table-striped table-condensed  table-hover table-sm"><thead>
+</div>
+    <div class="col">
+ <h4 align="center" class="fa-color">Data User <span class="fa fa-user"></span> </h4><hr>
+        <table id="data_user" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
 <th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nama User</th>
@@ -171,6 +170,6 @@ button:false,
 </thead>
 <tbody align="center">
 </table>
+    </div>    
+    </div></div>
 
-</div>
-</div>

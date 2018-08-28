@@ -7,6 +7,8 @@
 <h3 align="center"> <span class="fa fa-user fa-2x fa_color"></span><br> My Profile</h3><hr>
 <label>Nama lengkap :</label>
 <input type="text" class="form-control" id="nama_lengkap" readonly="" value="<?php echo $akun['nama_lengkap'] ?>">
+<label>Nama Pena :</label>
+<input type="text" class="form-control" id="nama_pena" readonly="" value="<?php echo $akun['nama_pena'] ?>">
 <label>Nomor kontak :</label>
 <input type="text" class="form-control" id="nomor_kontak" readonly="" value="<?php echo $akun['nomor_kontak'] ?>">
 <label>Alamat lengkap :</label>
@@ -48,6 +50,7 @@ $("#btn_edit").click(function(){
 $("#nama_lengkap").attr("readonly", false);
 $("#nomor_kontak").attr("readonly", false);
 $("#alamat_lengkap").attr("readonly", false);
+$("#nama_pena").attr("readonly", false);
 
 $("#btn_edit").hide(); 
 $("#btn_update").show(); 
@@ -57,12 +60,13 @@ $("#btn_update").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>"   
 
 var nama_lengkap  = $("#nama_lengkap").val();
+var nama_pena     = $("#nama_pena").val();
 var nomor_kontak  = $("#nomor_kontak").val();
 var alamat_lengkap= $("#alamat_lengkap").val();
 $.ajax({
 type:"POST",
 url:"<?php echo base_url('Halaman_penulis/update_penulis') ?>",
-data:"token="+token+"&nama_lengkap="+nama_lengkap+"&nomor_kontak="+nomor_kontak+"&alamat_lengkap="+alamat_lengkap,
+data:"token="+token+"&nama_pena="+nama_pena+"&nama_lengkap="+nama_lengkap+"&nomor_kontak="+nomor_kontak+"&alamat_lengkap="+alamat_lengkap,
 success:function(data){
 if(data == 'berhasil'){
 swal({

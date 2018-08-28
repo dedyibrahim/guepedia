@@ -74,6 +74,9 @@ echo $this->M_dashboard->lihat_kategori();
 public function json_file_naskah(){
 echo $this->M_dashboard->lihat_file_naskah();       
 }
+public function json_file_naskah_publish(){
+echo $this->M_dashboard->lihat_file_naskah_publish();       
+}
 public function json_penulis(){
 echo $this->M_dashboard->json_penulis();       
 }
@@ -114,10 +117,11 @@ $this->load->view('Umum/V_footer');
 }
 public function lihat_naskah(){
 $query = $this->M_dashboard->lihat_naskah($this->uri->segment(3));    
+$kategori = $this->M_dashboard->kategori_naskah();
 
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
-$this->load->view('Halaman_dashboard/V_lihat_naskah',['data_naskah'=>$query]);
+$this->load->view('Halaman_dashboard/V_lihat_naskah',['data_naskah'=>$query,'kategori'=>$kategori]);
 $this->load->view('Umum/V_footer');
     
     
@@ -140,19 +144,69 @@ force_download('./uploads/file_cover/'.$file_naskah['file_cover'], NULL);
     
 }
 
-public function update_status_naskah(){
-
-if($this->input->post('status')){
-$input = $this->input->post();
-$data =array('status'=>$input['status']);
-
+public function update_naskah(){
+ $input= $this->input->post();   
 $param = $input['id_file_naskah'];
+        
+ if($this->input->post('id_file_naskah')){
+  
+ if(!empty($_FILES['file_cover'])){
+$config2['upload_path']          = './uploads/file_cover/';
+$config2['allowed_types']        = 'jpeg|jpg|png|gif';
+$config2['file_size']            = "2004800";
+$config2['encrypt_name']         = TRUE;
+$this->upload->initialize($config2);
 
-$this->M_dashboard->update_status_naskah($data,$param);
-echo "berhasil";
+if(!$this->upload->do_upload('file_cover')){
+echo $this->upload->display_errors();
+}else{
+
+  $data =array(
+  'id_account'      => $input['id_account'],    
+  'penulis'         => $input['penulis'],
+  'status'          => $input['status'],
+  'id_kategori_naskah'=> $input['kategori'],
+  'sinopsis'        => $input['sinopsis'],
+  'judul'           => $input['judul'],
+  'harga'           => $input['harga'],
+  'berat_buku'      => $input['berat'],
+  'jumlah_lembar'   => $input['jumlah_lembar'],
+  'file_cover'      => $this->upload->data('file_name'),
+   );  
+  $this->M_dashboard->update_naskah($data,$param);
+ 
+ if($input['cover_lama'] !='' || $input['cover_lama'] !=NULL){ 
+ unlink('./uploads/file_cover/'.$input['cover_lama']);  
+ }
+ 
+ echo "berhasil";
+ 
+} 
+
+
+}else{ 
+     
+  $data =array(
+  'id_account'      => $input['id_account'],    
+  'penulis'         => $input['penulis'],
+  'status'          => $input['status'],
+  'id_kategori_naskah'=> $input['kategori'],
+  'sinopsis'        => $input['sinopsis'],
+  'judul'           => $input['judul'],
+  'harga'           => $input['harga'],
+  'berat_buku'      => $input['berat'],
+  'jumlah_lembar'   => $input['jumlah_lembar'],
+  );  
+  
+  $this->M_dashboard->update_naskah($data,$param);
+ 
+  echo "berhasil";
+ }   
+    
 }else{
 redirect(404);    
 }
+
 }
 
 
@@ -232,7 +286,114 @@ public function hapus_user(){
 $id_admin = base64_decode($this->uri->segment(3));
 $this->M_dashboard->hapus_user($id_admin);
 redirect('G_dashboard/user');
+}
 
+public function halaman_publish(){
+$kategori = $this->M_dashboard->kategori_naskah();
+    
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_publish_buku',['kategori'=>$kategori]);
+$this->load->view('Halaman_dashboard/V_data_file_publish');
+$this->load->view('Umum/V_footer');
+    
+  
+    
+}
+public function cari_penulis(){
+$term = strtolower($this->input->get('term'));    
+
+$query = $this->M_dashboard->cari_penulis($term);
+
+foreach ($query as $d) {
+$json[]= array(
+'label'                    => $d->nama_lengkap,   
+'email_penulis'            => $d->email,   
+'id_account'               => $d->id_account,
+);   
+
+}
+
+echo json_encode($json);
+}
+
+public function edit_penulis(){
+$id_account = $this->uri->segment(3);
+$query = $this->M_dashboard->data_penulis($id_account);
+
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_edit_penulis',['query'=>$query]);
+$this->load->view('Umum/V_footer');
+    
+  
+}
+
+function update_penulis(){
+    
+ if($this->input->post('status_akun')){
+    $input = $this->input->post();
+    
+    $data= array(
+    'status_akun'=>$input['status_akun']
+    );
+    
+    $this->M_dashboard->update_penulis($data,$input['id_account']); 
+     echo "berhasil";
+     
+ }else{
+     
+     redirect(404);   
+ }   
+    
+}
+
+public function proses_publish(){
+if($this->input->post('id_account')){
+$input = $this->input->post();
+$config2['upload_path']          = './uploads/file_cover/';
+$config2['allowed_types']        = 'jpeg|jpg|png|gif';
+$config2['file_size']            = "2004800";
+$config2['encrypt_name']         = TRUE;
+$this->upload->initialize($config2);
+
+if(!$this->upload->do_upload('file_cover')){
+
+echo $this->upload->display_errors();
+
+}else{    
+
+$data = array(
+'jumlah_lembar'     =>$input['jumlah_lembar'],  
+'judul'              =>$input['judul'],
+'penulis'            =>$input['penulis'],
+'harga'              =>$input['harga'],
+'berat_buku'         =>$input['berat'],
+'status'             =>$input['status'],
+'id_kategori_naskah' =>$input['kategori'],
+'tanggal_upload'     => date('d/m/Y'),
+'sinopsis'           =>$input['sinopsis'],
+'id_account'         =>$input['id_account'],
+'file_cover'         =>$this->upload->data('file_name'),    
+    
+);
+
+$this->M_dashboard->proses_publish($data);
+
+echo "berhasil";
+}
+}else{
+    
+    redirect(404);    
+}
+
+}
+function hapus_penulis(){
+$id_account = $this->uri->segment(3);
+
+$this->M_dashboard->hapus_penulis($id_account);
+
+redirect('G_dashboard/penulis');
 }
 
 }

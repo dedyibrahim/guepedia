@@ -26,8 +26,9 @@ public function update_penulis(){
 if($this->input->post('nama_lengkap')){    
 $input = $this->input->post();
 $data = array(
-'nama_lengkap'=>$input['nama_lengkap'],
-'nomor_kontak'=>$input['nomor_kontak'],
+'nama_pena'     =>$input['nama_pena'],
+'nama_lengkap'  =>$input['nama_lengkap'],
+'nomor_kontak'  =>$input['nomor_kontak'],
 'alamat_lengkap'=>$input['alamat_lengkap'],
 );
 $this->M_halaman_penulis->update_penulis($data,$this->session->userdata('id_account'));

@@ -1,62 +1,109 @@
 <?php $data = $data_naskah->row_array(); ?>
-<div class="container">
-<div class="row" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">    
-<div class="col" >
-<h4 align="center">Lihat Naskah </h4>
-<hr>
+
+<div class="container" style="background-color:#fff; margin-top:1%; ">
+    <div class="clearfix"></div><hr>
+
+<h4 align="center">Publish Buku <span class="fa fa-bookmark-o"></span></h4><hr>
+<div class="clearfix"></div>
+
+<div class="row">
+<div class="col-md-6">
+<label>Id Account:</label>
+<input type="text" disabled="" id="id_account" value="<?php echo $data['id_account'] ?>" class="form-control" >
+
+<input type="hidden" disabled="" id="cover_lama" value="<?php echo $data['file_cover'] ?>" class="form-control" >
+
+
+<label>Penulis:</label>
+<input type="text" readonly="" id="penulis" value="<?php echo $data['penulis'] ?>" class="form-control" placeholder="Penulis . . .">
+
 <label>Judul :</label>
-<input type="text" id="judul" readonly=""  placeholder="Judul . . ." value="<?php echo $data['judul'] ?>" class="form-control">
-<label>Penulis :</label>
-<input type="text" id="penulis" readonly=""  placeholder="Penulis . . ."  value="<?php echo $data['penulis'] ?>" class="form-control">
-<label>Sinopsis :</label>
-<textarea id="sinopsis"  readonly="" placeholder="Sinopsis . . ." value="" class="form-control"><?php echo $data['sinopsis'] ?></textarea>
-<label>Kategori :</label>
-<input type="text" id="kategori" readonly=""  placeholder="Judul Kategori . . " value="<?php echo $data['nama_kategori'] ?>" class="form-control">
-<label>Status: </label>
-<select disabled="" class="form-control" id="status">
-    <option><?php echo $data['status'] ?></option>    
-    <option>Tolak</option>    
-    <option>Pending</option>    
-    <option>Proses</option>    
-    <option>Publish</option>    
+<input type="text" readonly="" id="judul" value="<?php echo $data['judul'] ?>" class="form-control" placeholder="Judul Buku . . .">
+
+<label>Harga :</label>
+<input type="text" readonly="" id="harga" value="<?php echo $data['harga'] ?>" class="form-control" placeholder="Harga Buku . . .">
+
+<label>Berat :</label>
+<input type="text" readonly="" id="berat" value="<?php echo $data['berat_buku'] ?>" class="form-control" placeholder="Berat Buku . . .">
+
+<label>Jumlah Lembar :</label>
+<input type="text" readonly="" id="jumlah_lembar" value="<?php echo $data['jumlah_lembar'] ?>" class="form-control" placeholder="Jumlah Lembar. . .">
+<label>Status :</label>
+<select  class="form-control" disabled="" id="status" value="" placeholder="Status Buku . . .">
+    <option><?php echo $data['status'] ?></option>
+    <option>Pending</option>  
+    <option>Proses</option> 
+    <option>Publish</option>
 </select>
 
-<hr>
-<button class="btn btn-warning float-right" id="edit_status">Edit Status <span class="fa fa-save"></span></button>
-<button style="display: none;" class="btn btn-success float-right" id="update_status">Update Status <span class="fa fa-save"></span></button>
-
-<div style="display:none; "  id="data_publish">
-<label>Berat Buku :</label>
-<input type="text" class="form-control" id="berat_buku" placeholder="Berat . . . ">
-
-<label>Harga Buku :</label>
-<input type="text" class="form-control" id="harga_buku" placeholder="Haga Buku . . . ">
-
-<label>File Cover :</label>
-<input type="file" name="file_cover_jadi" value="" class="form-control" id="file_cover_jadi" placeholder="File Cover . . . ">
-
-
-<hr>
-<button class="btn btn-success float-right" id="publish_buku"> Publish Buku <span class="fa fa-book"></span></button>
-</div>
 
 </div>
-<div class="col-md-6">
-<h4 align="center">File Naskah Dan File Cover</h4>
+    
+<div class="col">
+
+<label>Kategori :</label>
+<select id="kategori" disabled="" value="" class="form-control">
+    <option value="<?php echo $data['id_kategori_naskah'] ?>"><?php echo $data['nama_kategori'] ?></option>   
+<?php foreach ($kategori->result_array() as $kategori){ ?>
+    <option value="<?php echo $kategori['id_kategori_naskah'] ?>"><?php echo $kategori['nama_kategori'] ?></option>
+ <?php } ?>    
+</select>
+
+<label>Sinopsis :</label>
+<textarea   id="sinopsis" readonly="" value="" rows="7" class="form-control"><?php echo $data['sinopsis'] ?></textarea>
+<div class="clearfix"></div>
+
 <hr>
-<h5 align='center'>Download File Naskah</h5>
-<button class="btn btn-success form-control" id="download_naskah">Download Naskah <span class="fa fa-download"></span></button>
-<hr>
-<h5 align='center'>Download File Cover</h5>
-<?php if($data['file_cover'] != NULL){ ?>
-<button class="btn btn-success form-control" id="download_cover">Download Cover <span class="fa fa-download"></span></button>
+<div id="data_cover">
+<?php if(!file_exists('./uploads/file_cover/'.$data['file_cover'])){ ?>
+<h5 align="center" style="color:#900">File cover tidak tersedia</h5>    
+<?php } else if($data['file_cover'] !='' || $data['file_cover']!=NULL){ ?>
+<button class="btn btn-success form-control" id="download_cover">Download cover <span class="fa fa-download"></span></button>
 <?php }else{ ?>
-<h5 align='center' style="color:#d14"> File Cover Tidak Tersedia</h5>
+<h5 align="center" style="color:#900">File cover tidak tersedia</h5>    
 <?php } ?>
 <hr>
-</div> 
-</div>   
 </div>
+
+<div id="data_naskah">
+<?php if(!file_exists('./uploads/dokumen_naskah/'.$data['file_naskah'])){ ?>
+<h5 align="center" style="color:#900">File naskah tidak tersedia</h5>    
+<?php } else if($data['file_naskah'] ==NULL || $data['file_naskah'] == '') {  ?>
+<h5 align="center" style="color:#900">File naskah tidak tersedia</h5>    
+<?php }else{ ?>
+<button class="btn btn-success form-control" id="download_naskah">Download naskah <span class="fa fa-download"></span></button>
+<?php } ?>
+</div>
+
+<div id="input_cover" style="display: none;">
+<label>File Cover :</label>
+<input type="file"  id="file_cover" name="file_cover" value="" class="form-control">    
+</div>
+
+</div> 
+</div>
+<hr>
+<button style="display:none;" class="btn btn-success float-right" id="btn_publish">Publish Buku <span class="fa fa-save"></span></button>
+<button  class="btn btn-warning float-right" id="edit_naskah">Edit Naskah <span class="fa fa-edit"></span></button>
+<div class="clearfix"></div><hr>
+</div>
+<script type="text/javascript">
+$(function () {
+$("#penulis").autocomplete({
+minLength:0,
+delay:0,
+source:'<?php echo site_url('G_dashboard/cari_penulis') ?>',
+select:function(event, ui){
+$('#id_account').val(ui.item.id_account);
+$('#email_penulis').val(ui.item.email_penulis);
+}
+
+}
+);
+});
+
+</script>
+
 <script type="text/javascript">
 $(document).ready(function(){
     
@@ -72,82 +119,64 @@ window.location="<?php echo base_url('G_dashboard/download_cover/'. base64_encod
     
 });
 
-$("#edit_status").click(function(data){
-$("#update_status").show();
-$("#edit_status").hide();
+$("#edit_naskah").click(function(data){
+$("#btn_publish").show();
+$("#edit_naskah").hide();
+$("#penulis").prop("readonly", false);
 $("#status").prop("disabled", false);
-    
+$("#kategori").prop("disabled", false);
+$("#sinopsis").prop("readonly", false); 
+$("#judul").prop("readonly", false); 
+$("#harga").prop("readonly", false); 
+$("#berat").prop("readonly", false); 
+$("#jumlah_lembar").prop("readonly", false); 
+$("#input_naskah").show();
+$("#input_cover").show();
+$("#data_naskah").hide();
+$("#data_cover").hide();
+
 });
 
 
-
-$("#update_status").click(function(){
+$("#btn_publish").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       
-var status = $("#status").val();
-var id_file_naskah ="<?php echo $this->uri->segment(3) ?>"; 
-
-if(status == "Publish"){
-$("#data_publish").show();
-$("#update_status").hide();
-$("#status").prop("disabled", true);
-
-}else{
-$.ajax({
-type:"post",
-url :"<?php echo base_url('G_dashboard/update_status_naskah') ?>",
-data:"token="+token+"&status="+status+"&id_file_naskah="+id_file_naskah,
-success:function(data){       
-if(data == "berhasil"){
-swal({
-title:"", 
-text:"Update Status naskah dengan Judul "+$("#judul").val()+" Berhasil",
-timer:3500,
-icon:"success",
-button:false,
-}).then(function() {
-location.href = '<?php echo base_url('G_dashboard/data_file_naskah')  ?>';
-});    
-    
-} else {
-swal({
-title:"", 
-text:data,
-timer:1500,
-icon:"error",
-button:false,
-});
-   
-}
-
-}
-
-});
-}       
-});
-
-$("#publish_buku").click(function(){
-var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       
-var fileCover  = $('#file_cover_jadi')[0];
-var cover_cek  = $('#file_cover_jadi').val();
-var berat_buku = $("#berat_buku").val();
-var harga_buku = $("#harga_buku").val();
+var file_cover     = $('#file_cover')[0];
 var id_file_naskah = "<?php echo $this->uri->segment(3) ?>";
+var cover_lama     = $("#cover_lama").val();
+var penulis        = $("#penulis").val();
+var status         = $("#status").val();
+var kategori       = $("#kategori").val();
+var sinopsis       = $("#sinopsis").val();
+var judul          = $("#judul").val();
+var harga          = $("#harga").val();
+var berat          = $("#berat").val();
+var jumlah_lembar  = $("#jumlah_lembar").val();
+var id_account     = $("#id_account").val();
+
 var formData = new FormData();
+if(id_file_naskah !='' && id_account !='' && penulis !=''&& status !='' && kategori !='' && sinopsis !='' && judul !='' && harga !='' && berat !='' && jumlah_lembar !=''){
 
-if(cover_cek !='' && berat_buku !='' && harga_buku !=''){
-
-$.each(fileCover.files, function(k,file){   
-formData.append('file_cover_jadi',file);
+$.each(file_cover.files, function(k,file){   
+formData.append('file_cover',file);
 });
 
 formData.append('token',token);
-formData.append('berat_buku',berat_buku);
-formData.append('harga_buku',harga_buku);
 formData.append('id_file_naskah',id_file_naskah);
+formData.append('penulis',penulis);
+formData.append('status',status);
+formData.append('kategori',kategori);
+formData.append('sinopsis',sinopsis);
+formData.append('judul',judul);
+formData.append('harga',harga);
+formData.append('berat',berat);
+formData.append('jumlah_lembar',jumlah_lembar);
+formData.append('id_account',id_account);
+formData.append('cover_lama',cover_lama);
+
 
 $.ajax({
 method: 'POST',
-url:"<?php echo base_url('G_dashboard/publish_buku') ?>",
+url:"<?php echo base_url('G_dashboard/update_naskah') ?>",
 data: formData,
 dataType: 'text',
 contentType: false,
@@ -157,7 +186,7 @@ if(data == "berhasil"){
  swal({
 title:"", 
 html:true,
-text:"Publish produk berhasil",
+text:"Update naskah berhasil",
 timer:2000,
 icon:"success",
 button:false,

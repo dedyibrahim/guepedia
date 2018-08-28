@@ -19,11 +19,13 @@
 <div class="container" style="background-color:#eee; border-radius:0px 0px  10px 10px; border-bottom:4px solid  #2c3e50;">
 <ul class="menu_penulis">
 <li class="text-center"><a href="<?php echo base_url('G_dashboard'); ?>">Kategori <span class="fa fa-book fa-3x"></span></a></li>   
+<li class="text-center"><a href="<?php echo base_url('G_dashboard/pengaturan_toko'); ?>">Toko <span class="fa fa-gears fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/data_file_naskah'); ?>">File Naskah <span class="fa fa-download fa-3x"></span></a></li>   
+<li class="text-center"><a href="<?php echo base_url('G_dashboard/halaman_publish'); ?>">Halaman Publish <span class="fa fa-bookmark-o fa-3x"></span></a></li>   
 <li class="text-center"><a href="">Laporan Penjualan <span class="fa fa-bar-chart-o fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/penulis'); ?>">Penulis <span class="fa fa-users fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/user'); ?>">User <span class="fa fa-user fa-3x"></span></a></li>   
-</ul> 
+ </ul> 
 </div>
 
 <div class="container" style="background-color:#eee; border-radius:5px;  margin-top:1%;  ">

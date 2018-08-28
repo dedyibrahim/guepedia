@@ -105,16 +105,13 @@ $('td:eq(0)', row).html(index);
 </div>
 </div>
 
-
-
-
 <div class="container">
 <div class="col" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
 <h4 align="center"> Data Naskah <?php echo $data['nama_lengkap'] ?></h4><hr>
 
 <table id="data_user" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
-<th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
+<th  align="center"     aria-controls="datatable-fixed-header"   >No</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nama Penulis</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Judul</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Harga</th>

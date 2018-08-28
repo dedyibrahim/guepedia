@@ -1,3 +1,4 @@
+</div>
 <div class="container-fluid" style="background-color:#eee; border-top:4px solid #a8cf45;">
 <div class="container" style="padding:1%; ">
 <div class="row">
@@ -42,11 +43,12 @@
 </div>
 
 <div class="col">
-<h5 align="center">Guepedia tersedia di : <span class="fa fa-home"></span><hr></h5>
+<h5 align="center">Guepedia tersedia di <span class="fa fa-home"></span><hr></h5>
 <ul class="list-inline">
-<li><a href="#">Cara Belanja</a></li>   
-<li><a href="#">Konfirmasi Pembayaran</a></li>   
-<li><a href="#">Menjadi Penulis</a></li>   
+<li><a href="#"> <img src="<?php echo base_url('assets/img/tokopedia.png') ?>"> Tokopedia.com</a></li>   
+<li><a href="#"> <img src="<?php echo base_url('assets/img/bukalapak.png') ?>">  Bukalapak.com</a></li>   
+<li><a href="#"> <img src="<?php echo base_url('assets/img/lazada.png') ?>">  Lazada.com</a></li>   
+<li><a href="#"> <img src="<?php echo base_url('assets/img/blibli.png') ?>">  Blibli.com</a></li>   
 </ul>
 </div>
 
@@ -62,7 +64,7 @@
 </div>
 </div>
 </div>
-<div class="container-fluid" style="background-color:#a8cf45; color:#2c3e50; border-top:4px solid #fff;  ">
+<div class="container-fluid" style="background-color:#a8cf45; color:#2c3e50;">
 <div class="container">
 <div class="navbar-header">
 <a class="navbar-brand" style="color: #2c3e50;" href="<?php echo base_url() ?>">  <span class="fa fa-copyright"></span> 2018  guepedia.com    </a>
