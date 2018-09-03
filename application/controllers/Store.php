@@ -72,16 +72,21 @@ $hasil_cari = $this->M_store->cari_buku($kata_kunci);
 
 echo "<div class='row'>";
 foreach ($hasil_cari->result_array() as $data){
-echo "<div class='col-lg-3 col-md-6 mb-4'>
+    
+echo "
+ <a style='text-decoration:none;' href='".base_url('Store/lihat_buku/'.base64_encode($data['id_file_naskah']))."'>    
+    
+<div class='col-lg-3 col-md-6 mb-4'>
 <div class='card'>
-<img class='card-img-top' style='max-height:185px;' src='".base_url('uploads/file_cover/'.$data['file_cover'])."'alt=''>
-<div class='card-body' >
+<img class='card-img-top cover'  src='".base_url('uploads/file_cover/'.$data['file_cover'])."' alt=''>
+<div class='card-body'>
 <p class='card-text' style='height:50px; text-align: center;'>".$data['judul']."</p>
 </div>
-<hr>
-<h5 align='center'><b>Rp.".number_format($data['harga'])."</b></h5>    
+</a>
 <div class='card-footer'>
-<a href='#' class='btn btn-success fa-color col'>Beli <span class='fa fa-shopping-basket'></span></a>
+<button class='btn btn-success form-control'><b>Rp.".number_format($data['harga'])."</b> <span class='fa fa-shopping-basket '></span></button>    
+
+
 </div>
 </div>
 </div>";
@@ -90,6 +95,17 @@ echo "</div>";
 
 }
 
+function lihat_buku(){
+$id_file_naskah = $this->uri->segment(3);
 
+$query = $this->M_store->data_buku($id_file_naskah);
+    
+
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_lihat_buku',['data'=>$query]);
+$this->load->view('Umum/V_footer_toko');
+
+}
 }
 

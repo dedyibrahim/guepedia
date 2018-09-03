@@ -22,7 +22,7 @@
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/pengaturan_toko'); ?>">Toko <span class="fa fa-gears fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/data_file_naskah'); ?>">File Naskah <span class="fa fa-download fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/halaman_publish'); ?>">Halaman Publish <span class="fa fa-bookmark-o fa-3x"></span></a></li>   
-<li class="text-center"><a href="">Laporan Penjualan <span class="fa fa-bar-chart-o fa-3x"></span></a></li>   
+<li class="text-center"><a href="<?php echo base_url('G_dashboard/laporan_penjualan'); ?>">Laporan Penjualan <span class="fa fa-bar-chart-o fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/penulis'); ?>">Penulis <span class="fa fa-users fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('G_dashboard/user'); ?>">User <span class="fa fa-user fa-3x"></span></a></li>   
 </ul> 
@@ -34,22 +34,34 @@
 <div class="col " style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff;   ">
 <span class="fa fa-shopping-cart fa-4x " style="position:absolute; "> </span>
 <h3 class="text-right">Item</h3><br>
-<div class="text-center">0</div>
+<div class="text-center"><?php echo $this->db->get('data_jumlah_penjualan')->num_rows() ?></div>
 </div>
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff; ">
 <span class="fa fa-money fa-4x " style="position:absolute; "> </span>
 <h3 class="text-right">Total Profit</h3><br>
-<div class="text-center">0</div>
+<div class="text-center">Rp. <?php $query =  $this->db->get('data_penjualan');
+$total_bersih = 0;
+foreach ($query->result_array() as $bersih ){
+ $total_bersih +=$bersih['total_bersih'];   
+}
+echo number_format($total_bersih);
+?></div>
 </div> 
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff;  ">
 <span class="fa fa-magic fa-4x " style="position:absolute; "> </span>
 <h3 class="text-right">Total Royalti</h3><br>
-<div class="text-center">0</div>
+<div class="text-center">Rp. <?php $query =  $this->db->get('data_penjualan');
+$royalti = 0;
+foreach ($query->result_array() as $bersih ){
+ $royalti +=$bersih['total_royalti'];   
+}
+echo number_format($royalti);
+?></div>
 </div> 
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff; ">
 <span class="fa fa-book fa-4x " style="position:absolute; "> </span>
 <h3 class="text-right">Naskah</h3><br>
-<div class="text-center">0</div>
+<div class="text-center"><?php echo $this->db->get_where('file_naskah_penulis',array('status'=>'Publish'))->num_rows() ?></div>
 </div>
 </div>
 

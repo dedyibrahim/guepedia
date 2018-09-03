@@ -21,10 +21,9 @@ function terlaris(){
 $this->db->select('*');
 $this->db->from('buku_terlaris');
 $this->db->join('file_naskah_penulis', 'file_naskah_penulis.id_file_naskah = buku_terlaris.id_file_naskah');
-   $this->db->where('status','Publish');
-   $query = $this->db->get();
-    
-   
+$this->db->where('status','Publish');
+$query = $this->db->get();
+     
 return $query;
 
 }
@@ -52,12 +51,17 @@ return $query;
 
 
 function jumlah_buku($id_kategori){
-    
          $this->db->where('id_kategori_naskah', base64_decode($id_kategori));
 $query = $this->db->get('file_naskah_penulis')->num_rows();    
-
 return $query;
 }
+
+function data_buku($id_file_naskah){
+$query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=> base64_decode($id_file_naskah)));  
+
+return $query;    
+}
+
 
 }
 

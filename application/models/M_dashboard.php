@@ -138,6 +138,20 @@ return $this->datatables->generate();
 
 
 }
+function json_penjualan(){
+$this->datatables->select('id_data_penjualan,'
+.'data_penjualan.no_invoices as no_invoices,'
+.'data_penjualan.nama_customer as nama_customer,'
+.'data_penjualan.tanggal_transaksi as tanggal_transaksi,'
+.'data_penjualan.status_penjualan as status_penjualan,'
+);
+
+$this->datatables->from('data_penjualan');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-print " href="'.base_url().'G_dashboard/print_penjualan/$1"></a>', 'base64_encode(id_data_penjualan)');
+return $this->datatables->generate();
+
+
+}
 function simpan_user($data){
 $this->db->insert('user',$data);    
 
@@ -151,6 +165,19 @@ public function cari_penulis($term){
 $this->db->from("akun_penulis");
 $this->db->limit(15);
 $array = array('nama_lengkap' => $term);
+$this->db->like($array);
+$query = $this->db->get();
+
+if($query->num_rows() >0 ){
+
+return $query->result();
+}
+
+}
+public function cari_customer($term){
+$this->db->from("data_customer");
+$this->db->limit(7);
+$array = array('nama_customer' => $term);
 $this->db->like($array);
 $query = $this->db->get();
 
@@ -228,6 +255,47 @@ function total_naskah(){
 $query = $this->db->get('file_naskah_penulis');    
 
 return $query;
+}
+
+function simpan_penjualan($data){
+    
+$this->db->insert('data_penjualan',$data);    
+}
+
+function file_naskah_penulis($id_file_naskah){
+         $this->db->select('id_account');
+         $this->db->select('id_file_naskah');
+         $this->db->select('judul');
+         $this->db->select('harga');
+         $this->db->select('penulis');
+$query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=>$id_file_naskah));
+
+return $query;
+    
+}
+
+function simpan_customer_baru($data){
+    
+ $this->db->insert('data_customer',$data);   
+}
+
+function hitung_invoices(){
+$query = $this->db->get('data_penjualan')->num_rows();
+
+return $query;
+    
+}
+
+function simpan_data_penjualan($data){
+    
+$this->db->insert('data_penjualan',$data);    
+    
+}
+
+function simpan_jumlah_penjualan($data){
+    
+$this->db->insert('data_jumlah_penjualan',$data);    
+    
 }
 
 }

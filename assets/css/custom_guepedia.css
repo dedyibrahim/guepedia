@@ -236,3 +236,12 @@ display: none;
 .swal-text {
   text-align: center;
 }
+.cover {
+    object-fit: contain;
+    width:252px;height:185px
+ }
+ .cover2 {
+    object-fit: contain;
+    width:348px;
+    height:247px
+ }
