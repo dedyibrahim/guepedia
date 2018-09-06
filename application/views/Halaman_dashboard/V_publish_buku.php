@@ -115,24 +115,19 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Publish produk Berhasil",
-timer:2000,
-icon:"success",
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('G_dashboard/halaman_publish')  ?>';
+window.location.href = '<?php echo base_url('G_dashboard/halaman_publish')  ?>';
 });
 
 } else{
 
 swal({
 title:"", 
-html:true,
 text:data,
-timer:2000,
-icon:"error",
-button:false,
-}).then(function() {
-location.href = '<?php echo base_url('G_dashboard/halaman_publish')  ?>';
+type:"error",
+showConfirmButton: true,
 });
 
 }
@@ -147,9 +142,8 @@ location.href = '<?php echo base_url('G_dashboard/halaman_publish')  ?>';
 swal({
 title:"", 
 text:"Masih ada data yg harus di isi",
-icon:"error",
-timer:2000,
-button:false,
+type:"error",
+showConfirmButton: true,
 });      
 
 }

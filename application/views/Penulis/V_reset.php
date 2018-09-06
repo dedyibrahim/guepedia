@@ -42,11 +42,10 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Email berhasil di reset silahkan login",
-timer:3000,
-icon:"success",
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Penulis') ?>';
 });  
 
 }else{
@@ -55,8 +54,8 @@ swal({
 title:"", 
 text:data,
 timer:3000,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 });  
 
 }
@@ -72,9 +71,8 @@ button:false,
 swal({
 title:"", 
 text:"Password yang di masukan tidak sama",
-timer:3000,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 });    
 
 }
@@ -87,8 +85,8 @@ swal({
 title:"", 
 text:"Masih ada inputan yang kosong",
 timer:3000,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 });   
 
 }

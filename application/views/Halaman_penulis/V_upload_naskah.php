@@ -88,11 +88,10 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Upload produk berhasil",
-timer:2000,
-icon:"success",
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>';
+window.location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>';
 });
 } else{
 
@@ -100,11 +99,10 @@ swal({
 title:"", 
 html:true,
 text:data,
-timer:2000,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>';
+window.location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>';
 });
 
 }
@@ -118,9 +116,8 @@ location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>';
 swal({
 title:"", 
 text:"Syarat dan ketentuan Belum di pilih.",
-icon:"error",
-timer:2000,
-button:false,
+type:"error",
+showConfirmButton: true,
 });   
 }
 
@@ -128,9 +125,8 @@ button:false,
 swal({
 title:"", 
 text:"Masih ada data yg harus di isi",
-icon:"error",
-timer:2000,
-button:false,
+type:"error",
+showConfirmButton: true,
 });      
 
 }

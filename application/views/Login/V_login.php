@@ -27,9 +27,8 @@ if (email == '' && password == ''){
 swal({
 title:"", 
 text:"Email atau Password Masih Kosong",
-timer:1500,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 }); 
 } else {    
 $.ajax({
@@ -41,22 +40,22 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Login berhasil",
-timer:1500,
-icon:"success",
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('G_dashboard') ?>';
-});    
+window.location.href = "<?php echo base_url('G_dashboard') ?>";
+});
+
 }else if(data == "gaada"){    
 
 swal({
 title:"", 
 text:"Email dan password salah",
-timer:1500,
-icon:"error",
+showConfirmButton: true,
+type:"error",
 button:false,
 }).then(function() {
-location.href = '<?php echo base_url('G_login') ?>';
+window.location.href = '<?php echo base_url('G_login') ?>';
 });
 
 }    

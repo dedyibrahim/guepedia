@@ -65,11 +65,10 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Update Status akun "+status_akun,
-icon:"success",
-timer:1500,
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('G_dashboard/penulis') ?>';
+window.location.href = '<?php echo base_url('G_dashboard/penulis') ?>';
 });     
 
 }    

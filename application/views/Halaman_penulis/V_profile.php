@@ -72,11 +72,10 @@ if(data == 'berhasil'){
 swal({
 title:"", 
 text:"Update profile berhasil",
-icon:"success",
-timer:1200,
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Halaman_penulis') ?>';
+window.location.href = '<?php echo base_url('Halaman_penulis') ?>';
 });      
 
 }
@@ -100,20 +99,18 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Rekening berhasil tersimpan",
-icon:"success",
-timer:1500,
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Halaman_penulis') ?>';
+window.location.href = '<?php echo base_url('Halaman_penulis') ?>';
 });     
 
 }else{
 swal({
 title:"", 
 text:"Server error",
-icon:"error",
-timer:1500,
-button:false,
+type:"error",
+showConfirmButton: true,
 });   
 
 } 
@@ -130,9 +127,8 @@ button:false,
 swal({
 title:"", 
 text:"Data rekening harus di isi semua",
-icon:"error",
-timer:1500,
-button:false,
+type:"error",
+showConfirmButton: true,
 });    
 
 }

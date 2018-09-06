@@ -1,5 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH.'libraries/dompdf/autoload.inc.php';
+use Dompdf\Dompdf;
+
 class Halaman_penulis extends CI_Controller {
 function __construct() {
 parent::__construct();
@@ -140,19 +143,153 @@ public function json_file_naskah(){
 echo $this->M_halaman_penulis->json_file_naskah();       
 }
 
-public function my_project(){
-    
+public function my_project(){   
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_penulis/V_menu');
 $this->load->view('Halaman_penulis/V_my_project');
 $this->load->view('Umum/V_footer');
-     
-    
 }
+
+public function tarik_royalti(){
+    
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_penulis/V_menu');
+$this->load->view('Halaman_penulis/V_tarik_royalti');
+$this->load->view('Umum/V_footer');
+        
+}
+public function saldo_royalti(){
+$id_account =  $this->session->userdata('id_account'); 
+
+$saldo_royalti = $this->M_halaman_penulis->saldo_royalti($id_account)->row_array();
+
+echo "Rp. ".number_format($saldo_royalti['royalti_diperoleh']);
+}
+
 public function download_tamplate(){
 
 force_download('./assets/tamplate/tamplateguepedia.zip', NULL);
 
 }
 
+public function input_penarikan(){
+if($this->input->post('jumlah_penarikan') !=''){
+$id_account =  $this->session->userdata('id_account'); 
+    
+$saldo_royalti = $this->M_halaman_penulis->saldo_royalti($id_account)->row_array();
+$input = $this->input->post();
+
+
+if ($saldo_royalti['royalti_diperoleh'] < 10000){
+echo "kurang";    
+
+}else if($input['jumlah_penarikan'] > $saldo_royalti['royalti_diperoleh']){
+
+echo "melebihi";
+
+
+}
+    
+
+
+}else{
+    
+    redirect(404);    
+}
+    
+    
+}
+
+public function hitung_penarikan(){
+if($this->input->post('jumlah_penarikan') !=''){
+    $input = $this->input->post();
+ echo "<label>Jumlah penarikan :</label><br>Rp. ".number_format($input['jumlah_penarikan']);   
+    
+}else{
+redirect(404);    
+}
+    
+}
+public function json_penjualan(){
+echo $this->M_halaman_penulis->json_penjualan();       
+}
+
+public function laporan_penjualan(){
+    
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_penulis/V_menu');
+$this->load->view('Halaman_penulis/V_laporan_penjualan');
+$this->load->view('Umum/V_footer');
+    
+    
+}
+function print_penjualan(){
+
+$id_data_penjualan = base64_decode($this->uri->segment(3));
+$this->db->select('*');
+$this->db->from('data_penjualan');
+$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$wer = array(
+'data_penjualan.id_data_penjualan'=>$id_data_penjualan,
+'data_jumlah_penjualan.id_account_penulis'=>$this->session->userdata('id_account'),    
+);
+$this->db->where($wer);
+
+$data = $this->db->get();
+$data_static = $data->row_array(); 
+
+$html  ="<img src='".base_url('assets/img/logo-toko.png')."'>";
+$html .="<h3 style='position:fixed;' align='center'>PENJUALAN GUEPEDIA <br><b>".$data_static['no_invoices']."</b></h3>";
+$html .="<br><hr>";
+$html .="Nama customer :".$data_static['nama_customer']."<br>";
+$html .="Nomor kontak  :".$data_static['nomor_kontak']."<br>";
+$html .="Alamat lengkap :".$data_static['alamat_lengkap']."<br><br>";
+
+
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
+        . '<tr>'
+        . '<th>Judul Buku</th>'
+        . '<th>Penulis</th>'
+        . '<th>Harga</th>'
+        . '<th>Qty</th>'
+        . '<th>Jumlah</th>'
+        . '<th>Diskon</th>'
+        . '<th>Nilai Diskon</th>'
+        . '<th>Royalti</th>'
+        . '<th>Bersih</th>'
+        . '</tr>';
+
+foreach ($data->result_array() as $penjualan){
+$html .= '<tr>
+<td>' . $penjualan['judul_buku'] . '</td>
+<td>' . $penjualan['nama_penulis'] . '</td>
+<td>Rp.' . number_format($penjualan['harga']) . '</td>
+<td>' . $penjualan['qty'].'</td>
+<td>Rp.' . number_format($penjualan['jumlah']) . '</td>
+<td>' . $penjualan['diskon'] . ' %</td>
+<td>Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
+<td>Rp.' . number_format($penjualan['royalti']) . '</td>
+<td>Rp.' . number_format($penjualan['bersih']) . '</td>
+</tr>';
+}
+
+$html.= '</table>';
+    
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'landscape');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+}
+public function json_transfer_royalti(){
+echo $this->M_halaman_penulis->json_transfer_royalti();       
+}
+public function download_bukti(){
+
+$id_data_transfer = base64_decode($this->uri->segment(3));
+$bukti_transfer = $this->db->get_where('data_transfer_royalti',array('id_data_transfer_royalti'=>$id_data_transfer))->row_array();
+
+
+force_download('./uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer'], NULL);
+}
 }

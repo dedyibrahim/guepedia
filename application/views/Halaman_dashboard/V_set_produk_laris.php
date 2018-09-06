@@ -61,11 +61,10 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Set laris berhasil",
-timer:2000,
-icon:"success",
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function(){
-location.href = '<?php echo base_url('G_dashboard/pengaturan_toko')  ?>';
+window.location.href = '<?php echo base_url('G_dashboard/pengaturan_toko')  ?>';
 });  
     
 }else{
@@ -73,9 +72,8 @@ location.href = '<?php echo base_url('G_dashboard/pengaturan_toko')  ?>';
 swal({
 title:"", 
 text:data,
-timer:2000,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 });   
     
     
@@ -93,9 +91,8 @@ button:false,
 swal({
 title:"", 
 text:"Buku belum terpilih",
-timer:2000,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 });
 
 }

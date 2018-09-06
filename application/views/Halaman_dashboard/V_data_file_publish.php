@@ -64,8 +64,7 @@ $('td:eq(0)', row).html(index);
 
 
 </script>    
-<div class="container">
-<div class="col" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
+<div class="container" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
 <h4 align="center"> File Naskah yang sudah terpublish</h4><hr>
 
 <table id="data_file_naskah" class="table table-striped table-condensed  table-hover table-sm"><thead>
@@ -82,5 +81,4 @@ $('td:eq(0)', row).html(index);
 <tbody align="center">
 </table>
 
-</div>
 </div>

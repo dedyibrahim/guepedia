@@ -17,15 +17,15 @@
 </div>
 </nav>
 <div class="container" style="background-color:#eee; border-radius:0px 0px  10px 10px; border-bottom:4px solid  #2c3e50;">
-<ul class="menu_penulis">
-<li class="text-center"><a href="<?php echo base_url('G_dashboard'); ?>">Kategori <span class="fa fa-book fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('G_dashboard/pengaturan_toko'); ?>">Toko <span class="fa fa-gears fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('G_dashboard/data_file_naskah'); ?>">File Naskah <span class="fa fa-download fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('G_dashboard/halaman_publish'); ?>">Halaman Publish <span class="fa fa-bookmark-o fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('G_dashboard/laporan_penjualan'); ?>">Laporan Penjualan <span class="fa fa-bar-chart-o fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('G_dashboard/penulis'); ?>">Penulis <span class="fa fa-users fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('G_dashboard/user'); ?>">User <span class="fa fa-user fa-3x"></span></a></li>   
-</ul> 
+<div class="row" style="text-align: center;">
+    <div class="col"  ><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard'); ?>"><span class="fa fa-book fa-3x"></span><br> Kategori</a></div>        
+<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/pengaturan_toko'); ?>"> <span class="fa fa-gears fa-3x"></span><br> Pengaturan Toko</a></div>  
+<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/data_file_naskah'); ?>"> <span class="fa fa-download fa-3x"></span><br> File Naskah</a></div>   
+<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/halaman_publish'); ?>"> <span class="fa fa-bookmark-o fa-3x"></span><br> Halaman Publish</a></div>    
+<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/laporan_penjualan'); ?>"> <span class="fa fa-bar-chart-o fa-3x"></span><br> Laporan </a></div>   
+<div class="col"><a style="text-decoration:none;  color: #2c3e50;"  href="<?php echo base_url('G_dashboard/penarikan'); ?>"><span class="fa fa-exchange fa-3x"></span><br> Penarikan</a></div>   
+<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/user'); ?>"> <span class="fa fa-user fa-3x"></span><br> Kontak</a></div>   
+</div>
 </div>
 
 <div class="container" style="background-color:#eee; border-radius:5px;  margin-top:1%;  ">
@@ -42,7 +42,7 @@
 <div class="text-center">Rp. <?php $query =  $this->db->get('data_penjualan');
 $total_bersih = 0;
 foreach ($query->result_array() as $bersih ){
- $total_bersih +=$bersih['total_bersih'];   
+$total_bersih +=$bersih['total_bersih'];   
 }
 echo number_format($total_bersih);
 ?></div>
@@ -50,10 +50,10 @@ echo number_format($total_bersih);
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff;  ">
 <span class="fa fa-magic fa-4x " style="position:absolute; "> </span>
 <h3 class="text-right">Total Royalti</h3><br>
-<div class="text-center">Rp. <?php $query =  $this->db->get('data_penjualan');
+<div class="text-center">Rp. <?php $query =  $this->db->get_where('akun_penulis',array('royalti_diperoleh !='=>'0'));
 $royalti = 0;
 foreach ($query->result_array() as $bersih ){
- $royalti +=$bersih['total_royalti'];   
+$royalti +=$bersih['royalti_diperoleh'];   
 }
 echo number_format($royalti);
 ?></div>

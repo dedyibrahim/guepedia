@@ -185,13 +185,11 @@ success:function(data){
 if(data == "berhasil"){
  swal({
 title:"", 
-html:true,
 text:"Update naskah berhasil",
-timer:2000,
-icon:"success",
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('G_dashboard/data_file_naskah')  ?>';
+window.location.href = '<?php echo base_url('G_dashboard/data_file_naskah')  ?>';
 });
    
     
@@ -201,8 +199,7 @@ swal({
 title:"", 
 text:data,
 icon:"error",
-timer:2000,
-button:false,
+showConfirmButton: true,
 });      
     
 }
@@ -215,9 +212,8 @@ button:false,
 swal({
 title:"", 
 text:"Masih terdapat data yang perlu di isi",
-timer:1500,
 icon:"error",
-button:false,
+showConfirmButton: true,
 });
 
 }

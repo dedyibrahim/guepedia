@@ -144,10 +144,11 @@ $this->datatables->select('id_data_penjualan,'
 .'data_penjualan.nama_customer as nama_customer,'
 .'data_penjualan.tanggal_transaksi as tanggal_transaksi,'
 .'data_penjualan.status_penjualan as status_penjualan,'
+.'data_penjualan.resi_pengiriman as resi_pengiriman,'
 );
 
 $this->datatables->from('data_penjualan');
-$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-print " href="'.base_url().'G_dashboard/print_penjualan/$1"></a>', 'base64_encode(id_data_penjualan)');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-print " href="'.base_url().'G_dashboard/print_penjualan/$1"></a> || <a class="btn btn-sm btn-warning fa fa-print " href="'.base_url().'G_dashboard/cetak_label/$1"> Cetak Label </a> || <button class="btn btn-sm btn-warning fa fa-edit  " onclick=edit_status("$1") > Edit </button>', 'base64_encode(id_data_penjualan)');
 return $this->datatables->generate();
 
 
@@ -205,11 +206,8 @@ return $query->result();
 function data_penulis($id_account){
     
 $query = $this->db->get_where('akun_penulis',array('id_account'=> base64_decode($id_account)));    
-
-if($query->num_rows() > 0){
-    
+  
 return $query;    
-}
 
     
 }
@@ -296,6 +294,81 @@ function simpan_jumlah_penjualan($data){
     
 $this->db->insert('data_jumlah_penjualan',$data);    
     
+}
+
+function update_status_penjualan($data,$id_data_penjualan){
+
+$this->db->update('data_penjualan',$data,array('id_data_penjualan'=> base64_decode($id_data_penjualan)));    
+}
+
+function total_royalti_penulis($id_account){
+$this->db->select('royalti');
+$query =$this->db->get_where('data_jumlah_penjualan',array('id_account_penulis'=> base64_decode($id_account)));
+
+return $query;
+
+}
+
+function total_naskah_penulis($id_account){
+$query =$this->db->get_where('file_naskah_penulis',array('id_account'=> base64_decode($id_account)));
+
+return $query;
+
+}
+
+function json_penjualan_customer($id){
+$this->datatables->select('id_data_jumlah_penjualan,'
+.'data_jumlah_penjualan.no_invoices as no_invoices,'
+.'data_jumlah_penjualan.id_account_penulis as id_account,'
+.'data_penjualan.id_data_penjualan as id_data_penjualan,'
+.'data_penjualan.nama_customer as nama_customer,'
+.'data_jumlah_penjualan.tanggal_transaksi as tanggal_transaksi,'
+.'data_penjualan.status_penjualan as status_penjualan,'
+);
+$this->datatables->where('id_account_penulis', base64_decode($id));
+$this->datatables->group_by('data_penjualan.no_invoices');
+$this->datatables->from('data_penjualan');
+$this->datatables->join('data_jumlah_penjualan','data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-print " href="'.base_url().'G_dashboard/print_penjualan_customer/$1/$2"></a>', 'base64_encode(id_data_penjualan),base64_encode(id_account)');
+return $this->datatables->generate();
+}
+
+
+function json_customer_royalti(){
+$this->datatables->select('id_account,'
+.'akun_penulis.nama_lengkap as nama_lengkap,'
+.'akun_penulis.nomor_kontak as nomor_kontak,'
+.'akun_penulis.email as email,'
+.'akun_penulis.royalti_diperoleh as royalti_diperoleh,'
+);
+$this->datatables->where('royalti_diperoleh !=',0);
+$this->datatables->from('akun_penulis');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-exchange " href="'.base_url().'G_dashboard/buat_transfer/$1"> Buat Transferan</a>', 'base64_encode(id_account)');
+return $this->datatables->generate();
+      
+}
+
+function simpan_transfer($data){
+
+$this->db->insert('data_transfer_royalti',$data);    
+}
+
+function json_transfer_royalti(){
+$this->datatables->select('data_transfer_royalti.id_account,'
+.'data_transfer_royalti.id_data_transfer_royalti as id_data_transfer_royalti,'
+.'data_transfer_royalti.royalti as royalti,'
+.'data_transfer_royalti.biaya_admin as biaya_admin,'
+.'data_transfer_royalti.royalti_bersih as royalti_bersih,'
+.'akun_penulis.nama_lengkap as nama_lengkap,'
+.'akun_penulis.nomor_kontak as nomor_kontak,'
+.'akun_penulis.email as email,'
+        
+);
+$this->datatables->from('data_transfer_royalti');
+$this->datatables->join('akun_penulis','akun_penulis.id_account = data_transfer_royalti.id_account');
+$this->datatables->add_column('view','<button class="btn btn-sm btn-success fa fa-download " onclick=download_bukti("$1") > Download </a>', 'base64_encode(id_data_transfer_royalti)');
+return $this->datatables->generate();
+      
 }
 
 }

@@ -57,11 +57,10 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Kategori berhasil di buat",
-icon:"success",
-timer:1500,
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('G_dashboard') ?>';
+window.location.href = '<?php echo base_url('G_dashboard') ?>';
 });     
 
 }    

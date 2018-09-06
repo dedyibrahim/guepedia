@@ -76,9 +76,8 @@ if(password1 != password){
 swal({
 title:"", 
 text:"Password tidak sesuai",
-icon:"error",
-timer:2000,
-button:false,
+type:"error",
+showConfirmButton: true,
 });
 
 }else{
@@ -93,11 +92,10 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"User berhasil di buat",
-icon:"success",
-timer:2000,
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('G_dashboard/user') ?>';
+window.location.href = '<?php echo base_url('G_dashboard/user') ?>';
 });    
     
 }else{
@@ -105,9 +103,8 @@ location.href = '<?php echo base_url('G_dashboard/user') ?>';
 swal({
 title:"", 
 text:data,
-icon:"error",
-timer:2000,
-button:false,
+type:"error",
+showConfirmButton: true,
 });
     
 }
@@ -128,9 +125,8 @@ button:false,
 swal({
 title:"", 
 text:"Masih ada data yang perlu di isi",
-icon:"error",
-timer:2000,
-button:false,
+type:"error",
+showConfirmButton: true,
 });  
 
 }

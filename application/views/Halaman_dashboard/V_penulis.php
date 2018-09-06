@@ -64,9 +64,8 @@ $('td:eq(0)', row).html(index);
 
 
 </script>    
-<div class="container">
-<div class="col" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-<h4 align="center"> Data customer </h4><hr>
+<div class="container" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
+<h4 align="center"> Data Penulis </h4><hr>
 
 <table id="data_penulis" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
@@ -82,5 +81,4 @@ $('td:eq(0)', row).html(index);
 <tbody align="center">
 </table>
 
-</div>
 </div>

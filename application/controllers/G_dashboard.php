@@ -96,6 +96,13 @@ public function json_penjualan(){
 echo $this->M_dashboard->json_penjualan();       
 }
 
+public function json_customer_royalti(){
+echo $this->M_dashboard->json_customer_royalti();       
+}
+
+public function json_transfer_royalti(){
+echo $this->M_dashboard->json_transfer_royalti();       
+}
 public function data_file_naskah(){
 
 $this->load->view('Umum/V_header');
@@ -119,6 +126,7 @@ public function user(){
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
 $this->load->view('Halaman_dashboard/V_user');
+$this->load->view('Halaman_dashboard/V_penulis');
 $this->load->view('Umum/V_footer');
 
 
@@ -260,12 +268,14 @@ redirect(404);
 }
 
 public function data_penulis(){
-$id_account = $this->uri->segment(3);
-$data_penulis = $this->M_dashboard->data_penulis($id_account);    
+$id_account    = $this->uri->segment(3);
+$data_penulis  = $this->M_dashboard->data_penulis($id_account);    
+$total_royalti = $this->M_dashboard->total_royalti_penulis($id_account);
+$total_naskah  = $this->M_dashboard->total_naskah_penulis($id_account);
 
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
-$this->load->view('Halaman_dashboard/V_data_penulis',['data_penulis'=>$data_penulis]);
+$this->load->view('Halaman_dashboard/V_data_penulis',['data_penulis'=>$data_penulis,'total_royalti'=>$total_royalti,'total_naskah'=>$total_naskah]);
 $this->load->view('Umum/V_footer');
 
 
@@ -928,8 +938,8 @@ $data1 = array(
 'jumlah_diskon'         => $this->session->userdata('nilai_diskon'),
 'total_royalti'         => $this->session->userdata('royalti'),
 'bersih'                => $this->session->userdata('bersih'),
-'status_penjualan'      => 'Selesai',    
-);
+'status_penjualan'      => 'Pending',
+ );
 
 $this->M_dashboard->simpan_data_penjualan($data1);
 
@@ -950,6 +960,8 @@ $data2 = array (
 'nilai_diskon'          => $data[$i]['nilai_diskon'],
 'royalti'               => $data[$i]['royalti'],
 'bersih'                => $data[$i]['bersih'],
+'tanggal_transaksi'     => date('d/m/Y'),
+    
 );    
 
 $this->M_dashboard->simpan_jumlah_penjualan($data2);
@@ -1091,4 +1103,261 @@ $dompdf->stream('INV.pdf',array('Attachment'=>0));
     
 }
 
+
+public function buat_laporan(){
+if ($this->input->post('dates')){
+    
+$tanggal = $this->input->post('dates');
+$range = explode(' ', $tanggal);
+
+$this->db->select('*');
+$this->db->where(array('data_jumlah_penjualan.tanggal_transaksi >='=>$range[0],'data_jumlah_penjualan.tanggal_transaksi <='=>$range[2]));
+$this->db->from('data_penjualan');
+$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$query = $this->db->get();
+
+$html  = "<h2 align='center'>Laporan penjualan <br>".$tanggal."</h2>";
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
+        . '<tr>'
+        . '<th>No invoices</th>'
+        . '<th>Customer</th>'
+        . '<th>Tanggal</th>'
+        . '<th>Judul Buku</th>'
+        . '<th>Penulis</th>'
+        . '<th>Harga</th>'
+        . '<th>Qty</th>'
+        . '<th>Jumlah</th>'
+        . '<th>Diskon</th>'
+        . '<th>Nilai Diskon</th>'
+        . '<th>Royalti</th>'
+        . '<th>Bersih</th>'
+        . '</tr>';
+
+
+foreach ($query->result_array() as $penjualan){
+$html .= '<tr>
+<td>' . $penjualan['no_invoices'] . '</td>
+<td>' . $penjualan['nama_customer'] . '</td>
+<td>' . $penjualan['tanggal_transaksi'] . '</td>
+<td>' . $penjualan['judul_buku'] . '</td>
+<td>' . $penjualan['nama_penulis'] . '</td>
+<td>Rp.' . number_format($penjualan['harga']) . '</td>
+<td>' . $penjualan['qty'].'</td>
+<td>Rp.' . number_format($penjualan['jumlah']) . '</td>
+<td>' . $penjualan['diskon'] . ' %</td>
+<td>Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
+<td>Rp.' . number_format($penjualan['royalti']) . '</td>
+<td>Rp.' . number_format($penjualan['bersih']) . '</td>
+</tr>';
+}
+
+$html .="</table>";
+
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'landscape');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+   
+
+}else{
+redirect(404);    
+}
+    
+}
+
+function cetak_label(){
+
+$id_data_penjualan = base64_decode($this->uri->segment(3));
+$this->db->select('*');
+$this->db->from('data_penjualan');
+$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$this->db->where('data_penjualan.id_data_penjualan',$id_data_penjualan);
+$data = $this->db->get();
+$data_static = $data->row_array(); 
+  
+    
+$html  ="<img src='".base_url('assets/img/logo-toko.png')."'>";
+$html .="<br><hr>";
+
+$html .="<h3 style='position:fixed;' align='center'> ALAMAT PENGIRIMAN <br><b>".$data_static['no_invoices']."</h3></b>";
+
+$html .="<h3 align ='center'> DARI : </h3>";
+$html .="<h4 align='center'> Bukit Golf Arcadia Blok A4 / 05 Bojong Nangka, Gunung Putri Bogor <br> Telp : 081287602508</h4>";
+
+
+$html .="<h3 align = 'center'> TUJUAN PENGIRIMAN :</h3><h4 align='center'>Nama Penerima : ".$data_static['nama_customer']."<br>";
+$html .="Nomor kontak  : ".$data_static['nomor_kontak']."<br>";
+$html .="Alamat lengkap : ".$data_static['alamat_lengkap']."</h4>";
+
+$html .="<hr>";
+foreach ($data->result_array() as $penjualan){
+$html .= '' . $penjualan['judul_buku'] . ' (' . $penjualan['qty'].')<br>';
+}
+
+    
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A5','landscape');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+    
+    
+}
+
+public function update_status_penjualan(){
+if($this->input->post('id_data_penjualan')){
+   $input = $this->input->post();
+   
+   $data = array(
+   'status_penjualan' => $input['status_penjualan'],
+   'resi_pengiriman' => $input['resi_pengiriman'],  
+   );
+   
+   $this->M_dashboard->update_status_penjualan($data,$input['id_data_penjualan']);
+}else{
+    
+    redirect(404);    
+}    
+    
+}
+public function json_penjualan_customer($id){
+echo $this->M_dashboard->json_penjualan_customer($id);       
+}
+
+function print_penjualan_customer(){
+
+$id_data_penjualan = base64_decode($this->uri->segment(3));
+$this->db->select('*');
+$this->db->from('data_penjualan');
+$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$wer = array(
+'data_penjualan.id_data_penjualan'=>$id_data_penjualan,
+'data_jumlah_penjualan.id_account_penulis'=> base64_decode($this->uri->segment(4)),    
+);
+$this->db->where($wer);
+
+$data = $this->db->get();
+$data_static = $data->row_array(); 
+
+$html  ="<img src='".base_url('assets/img/logo-toko.png')."'>";
+$html .="<h3 style='position:fixed;' align='center'>PENJUALAN GUEPEDIA <br><b>".$data_static['no_invoices']."</b></h3>";
+$html .="<br><hr>";
+$html .="Nama customer :".$data_static['nama_customer']."<br>";
+$html .="Nomor kontak  :".$data_static['nomor_kontak']."<br>";
+$html .="Alamat lengkap :".$data_static['alamat_lengkap']."<br><br>";
+
+
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
+        . '<tr>'
+        . '<th>Judul Buku</th>'
+        . '<th>Penulis</th>'
+        . '<th>Harga</th>'
+        . '<th>Qty</th>'
+        . '<th>Jumlah</th>'
+        . '<th>Diskon</th>'
+        . '<th>Nilai Diskon</th>'
+        . '<th>Royalti</th>'
+        . '<th>Bersih</th>'
+        . '</tr>';
+
+
+foreach ($data->result_array() as $penjualan){
+$html .= '<tr>
+<td>' . $penjualan['judul_buku'] . '</td>
+<td>' . $penjualan['nama_penulis'] . '</td>
+<td>Rp.' . number_format($penjualan['harga']) . '</td>
+<td>' . $penjualan['qty'].'</td>
+<td>Rp.' . number_format($penjualan['jumlah']) . '</td>
+<td>' . $penjualan['diskon'] . ' %</td>
+<td>Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
+<td>Rp.' . number_format($penjualan['royalti']) . '</td>
+<td>Rp.' . number_format($penjualan['bersih']) . '</td>
+</tr>';
+}
+
+
+
+$html.= '</table>';
+    
+    
+    
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'landscape');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+    
+    
+}
+public function penarikan(){
+
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_customer_royalti');
+$this->load->view('Umum/V_footer');
+}
+
+public function buat_transfer(){
+$id_account    = $this->uri->segment(3);
+$data_penulis  = $this->M_dashboard->data_penulis($id_account);    
+$total_royalti = $this->M_dashboard->total_royalti_penulis($id_account);
+$total_naskah  = $this->M_dashboard->total_naskah_penulis($id_account);
+
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_buat_transfer',['data_penulis'=>$data_penulis,'total_royalti'=>$total_royalti,'total_naskah'=>$total_naskah]);
+$this->load->view('Umum/V_footer');
+
+
+}
+
+public function simpan_transfer_royalti(){
+if($this->input->post('royalti')){
+$input = $this->input->post();
+
+$config2['upload_path']          = './uploads/bukti_transfer/';
+$config2['allowed_types']        = 'jpeg|jpg|png|gif';
+$config2['file_size']            = "2004800";
+$config2['encrypt_name']         = TRUE;
+$this->upload->initialize($config2);
+
+if(!$this->upload->do_upload('bukti_transfer')){
+
+echo $this->upload->display_errors();
+
+}else{
+$data = array(
+'royalti'           => $input['royalti'],
+'id_account'        => base64_decode($input['id_account']),
+'biaya_admin'       => $input['biaya_admin'],
+'royalti_bersih'    => $input['royalti_bersih'],   
+'bukti_transfer'    => $this->upload->data('file_name'),    
+);
+
+$this->M_dashboard->simpan_transfer($data);
+
+echo "berhasil";
+}
+
+
+    
+    
+}else{
+    
+redirect(404);    
+} 
+    
+   
+ 
+}
+
+public function download_bukti(){
+
+$id_data_transfer = base64_decode($this->uri->segment(3));
+$bukti_transfer = $this->db->get_where('data_transfer_royalti',array('id_data_transfer_royalti'=>$id_data_transfer))->row_array();
+
+
+force_download('./uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer'], NULL);
+}
 }

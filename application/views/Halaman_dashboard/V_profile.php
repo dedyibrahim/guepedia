@@ -69,10 +69,9 @@ swal({
 title:"", 
 text:"Update profile berhasil",
 icon:"success",
-timer:1200,
-button:false,
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Halaman_penulis') ?>';
+window.location.href = '<?php echo base_url('Halaman_penulis') ?>';
 });      
 
 }
@@ -97,10 +96,9 @@ swal({
 title:"", 
 text:"Rekening berhasil tersimpan",
 icon:"success",
-timer:1500,
-button:false,
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Halaman_penulis') ?>';
+window.location.href = '<?php echo base_url('Halaman_penulis') ?>';
 });     
 
 }else{
@@ -108,8 +106,7 @@ swal({
 title:"", 
 text:"Server error",
 icon:"error",
-timer:1500,
-button:false,
+showConfirmButton: true,
 });   
 
 } 
@@ -127,8 +124,7 @@ swal({
 title:"", 
 text:"Data rekening harus di isi semua",
 icon:"error",
-timer:1500,
-button:false,
+showConfirmButton: true,
 });    
 
 }

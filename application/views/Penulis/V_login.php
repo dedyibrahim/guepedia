@@ -102,9 +102,8 @@ if (password_daftar != password_daftar1 ){
 swal({
 title:"", 
 text:"Password yang dimasukan tidak sesuai",
-timer:1500,
-icon:"error",
-button:false,
+showConfirmButton: true,
+type:"error",
 });
 }else {
 $.ajax({
@@ -116,29 +115,29 @@ if(data == "berhasil"){
 swal({
 title:"Pendaftaran berhasil", 
 text:"Pendaftaran berhasil silahkan aktivasi akun anda melalui email yang anda masukan",
-icon:"success",
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Penulis') ?>';
 });  
 
 }else if (data == 'sudah_digunakan'){
 swal({
 title:"", 
 text:"Email Sudah dipakai silahkan gunakan email lainnya atau klik lupa password ",
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Penulis') ?>';
 });    
 }else{
 swal({
 title:"", 
 text:"Pendaftaran gagal",
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Penulis') ?>';
 });    
 }
 
@@ -153,9 +152,8 @@ location.href = '<?php echo base_url('Penulis') ?>';
 swal({
 title:"", 
 text:"Masih terdapat data yang perlu di isi",
-timer:1500,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 });
 }
 
@@ -180,32 +178,30 @@ if(data == 'tidak'){
 swal({
 title:"Akun tidak aktif", 
 text:"Maaf untuk alasan keamanan kami menonaktifkan akun anda jika anda adalah pemilik akun ini silahkan hubungi kami via telephone : 081287602508, email : admin@guepedia.com, atas perhatian dan kerjasamnya kami ucapkan terimakasih",
-icon:"warning",
-button:false,
+type:"warning",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Penulis') ?>';
 });    
     
 }else if(data == "berhasil"){
 swal({
 title:"", 
 text:"Login berhasil",
-timer:2000,
-icon:"success",
-button:false,
+type:"success",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Halaman_penulis') ?>';
+window.location.href = '<?php echo base_url('Halaman_penulis') ?>';
 });    
     
 }else if(data == "akun_gaada"){
 swal({
 title:"", 
 text:"Akun tidak tersedia silahkan daftar terlebih dahulu",
-timer:2000,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Penulis') ?>';
 });    
     
 }    
@@ -219,9 +215,8 @@ location.href = '<?php echo base_url('Penulis') ?>';
 swal({
 title:"", 
 text:"Harap isi email dan password anda",
-timer:1500,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 });    
     
 }
@@ -250,11 +245,10 @@ if(data == "berhasil"){
 swal({
 title:"", 
 text:"Link reset password telah dikirimkan ke alamat email "+email_reset,
-timer:3000,
 icon:"success",
-button:false,
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Penulis') ?>';
 });     
         
     
@@ -263,11 +257,10 @@ location.href = '<?php echo base_url('Penulis') ?>';
 swal({
 title:"", 
 text:"Email yang anda masukan tidak tersedia silahkan daftar terlebih dahulu",
-timer:3000,
 icon:"error",
-button:false,
+showConfirmButton: true,
 }).then(function() {
-location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Penulis') ?>';
 });     
     
 }else{
@@ -275,9 +268,8 @@ location.href = '<?php echo base_url('Penulis') ?>';
 swal({
 title:"", 
 text:data,
-timer:3000,
-icon:"error",
-button:false,
+type:"error",
+showConfirmButton: true,
 });    
     
 }    
@@ -292,9 +284,8 @@ button:false,
 swal({
 title:"", 
 text:"Email masih kosong",
-timer:1500,
 icon:"error",
-button:false,
+showConfirmButton: true,
 });
 
 }

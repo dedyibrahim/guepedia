@@ -49,6 +49,49 @@ $this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye
 return $this->datatables->generate();
 
 
-}    
-   
+}
+
+function saldo_royalti($id_account){
+         $this->db->select('royalti_diperoleh');
+$query = $this->db->get_where('akun_penulis',array('id_account'=>$id_account));    
+
+return $query;
+
+
+}
+
+function json_penjualan(){
+$this->datatables->select('id_data_jumlah_penjualan,'
+.'data_jumlah_penjualan.no_invoices as no_invoices,'
+.'data_penjualan.id_data_penjualan as id_data_penjualan,'
+.'data_penjualan.nama_customer as nama_customer,'
+.'data_jumlah_penjualan.tanggal_transaksi as tanggal_transaksi,'
+.'data_penjualan.status_penjualan as status_penjualan,'
+);
+$this->datatables->where('id_account_penulis',$this->session->userdata('id_account'));
+$this->datatables->group_by('data_penjualan.no_invoices');
+$this->datatables->from('data_penjualan');
+$this->datatables->join('data_jumlah_penjualan','data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-print " href="'.base_url().'Halaman_penulis/print_penjualan/$1"></a>', 'base64_encode(id_data_penjualan)');
+return $this->datatables->generate();
+}
+
+function json_transfer_royalti(){
+$this->datatables->select('data_transfer_royalti.id_account,'
+.'data_transfer_royalti.id_data_transfer_royalti as id_data_transfer_royalti,'
+.'data_transfer_royalti.royalti as royalti,'
+.'data_transfer_royalti.biaya_admin as biaya_admin,'
+.'data_transfer_royalti.royalti_bersih as royalti_bersih,'
+.'akun_penulis.nama_lengkap as nama_lengkap,'
+.'akun_penulis.nomor_kontak as nomor_kontak,'
+.'akun_penulis.email as email,'
+        
+);
+$this->datatables->where('data_transfer_royalti.id_account',$this->session->userdata('id_account'));
+$this->datatables->from('data_transfer_royalti');
+$this->datatables->join('akun_penulis','akun_penulis.id_account = data_transfer_royalti.id_account');
+$this->datatables->add_column('view','<button class="btn btn-sm btn-success fa fa-download " onclick=download_bukti("$1") > Download </a>', 'base64_encode(id_data_transfer_royalti)');
+return $this->datatables->generate();
+      
+}
 }
