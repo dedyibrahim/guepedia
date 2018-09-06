@@ -18,7 +18,7 @@ BUKU TERLARIS
 </div>
 </a>
 <div class="card-footer">
-<button class="btn btn-success form-control"><b>Rp.<?php echo number_format($laris['harga']) ?></b> <span class="fa fa-shopping-basket "></span></button>    
+<button onclick="tambah_keranjang('<?php echo base64_encode($laris['id_file_naskah']) ?>')" class="btn btn-success form-control"><b>Rp.<?php echo number_format($laris['harga']) ?></b> <span class="fa fa-shopping-basket "></span></button>    
 </a>
 </div>
 </div>
@@ -59,7 +59,7 @@ BARU TERBIT
 </div>
 </a>
 <div class="card-footer">
-<button class="btn btn-success form-control"><b>Rp.<?php echo number_format($new_book['harga']) ?></b> <span class="fa fa-shopping-basket "></span></button>    
+    <button onclick="tambah_keranjang('<?php echo base64_encode($new_book['id_file_naskah']) ?>')" class="btn btn-success form-control"><b>Rp.<?php echo number_format($new_book['harga']) ?></b> <span class="fa fa-shopping-basket "></span></button>    
 </a>
 </div>
 </div>

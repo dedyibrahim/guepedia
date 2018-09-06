@@ -12,7 +12,7 @@
 </div>
 </a>
 <div class="card-footer">
-<button class="btn btn-success form-control"><b>Rp.<?php echo number_format($kate['harga']) ?></b> <span class="fa fa-shopping-basket "></span></button>    
+<button onclick="tambah_keranjang('<?php echo base64_encode($kate['id_file_naskah']) ?>')" class="btn btn-success form-control"><b>Rp.<?php echo number_format($kate['harga']) ?></b> <span class="fa fa-shopping-basket "></span></button>    
 
 </div>
 </div>

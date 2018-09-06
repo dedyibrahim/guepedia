@@ -62,6 +62,25 @@ $query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=> bas
 return $query;    
 }
 
+function tambah_keranjang($id_file_naskah){
+$query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=> base64_decode($id_file_naskah)));    
+
+return $query;
+}
+
+public function cari_kota($term){
+$this->db->from("data_kota");
+$this->db->limit(15);
+$array = array('nama_kota' => $term);
+$this->db->like($array);
+$query = $this->db->get();
+
+if($query->num_rows() >0 ){
+
+return $query->result();
+}
+
+}
 
 }
 
