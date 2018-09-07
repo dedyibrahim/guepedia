@@ -81,6 +81,30 @@ return $query->result();
 }
 
 }
+function cek_email_daftar($email){
+
+$hasil_cek = $this->db->get_where('akun_penulis',array('email'=>$email))->num_rows();
+
+if($hasil_cek > 0){
+return $hasil_cek;    
+    
+}
+
+}
+function hitung_penulis(){
+
+$data_pendaftar = $this->db->get('id_penulis')->num_rows();
+
+return $data_pendaftar;
+
+}
+function daftar_penulis($data,$input_total){
+    
+$this->db->insert('akun_penulis',$data); 
+$this->db->insert('id_penulis',$input_total); 
+
+    
+}
 
 }
 

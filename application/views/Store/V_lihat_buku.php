@@ -86,7 +86,7 @@ data :"token="+token+"&id_file_naskah="+data+"&qty="+qty,
 success:function(data){
 swal({
 type: 'success',
-text: data + ' Berhasil di masukan ke keranjang',
+html: data + ' <br>Berhasil di masukan ke keranjang',
 showConfirmButton: false,
 animation: false,
 customClass: 'animated bounceInDown',

@@ -258,5 +258,89 @@ $json[]= array(
 
 echo json_encode($json);
 }
+
+public function daftar_akun(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_daftar_akun');
+$this->load->view('Umum/V_footer_toko');        
+}
+
+public function daftar(){
+
+if($this->input->post('nama_lengkap')){
+    
+$hasil_cek = $this->M_store->cek_email_daftar($this->input->post('email'));   
+
+if($hasil_cek > 0 ){
+
+echo "sudah_digunakan";
+
+}else{
+$input = $this->input->post();
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($input['email']);
+$this->email->subject('Aktivasi akun');
+
+$data_kirim ="<h3>Terimakasih anda telah melakukan pendaftaran di Guepedia.com </h3><br>"
+. "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
+. "<a href='".base_url('Penulis/aktivasi/'. base64_encode($input['email']))."'>Konfirmasi akun anda disini</a><br><br>"
+. "atas perhatian dan kerjasamanya kami ucapkan terimaksih <br>"
+. "<i>Note: Jika anda tidak merasa melakukan pendaftaran mohon abaikan email ini </i>";
+
+
+$this->email->message($data_kirim);
+
+if (!$this->email->send()){    
+
+echo $this->email->print_debugger();
+
+    
+}else{
+
+$hasil_pendaftar = $this->M_store->hitung_penulis();
+
+$angka = 6;
+$pendaftar = $hasil_pendaftar;
+
+$id_account = str_pad($pendaftar, $angka ,"0",STR_PAD_LEFT);
+
+
+$data = array(
+'id_account'     => $id_account,   
+'nama_lengkap'   => $input['nama_lengkap'],    
+'email'          => $input['email'],    
+'password'       => md5($input['password']),    
+'status_akun'    =>'tidak',
+);
+$input_total =array(
+'id_account'           =>$id_account,
+);
+
+$this->M_store->daftar_penulis($data,$input_total);
+
+echo "berhasil";    
+
+}
+}
+}else{
+redirect(404);
+}
+}
+
+
+
 }
 

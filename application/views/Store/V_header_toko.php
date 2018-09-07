@@ -34,13 +34,13 @@ Kategori Buku
 </li>
 </ul>
 <form class="form-inline my-1 my-lg-0 col-6">
-<input class="form-search mr-md-6 col-md-12" value="" id="cari" type="search" placeholder="Cari Buku . . " aria-label="Cari Buku">
+<input class="form-control mr-md-6 col-md-12" value="" id="cari" type="search" placeholder="Cari Buku . . " aria-label="Cari Buku">
 </form>
 
 <div class="form-inline my-1 my-lg-0 col">
 <button onclick="load_keranjang_header();" class="btn btn-success form-control" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" 
 data-content="
-<h5 align='center'>Keranjang Belanja Anda</h5>
+<h5 align='center'>Buku belanjaan anda</h5>
 <hr>
 <div id='keranjang_header'></div><hr>
 
@@ -50,18 +50,21 @@ data-content="
 </div>
 
 <div class="form-inline my-1 my-lg-0 col">
-<a  href="<?php echo base_url('penulis') ?>"><button class="btn btn-success form-control">Penulis <span class="fa fa-pencil"></span></button> </a>
+<a  href="<?php echo base_url('penulis') ?>"><button class="btn btn-success  form-control">Penulis <span class="fa fa-pencil"></span></button> </a>
 </div>
 
 <div class="form-inline my-1 my-lg-0 col">
 <button class="btn btn-success form-control" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" 
 data-content="
+<h4 align='center'>Login <span class='fa fa-sign-in fa-color'></span></h4>
+<hr>
 <label>Email : </label>
 <input type='text' class='form-control' placeholder='Email . . .'>
 <label>Password : </label>
 <input type='password' class='form-control' placeholder='Password . . .'>
 <hr>
-<button class='btn btn-success col'>Login <span class='fa fa-sign-in'></span></button>
+<button class='btn btn-success btn-sm col form-control'> Masuk Toko <span class='fa fa-sign-in'></span></button><br><hr>
+<a href='<?php echo base_url('Store/daftar_akun') ?>'><button class='btn btn-success form-control col btn-sm'> Daftar Akun <span class='fa fa-pencil-square'></span></button></a>
 ">Login <span class="fa fa-sign-in"></span></button> 
 </div>
 
@@ -137,7 +140,7 @@ data :"token="+token+"&id_file_naskah="+data+"&qty="+"1",
 success:function(data){
 swal({
   type: 'success',
-  text: data + ' Berhasil di masukan ke keranjang',
+  html: data + ' <br>Berhasil di masukan ke keranjang',
   showConfirmButton: false,
   animation: false,
   customClass: 'animated bounceInDown',
