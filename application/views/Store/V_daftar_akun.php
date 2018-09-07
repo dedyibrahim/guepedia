@@ -4,7 +4,7 @@
     <label>Nama Lengkap :</label>
     <input type="text" id="nama_lengkap" placeholder="Nama lengkap . . ." class="form-control">    
     <label>Email :</label>
-    <input type="text" id="email" placeholder="Email . . ." class="form-control">    
+    <input type="text" id="email_daftar" placeholder="Email . . ." class="form-control">    
     <label>Password :</label>
     <input type="password" id="password_daftar" placeholder="Password . . ." class="form-control">    
     <label>Ulangi Password :</label>
@@ -43,7 +43,7 @@ text:"Pendaftaran berhasil silahkan aktivasi akun anda melalui email yang anda m
 type:"success",
 showConfirmButton: true,
 }).then(function() {
-window.location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Store') ?>';
 });  
 }else if (data == 'sudah_digunakan'){
 swal({
@@ -52,7 +52,7 @@ text:"Email Sudah dipakai silahkan gunakan email lainnya atau klik lupa password
 type:"error",
 showConfirmButton: true,
 }).then(function() {
-window.location.href = '<?php echo base_url('Store/login') ?>';
+window.location.href = '<?php echo base_url('Store/login_akun') ?>';
 });    
 }else{
 swal({

@@ -197,12 +197,13 @@ redirect(404);
 }    
 }
 
-function input_kota(){
-/*$curl = curl_init();
-
+function data_kecamatan(){
+if($this->input->post('city_id')){
+$curl = curl_init();
+$input = $this->input->post();
 curl_setopt_array($curl, array(
-   CURLOPT_URL => "https://pro.rajaongkir.com/api/city?id=39&province=5",
-   CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$input['city_id'],
+  CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,
   CURLOPT_TIMEOUT => 30,
@@ -221,14 +222,20 @@ curl_close($curl);
 if ($err) {
   echo "cURL Error #:" . $err;
 } else {
-  echo $response;
 }
-echo print_r($response);
-*/
-    
-}    
+        echo "Nama Kecamatan<br>";
+	echo "<select name='kecamatan' class='form-control' id='subdistrict_id'>";
+	echo "<option></option>";
+	$data = json_decode($response, true);
+	for ($i=0; $i < count($data['rajaongkir']['results']); $i++) {
+		echo "<option value='".$data['rajaongkir']['results'][$i]['subdistrict_id']."'>".$data['rajaongkir']['results'][$i]['subdistrict_name']."</option>";
+	}
+	echo "</select>";   
+}else{
+    redirect(404);    
+} 
 
-
+}   
 public function cari_kota(){
 $term = strtolower($this->input->get('term'));    
 
@@ -239,7 +246,7 @@ $json[]= array(
 'label'                     => $d->nama_kota,   
 'province'                  => $d->province,   
 'postal_code'               => $d->postal_code,
-'city_id'               => $d->city_id,
+'city_id'                   => $d->city_id,
 );   
 
 }
@@ -251,6 +258,13 @@ public function daftar_akun(){
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_daftar_akun');
+$this->load->view('Umum/V_footer_toko');        
+}
+
+public function login_akun(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_login_akun');
 $this->load->view('Umum/V_footer_toko');        
 }
 
@@ -327,8 +341,60 @@ echo "berhasil";
 redirect(404);
 }
 }
+function cek_cost(){
+if($this->input->post('total_berat')){
+$input = $this->input->post();    
+    
+    $curl = curl_init();
+curl_setopt_array($curl, array(
+  CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_POSTFIELDS => "origin=78&originType=city&destination=".$input['subdistrict_id']."&destinationType=subdistrict&weight=".$input['total_berat']."&courier=".$input['kurir']."",
+  CURLOPT_HTTPHEADER => array(
+    "content-type: application/x-www-form-urlencoded",
+    "key: 2390264a2b725f30995e41292a420f65"
+  ),
+));
 
+$response = curl_exec($curl);
+$err = curl_error($curl);
 
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+      $data = json_decode($response, true);
+	
+      foreach ($data as $a){
+          
+          foreach ($a['results'] as $b){
+              echo "<br><h4 align='center'>".$b['name']."</h4><hr>";
+      
+              foreach ($b['costs'] as $c){
+                   echo "<h5 style='color:#28a745;'>Service ".$c['service']." ";
+                   echo "( ".$c['description']." ) </h5>";
+                  foreach ($c['cost'] as $d){
+                      echo "Rp.". number_format($d['value']);
+                      echo " Estimasi ". $d['etd']." Hari <br>";
+                 }
+              }
+          }
+      }
+
+      
+}    
+    
+}else{
+redirect(404);    
+}
+
+}
 
 }
 
