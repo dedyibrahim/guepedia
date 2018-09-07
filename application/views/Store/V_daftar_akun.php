@@ -22,10 +22,7 @@ var nama_lengkap      = $("#nama_lengkap").val();
 var email_daftar      = $("#email_daftar").val();
 var password_daftar   = $("#password_daftar").val();
 var password_daftar1  = $("#password_daftar1").val();
-
-
 if( nama_lengkap != '' && email_daftar != '' && password_daftar != '' && password_daftar1 != ''){
-
 if (password_daftar != password_daftar1 ){
 swal({
 title:"", 
@@ -48,7 +45,6 @@ showConfirmButton: true,
 }).then(function() {
 window.location.href = '<?php echo base_url('Penulis') ?>';
 });  
-
 }else if (data == 'sudah_digunakan'){
 swal({
 title:"", 
@@ -68,13 +64,8 @@ showConfirmButton: true,
 window.location.href = '<?php echo base_url('Penulis') ?>';
 });    
 }
-
-
 }        
-
 });    
-
-
 }
 }else{
 swal({
@@ -84,9 +75,7 @@ type:"error",
 showConfirmButton: true,
 });
 }
-
 });
-
     
 });
-</script>    
+</script>   

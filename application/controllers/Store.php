@@ -201,16 +201,16 @@ function input_kota(){
 /*$curl = curl_init();
 
 curl_setopt_array($curl, array(
-CURLOPT_URL => "https://api.rajaongkir.com/starter/city",
-CURLOPT_RETURNTRANSFER => true,
-CURLOPT_ENCODING => "",
-CURLOPT_MAXREDIRS => 10,
-CURLOPT_TIMEOUT => 30,
-CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-CURLOPT_CUSTOMREQUEST => "GET",
-CURLOPT_HTTPHEADER => array(
-"key: 2390264a2b725f30995e41292a420f65"
-),
+   CURLOPT_URL => "https://pro.rajaongkir.com/api/city?id=39&province=5",
+   CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "GET",
+  CURLOPT_HTTPHEADER => array(
+    "key: 2390264a2b725f30995e41292a420f65"
+  ),
 ));
 
 $response = curl_exec($curl);
@@ -219,24 +219,12 @@ $err = curl_error($curl);
 curl_close($curl);
 
 if ($err) {
-echo "cURL Error #:" . $err;
+  echo "cURL Error #:" . $err;
 } else {
-$data = json_decode($response, true);
-for ($i=0; $i < count($data['rajaongkir']['results']); $i++) { 
-$data_kota =array(
-'city_id'       => $data['rajaongkir']['results'][$i]['city_id'],
-'province_id'   => $data['rajaongkir']['results'][$i]['province_id'],
-'province'      => $data['rajaongkir']['results'][$i]['province'],
-'city_name'     => $data['rajaongkir']['results'][$i]['city_name'],
-'type'          => $data['rajaongkir']['results'][$i]['type'],
-'postal_code'   => $data['rajaongkir']['results'][$i]['postal_code'],
-'nama_kota'     => $data['rajaongkir']['results'][$i]['type']." ".$data['rajaongkir']['results'][$i]['city_name'],
-);
-$this->db->insert('data_kota',$data_kota);
+  echo $response;
 }
-
-}*/
-echo $this->db->get('data_kota')->num_rows();    
+echo print_r($response);
+*/
     
 }    
 
