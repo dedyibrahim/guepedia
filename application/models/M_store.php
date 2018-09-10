@@ -106,6 +106,13 @@ $this->db->insert('id_penulis',$input_total);
     
 }
 
+function login($data){
+$query = $this->db->get_where('akun_penulis',$data);    
+    
+return $query;    
+    
+}
+
 }
 
 

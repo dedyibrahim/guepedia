@@ -40,7 +40,7 @@ Kategori Buku
 <div class="form-inline my-1 my-lg-0 col">
 <button onclick="load_keranjang_header();" class="btn btn-success form-control" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" 
 data-content="
-<h5 align='center'>Buku belanjaan anda</h5>
+<h5 align='center'>Shopping Cart</h5>
 <hr>
 <div id='keranjang_header'></div><hr>
 
@@ -50,23 +50,42 @@ data-content="
 </div>
 
 <div class="form-inline my-1 my-lg-0 col">
-<a  href="<?php echo base_url('penulis') ?>"><button class="btn btn-success  form-control">Penulis <span class="fa fa-pencil"></span></button> </a>
+<a  href="<?php echo base_url('penulis') ?>"><button class="btn btn-secondary  form-control">Penulis <span class="fa fa-pencil"></span></button> </a>
 </div>
 
+
+<?php if($this->session->userdata('id_account_toko')){ ?>
+
 <div class="form-inline my-1 my-lg-0 col">
-<button class="btn btn-success form-control" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" 
+<button class="btn btn-secondary form-control  " data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" 
+data-content="
+
+<button class='btn btn-success btn-sm col form-control'>Konfirmasi Pembayaran <span class='fa fa-check'></span></button><br><hr>
+<button class='btn btn-success btn-sm col form-control'>Cek Status Pesanan <span class='fa fa-check-square-o'></span></button><br><hr>
+<button class='btn btn-success btn-sm col form-control'>Daftar Transaksi <span class='fa fa-list-alt'></span></button><br><hr>
+
+<button class='btn btn-success btn-sm col form-control' onclick='logout();'>Logout <span class='fa fa-sign-out'></span></button><br>
+
+">User <span class="fa fa-user"></span></button> 
+</div>    
+
+<?php }else{ ?>
+<div class="form-inline my-1 my-lg-0 col">
+<button class="btn btn-secondary form-control" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" 
 data-content="
 <h4 align='center'>Login <span class='fa fa-sign-in fa-color'></span></h4>
 <hr>
 <label>Email : </label>
-<input type='text' class='form-control' placeholder='Email . . .'>
+<input type='text' id='email_header' class='form-control' placeholder='Email . . .'>
 <label>Password : </label>
-<input type='password' class='form-control' placeholder='Password . . .'>
+<input type='password' id='password_header' class='form-control' placeholder='Password . . .'>
 <hr>
-<button class='btn btn-success btn-sm col form-control'> Masuk Toko <span class='fa fa-sign-in'></span></button><br><hr>
+<button class='btn btn-success btn-sm col form-control' onclick='login_header();'> Masuk Toko <span class='fa fa-sign-in'></span></button><br><hr>
 <a href='<?php echo base_url('Store/daftar_akun') ?>'><button class='btn btn-success form-control col btn-sm'> Daftar Akun <span class='fa fa-pencil-square'></span></button></a>
 ">Login <span class="fa fa-sign-in"></span></button> 
-</div>
+</div>    
+
+<?php } ?>
 
 </div>
 </nav>
@@ -107,9 +126,9 @@ $("#konten").show();
 }
 });    
 });
+
+
 });
-
-
 
 $('.btn').on('click', function (e) {
     $('.btn').not(this).popover('hide');
@@ -151,8 +170,81 @@ swal({
 });
 
 }
+
+function login_header(){
+var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
+var email       = $("#email_header").val();
+var password    = $("#password_header").val();
+
+
+if(email !='' && password !=''){
+    
+
+$.ajax({
+type:"POST",
+url:"<?php echo base_url('Store/login') ?>",
+data:"token="+token+"&email="+email+"&password="+password,
+success:function(data){
+if(data == "berhasil"){
+swal({
+title:"", 
+text:"Login berhasil",
+type:"success",
+showConfirmButton: true,
+}).then(function() {
+window.location.href = "<?php echo base_url('Store') ?>";
+});
+
+}else{
+swal({
+title:"", 
+text:"Email dan password yang di masukan salah",
+type:"error",
+showConfirmButton: true,
+}).then(function() {
+window.location.href = "<?php echo base_url('Store/login_akun') ?>";
+});    
+}    
+}
+    
+});
+
+}else{
+swal({
+  type: 'question',
+  html: 'Email dan password Belum di isi',
+  showConfirmButton: false,
+  animation: false,
+  customClass: 'animated bounceInDown',
+  timer: 2000
+});    
+
+}
+}
+function logout(){
+var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
+
+$.ajax({
+type:"POST",
+url :"<?php echo base_url('Store/keluar') ?>",
+data:"token="+token,
+success:function(data){
+swal({
+title:"", 
+text:"Logout Berhasil",
+type:"success",
+showConfirmButton: true,
+}).then(function() {
+window.location.href = "<?php echo base_url('Store') ?>";
+});
+    
+}
+
+
+});
+
+}
 </script>
 <div class="container" id="hasil_cari" style="display:none; margin-top:7%; "></div>
-
 
 <div id="konten">

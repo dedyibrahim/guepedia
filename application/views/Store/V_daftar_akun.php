@@ -10,6 +10,8 @@
     <label>Ulangi Password :</label>
     <input type="password"  id="password_daftar1" placeholder="Ulangi Password . . ." class="form-control"> 
     <hr>
+    <a  style="text-decoration:none; " href="<?php echo base_url('Store/login_akun') ?>">Sudah punya akun ?</a>
+    <hr>
     <button class="btn btn-success form-control" id="btn_daftar">Daftar <span class="fa fa-save"></span></button>
 </div>
 

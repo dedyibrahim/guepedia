@@ -395,6 +395,121 @@ redirect(404);
 }
 
 }
+function login(){
+if($this->input->post('email')){
+$input = $this->input->post();
+$data = array(
+'email'      => $input['email'],
+'password'   => md5($input['password']),
+'status_akun'=>'aktif',    
+);
+$query = $this->M_store->login($data);
+
+if($query->num_rows() > 0){
+$c = $query->row_array();
+$data = array(
+'id_account_toko'    =>$c['id_account'],
+'email_toko'         =>$c['email'],
+'nama_lengkap'  =>$c['nama_lengkap'],
+'nomor_kontak'  =>$c['nomor_kontak'],  
+);
+
+$this->session->set_userdata($data);
+
+echo "berhasil";
+}else{
+echo "tidakada";    
+}
+
+}else{
+redirect(404);    
+}
+    
+    
+}
+
+function  keluar(){
+$this->session->sess_destroy();    
+}
+
+function checkout(){
+if($this->session->userdata('id_account_toko')){    
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_checkout');
+$this->load->view('Umum/V_footer_toko');    
+}else{
+redirect('Store/login_akun');    
+}
+
+}
+
+function cost_checkout(){
+    
+if($this->input->post('subdistrict_id')){
+
+$total_berat = 0;
+foreach ($this->cart->contents() as $items){ 
+$total_berat += $items['berat'] * $items['qty'];    
+
+}    
+
+    
+    $input = $this->input->post();    
+    
+    $curl = curl_init();
+curl_setopt_array($curl, array(
+  CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_POSTFIELDS => "origin=78&originType=city&destination=".$input['subdistrict_id']."&destinationType=subdistrict&weight=".$total_berat."&courier=".$input['kurir']."",
+  CURLOPT_HTTPHEADER => array(
+    "content-type: application/x-www-form-urlencoded",
+    "key: 2390264a2b725f30995e41292a420f65"
+  ),
+));
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+      $data = json_decode($response, true);
+	
+      foreach ($data as $a){
+          
+          foreach ($a['results'] as $b){
+              echo "<br><h4 align='center'>".$b['name']."</h4><hr>";
+      
+              foreach ($b['costs'] as $c){
+                   echo "<h5 style='color:#28a745;'>Service ".$c['service']." ";
+                   echo "( ".$c['description']." ) </h5>";
+                  foreach ($c['cost'] as $d){
+                      echo "Rp.". number_format($d['value']);
+                      echo " Estimasi ". $d['etd']." Hari <br>";
+                 }
+              }
+          }
+      }
+
+      
+}    
+    
+}else{
+redirect(404);    
+}
+
+
+}
+
+
 
 }
 
