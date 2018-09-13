@@ -1,92 +1,95 @@
-<div class="container" style="background-color: #fff; margin-top: 6.5%;">
-<h4 align="center"><span class="fa fa-list-ul fa-3x fa-color"></span><br>Checkout</h4><hr> 
-<div class="row">
-<div class="col-md-4">
-<h4 align="center"><span class="fa fa-truck fa-3x fa-color"></span><br>Alamat pengiriman</h4><hr> 
-<label>Nama kota</label>
-<input type="text" class="form-control" id="nama_kota">
-<input type="hidden" id="city_id" class="form-control" id="city_id">
-
-<div id="data_kecamatan"></div>    
-
-
-<label>Nama Provinsi</label>
-<input type="text" readonly=""  class="form-control" id="nama_provinsi">
-
-<label>Kode pos</label>
-<input type="text" readonly="" class="form-control" id="kode_pos">
-
-<label>Nama Kurir</label>
-<select class="form-control" id="kurir" onchange="cek_cost();">
-<option ></option>    
-<option value="jne">JNE</option>    
-<option value="wahana">WAHANA</option>    
-</select>
-<div id="data_kost">
-    
-</div>
-</div>
-</div>
-<hr>
-</div>
-
+<body onload="halaman_checkout()"></body>
+<div id="halaman_checkout"></div>
 <script type="text/javascript">
-$(function () {
+function halaman_checkout(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
-
-$("#nama_kota").autocomplete({
-minLength:0,
-delay:0,
-source:'<?php echo site_url('Store/cari_kota') ?>',
-select:function(event, ui){
-$('#nama_provinsi').val(ui.item.province);
-$('#kode_pos').val(ui.item.postal_code);
-$('#city_id').val(ui.item.city_id);
-
 $.ajax({
 type:"POST",
-url:"<?php echo base_url('Store/data_kecamatan') ?>",
-data:"token="+token+"&city_id="+ui.item.city_id,
+url:"<?php echo base_url('Store/halaman_checkout') ?>",
+data:"token="+token,
 success:function(data){
-$("#data_kecamatan").html(data);    
+$("#halaman_checkout").html(data);    
 }
-
 });
+    
 }
 
-}
-);
-});
+$(document).ready(function(){
 
-function cek_cost(){
+$("#bayar").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
-var city_id        = $("#city_id").val();
-var subdistrict_id = $("#subdistrict_id  option:selected").val();
-var kurir          = $("#kurir  option:selected").val();
-
-if(city_id !='' && subdistrict_id !=''){
-
+var metode_pembayaran = $("#metode_pembayaran").val();    
 $.ajax({
-type:"post",
-url:"<?php echo base_url('Store/cost_checkout') ?>",
-data:"token="+token+"&city_id="+city_id+"&subdistrict_id="+subdistrict_id+"&kurir="+kurir,
+type:"POST",
+url :"<?php echo base_url('Store/bayar') ?>",
+data:"token="+token+"&metode_pembayaran="+metode_pembayaran,
 success:function(data){
-$("#data_kost").html(data);   
-
-}
-
-
+if(data == "berhasil"){    
+swal({
+title:"Proses Berhasil", 
+text:"untuk tahap selanjutnya silahkan anda melakukan konfirmasi pembayaran",
+type:"success",
+showConfirmButton: true,
+}).then(function() {
+window.location.href = "<?php echo base_url('Store/konfirmasi_pembayaran') ?>";
 });
-
 }else{
+    
 swal({
 title:"", 
-text:"Masih ada data yang harus di isi",
+text:data,
 type:"error",
 showConfirmButton: true,
-});    
+});
 
 }
-
 }
+
+});
+});
+});
+
 </script>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Masukan Kode kupon Atau Promo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <label>Kupon </label>
+          <input type="text" class="form-control" id="kupon" value="" placeholder="Kode kupon . . . " >
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="tambah_kupon">Tambahkan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="metode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Plih Metode pembayaran</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <label>Metode pembayaran</label>
+          <select id="metode_pembayaran" class="form-control">
+              <option>Bank Transfer</option>
+              <option>Cash On Delivery</option>
+          </select>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary form-control" id="bayar">Bayar <span class="fa fa-money"></span></button>
+      </div>
+    </div>
+  </div>
+</div>
