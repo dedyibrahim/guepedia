@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-class Store extends CI_Controller{
+class Store extends CI_Controller {
 public function __construct() {
 parent::__construct();
 $this->load->library('pagination');
@@ -202,16 +202,16 @@ if($this->input->post('city_id')){
 $curl = curl_init();
 $input = $this->input->post();
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$input['city_id'],
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "GET",
-  CURLOPT_HTTPHEADER => array(
-    "key: 2390264a2b725f30995e41292a420f65"
-  ),
+CURLOPT_URL => "https://pro.rajaongkir.com/api/subdistrict?city=".$input['city_id'],
+CURLOPT_RETURNTRANSFER => true,
+CURLOPT_ENCODING => "",
+CURLOPT_MAXREDIRS => 10,
+CURLOPT_TIMEOUT => 30,
+CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+CURLOPT_CUSTOMREQUEST => "GET",
+CURLOPT_HTTPHEADER => array(
+"key: 2390264a2b725f30995e41292a420f65"
+),
 ));
 
 $response = curl_exec($curl);
@@ -220,19 +220,19 @@ $err = curl_error($curl);
 curl_close($curl);
 
 if ($err) {
-  echo "cURL Error #:" . $err;
+echo "cURL Error #:" . $err;
 } else {
 }
-        echo "Nama Kecamatan<br>";
-	echo "<select name='kecamatan' class='form-control' id='subdistrict_id'>";
-	echo "<option></option>";
-	$data = json_decode($response, true);
-	for ($i=0; $i < count($data['rajaongkir']['results']); $i++) {
-		echo "<option value='".$data['rajaongkir']['results'][$i]['subdistrict_id']."'>".$data['rajaongkir']['results'][$i]['subdistrict_name']."</option>";
-	}
-	echo "</select>";   
+echo "Nama Kecamatan<br>";
+echo "<select name='kecamatan' class='form-control' id='subdistrict_id'>";
+echo "<option></option>";
+$data = json_decode($response, true);
+for ($i=0; $i < count($data['rajaongkir']['results']); $i++) {
+echo "<option id='subdistrict_id' value='".$data['rajaongkir']['results'][$i]['subdistrict_id']."'>".$data['rajaongkir']['results'][$i]['subdistrict_name']."</option>";
+}
+echo "</select>";   
 }else{
-    redirect(404);    
+redirect(404);    
 } 
 
 }   
@@ -271,7 +271,7 @@ $this->load->view('Umum/V_footer_toko');
 public function daftar(){
 
 if($this->input->post('nama_lengkap')){
-    
+
 $hasil_cek = $this->M_store->cek_email_daftar($this->input->post('email'));   
 
 if($hasil_cek > 0 ){
@@ -309,7 +309,7 @@ if (!$this->email->send()){
 
 echo $this->email->print_debugger();
 
-    
+
 }else{
 
 $hasil_pendaftar = $this->M_store->hitung_penulis();
@@ -344,21 +344,21 @@ redirect(404);
 function cek_cost(){
 if($this->input->post('total_berat')){
 $input = $this->input->post();    
-    
-    $curl = curl_init();
+
+$curl = curl_init();
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "POST",
-  CURLOPT_POSTFIELDS => "origin=78&originType=city&destination=".$input['subdistrict_id']."&destinationType=subdistrict&weight=".$input['total_berat']."&courier=".$input['kurir']."",
-  CURLOPT_HTTPHEADER => array(
-    "content-type: application/x-www-form-urlencoded",
-    "key: 2390264a2b725f30995e41292a420f65"
-  ),
+CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
+CURLOPT_RETURNTRANSFER => true,
+CURLOPT_ENCODING => "",
+CURLOPT_MAXREDIRS => 10,
+CURLOPT_TIMEOUT => 30,
+CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+CURLOPT_CUSTOMREQUEST => "POST",
+CURLOPT_POSTFIELDS => "origin=78&originType=city&destination=".$input['subdistrict_id']."&destinationType=subdistrict&weight=".$input['total_berat']."&courier=".$input['kurir']."",
+CURLOPT_HTTPHEADER => array(
+"content-type: application/x-www-form-urlencoded",
+"key: 2390264a2b725f30995e41292a420f65"
+),
 ));
 
 $response = curl_exec($curl);
@@ -367,29 +367,29 @@ $err = curl_error($curl);
 curl_close($curl);
 
 if ($err) {
-  echo "cURL Error #:" . $err;
+echo "cURL Error #:" . $err;
 } else {
-      $data = json_decode($response, true);
-	
-      foreach ($data as $a){
-          
-          foreach ($a['results'] as $b){
-              echo "<br><h4 align='center'>".$b['name']."</h4><hr>";
-      
-              foreach ($b['costs'] as $c){
-                   echo "<h5 style='color:#28a745;'>Service ".$c['service']." ";
-                   echo "( ".$c['description']." ) </h5>";
-                  foreach ($c['cost'] as $d){
-                      echo "Rp.". number_format($d['value']);
-                      echo " Estimasi ". $d['etd']." Hari <br>";
-                 }
-              }
-          }
-      }
+$data = json_decode($response, true);
 
-      
+foreach ($data as $a){
+
+foreach ($a['results'] as $b){
+echo "<br><h4 align='center'>".$b['name']."</h4><hr>";
+
+foreach ($b['costs'] as $c){
+echo "<h5 style='color:#28a745;'>Service ".$c['service']." ";
+echo "( ".$c['description']." ) </h5>";
+foreach ($c['cost'] as $d){
+echo "Rp.". number_format($d['value']);
+echo " Estimasi ". $d['etd']." Hari <br>";
+}
+}
+}
+}
+
+
 }    
-    
+
 }else{
 redirect(404);    
 }
@@ -410,8 +410,8 @@ $c = $query->row_array();
 $data = array(
 'id_account_toko'    =>$c['id_account'],
 'email_toko'         =>$c['email'],
-'nama_lengkap'  =>$c['nama_lengkap'],
-'nomor_kontak'  =>$c['nomor_kontak'],  
+'nama_lengkap'       =>$c['nama_lengkap'],
+'nomor_kontak'       =>$c['nomor_kontak'],  
 );
 
 $this->session->set_userdata($data);
@@ -424,53 +424,64 @@ echo "tidakada";
 }else{
 redirect(404);    
 }
-    
-    
+
+
 }
 
 function  keluar(){
 $this->session->sess_destroy();    
 }
 
+function halaman_checkout(){        
+$query = $this->M_store->cek_alamat($this->session->userdata('id_account_toko'));
+
+    
+$this->load->view('Store/V_halaman_checkout',['data_alamat'=>$query]);
+
+
+}
+
 function checkout(){
-if($this->session->userdata('id_account_toko')){    
+if($this->session->userdata('id_account_toko') !=NULL){
+if($this->cart->total()){    
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_checkout');
 $this->load->view('Umum/V_footer_toko');    
 }else{
-redirect('Store/login_akun');    
+    redirect('Store');    
 }
 
+}else{
+redirect('Store/login_akun');    
+}
 }
 
 function cost_checkout(){
-    
-if($this->input->post('subdistrict_id')){
+if($this->input->post('kurir')){
 
 $total_berat = 0;
 foreach ($this->cart->contents() as $items){ 
 $total_berat += $items['berat'] * $items['qty'];    
-
 }    
+$id_account = $this->session->userdata('id_account_toko');
+$alamat     = $this->M_store->cek_alamat($id_account)->row_array();
 
-    
-    $input = $this->input->post();    
-    
-    $curl = curl_init();
+$input = $this->input->post();    
+$curl = curl_init();
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "POST",
-  CURLOPT_POSTFIELDS => "origin=78&originType=city&destination=".$input['subdistrict_id']."&destinationType=subdistrict&weight=".$total_berat."&courier=".$input['kurir']."",
-  CURLOPT_HTTPHEADER => array(
-    "content-type: application/x-www-form-urlencoded",
-    "key: 2390264a2b725f30995e41292a420f65"
-  ),
+CURLOPT_URL => "https://pro.rajaongkir.com/api/cost",
+CURLOPT_RETURNTRANSFER => true,
+CURLOPT_ENCODING => "",
+CURLOPT_MAXREDIRS => 10,
+CURLOPT_TIMEOUT => 30,
+CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+CURLOPT_CUSTOMREQUEST => "POST",
+CURLOPT_POSTFIELDS => "origin=78&originType=city&destination=".$alamat['subdistrict_id']."&destinationType=subdistrict&weight=".$total_berat."&courier=".$input['kurir']."",
+CURLOPT_HTTPHEADER => array(
+"content-type: application/x-www-form-urlencoded",
+"key: 2390264a2b725f30995e41292a420f65"
+),
 ));
 
 $response = curl_exec($curl);
@@ -479,37 +490,198 @@ $err = curl_error($curl);
 curl_close($curl);
 
 if ($err) {
-  echo "cURL Error #:" . $err;
+echo "cURL Error #:" . $err;
 } else {
-      $data = json_decode($response, true);
-	
-      foreach ($data as $a){
-          
-          foreach ($a['results'] as $b){
-              echo "<br><h4 align='center'>".$b['name']."</h4><hr>";
-      
-              foreach ($b['costs'] as $c){
-                   echo "<h5 style='color:#28a745;'>Service ".$c['service']." ";
-                   echo "( ".$c['description']." ) </h5>";
-                  foreach ($c['cost'] as $d){
-                      echo "Rp.". number_format($d['value']);
-                      echo " Estimasi ". $d['etd']." Hari <br>";
-                 }
-              }
-          }
-      }
+$data = json_decode($response, true);
 
-      
+foreach ($data as $a){
+foreach ($a['results'] as $b){
+echo "<br><h5 align='center' id='nama_kurir'>".$b['name']."</h5><hr>";
+$no =0;
+$n =0;
+foreach ($b['costs'] as $c){
+
+echo "<h6 style='color:#28a745;'>Service <span id='nama_service".$no ++."'>".$c['service']." ";
+echo "( ".$c['description']." )</span> </h6>";
+
+foreach ($c['cost'] as $d){
+echo "<input type='radio' onclick='set_ongkir(".$n ++.");' id='ongkir' name='ongkir' value='".$d['value']."' >  ";
+echo "Rp.". number_format($d['value']);
+echo " Estimasi ". $d['etd']." Hari <br>";
+}
+
+}
+}
+}
 }    
+
+}else{
+redirect(404);    
+}
+}
+
+function simpan_alamat(){
+
+if($this->input->post('subdistrict_id')){
+$input = $this->input->post();
+$cek_alamat = $this->M_store->cek_alamat($this->session->userdata('id_account_toko'));
+
+if($cek_alamat->num_rows() > 0){
     
+$data =array(
+'id_account_toko'   => $this->session->userdata('id_account_toko'),  
+'nama_kota'         => $input['nama_kota'],
+'city_id'           => $input['city_id'],
+'nama_provinsi'     => $input['nama_provinsi'],
+'nomor_kontak'      => $input['nomor_kontak'],
+'kode_pos'          => $input['kode_pos'],
+'alamat_lengkap'    => $input['alamat_lengkap'],
+'subdistrict_id'    => $input['subdistrict_id'],
+'nama_kecamatan'    => $input['nama_kecamatan'],
+);
+$this->M_store->update_alamat($data,$this->session->userdata('id_account_toko'));
+    
+    
+}else{
+    
+$data =array(
+'id_account_toko'   => $this->session->userdata('id_account_toko'),  
+'nama_kota'         => $input['nama_kota'],
+'city_id'           => $input['city_id'],
+'nama_provinsi'     => $input['nama_provinsi'],
+'nomor_kontak'      => $input['nomor_kontak'],
+'kode_pos'          => $input['kode_pos'],
+'alamat_lengkap'    => $input['alamat_lengkap'],
+'subdistrict_id'    => $input['subdistrict_id'],
+'nama_kecamatan'    => $input['nama_kecamatan'],
+);
+$this->M_store->input_alamat($data);
+
+}
+echo "berhasil";
 }else{
 redirect(404);    
 }
 
+}
+function buat_alamat_baru (){
+if($this->session->userdata('id_account_toko')){
+$id_account_toko = $this->session->userdata('id_account_toko');
+unset($_SESSION['ongkir']);
+$this->M_store->buat_alamat_baru($id_account_toko);
+}else{
+redirect(404);    
+}
+}
+function set_ongkir(){
+if($this->input->post('ongkir')){
+$data = array(
+'ongkir' => $this->input->post('ongkir'),
+'kurir'  => $this->input->post('nama_kurir'),
+'service' => $this->input->post('nama_service'),    
+);
+$this->session->set_userdata($data);    
+}else{
+redirect(404);    
+}    
+}
+
+function ubah_kurir(){
+unset($_SESSION['ongkir']);
+unset($_SESSION['kurir']);
+unset($_SESSION['service']);
+    
+}
+
+function set_kupon(){
+if($this->input->post('kupon')){
+$kupon = $this->input->post('kupon');
+$query = $this->M_store->cek_kupon($kupon);    
+
+if($query->num_rows() > 0){
+$data_kupon = $query->row_array();
+
+$data = array(
+'nilai_kupon' => $data_kupon['nilai_kupon'],
+'hasil_kupon' => $this->cart->total() * $data_kupon['nilai_kupon'] / 100,
+'nama_kupon'  => $data_kupon['kupon'],   
+);
+$this->session->set_userdata($data);
+        
+echo "berhasil";
+}else{
+echo "tidak tersedia";    
+}    
+}else{
+ redirect(404);    
+}    
+    
+}
+function bayar(){
+if($this->input->post('metode_pembayaran')){
+$input = $this->input->post();
+$id_account = $this->session->userdata('id_account_toko');
+$alamat     = $this->M_store->cek_alamat($id_account)->row_array();
+
+$penjualan = $this->M_store->data_penjualan_toko()->num_rows();
+$angka = 6;
+$jumlah_penjualan = $penjualan;
+$invoices_toko = str_pad($jumlah_penjualan, $angka ,"0",STR_PAD_LEFT);
+
+
+$penjualan_toko = array(
+'invoices_toko'     => 'INV/ST/'.$invoices_toko,
+'id_account'        => $this->session->userdata('id_account_toko'),
+'nama_kota'         => $alamat['nama_kota'],
+'nomor_kontak'      => $alamat['nomor_kontak'],
+'nama_kecamatan'    => $alamat['nama_kecamatan'],
+'nama_provinsi'     => $alamat['nama_provinsi'],
+'kode_pos'          => $alamat['kode_pos'],
+'alamat_lengkap'    => $alamat['alamat_lengkap'],
+'nilai_kupon'       => $this->session->userdata('nilai_kupon'), 
+'hasil_kupon'       => $this->session->userdata('hasil_kupon'),
+'nama_kupon'        => $this->session->userdata('nama_kupon'),
+'ongkir'            => $this->session->userdata('ongkir'),
+'kurir'             => $this->session->userdata('kurir'),
+'service'           => $this->session->userdata('service'),    
+'metode_pembayaran' => $input['metode_pembayaran'],
+'status'            => 'pending',    
+'total_belanja'     => $this->cart->total(),    
+'total_bayar'       => $this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon'),    
+); 
+$this->M_store->input_data_jumlah_penjualan_toko($penjualan_toko);
+
+foreach ($this->cart->contents() as $items){
+$data_penjualan =array(
+'invoices_toko'     => 'INV/ST/'.$invoices_toko,
+'nama_buku'         => $items['name'],
+'harga_buku'        => $items['price'],
+'qty'               => $items['qty'],
+'subtotal'          => $items['subtotal'],
+);
+$this->M_store->input_data_penjualan_toko($data_penjualan);
+}
+
+echo "berhasil";
+$this->cart->destroy();
+$unset = array(
+'nilai_kupon', 
+'hasil_kupon',
+'nama_kupon',
+'ongkir',
+'kurir',
+'service',        
+);
+$this->session->unset_userdata($unset);
+
+}else{
+
+redirect(404);    
+
 
 }
 
-
+}
 
 }
 

@@ -113,6 +113,37 @@ return $query;
     
 }
 
+function input_alamat($data){
+$this->db->insert('data_alamat',$data);    
+}
+
+function update_alamat($data,$param){
+$this->db->update('data_alamat',$data,array('id_account_toko'=>$param));    
+}
+
+function cek_alamat($param){
+$query = $this->db->get_where('data_alamat',array('id_account_toko'=>$param));    
+return $query;    
+}
+
+function buat_alamat_baru($id_account){
+$this->db->delete('data_alamat',array('id_account_toko'=>$id_account));    
+}
+function  cek_kupon($kupon){
+$query = $this->db->get_where('data_kupon',array('kupon'=>$kupon));
+return $query;
+}
+function data_penjualan_toko(){
+$query = $this->db->get('data_jumlah_penjualan_toko');    
+
+return $query;
+}
+function input_data_jumlah_penjualan_toko($data){
+$this->db->insert('data_jumlah_penjualan_toko',$data);    
+}
+function input_data_penjualan_toko($data){
+$this->db->insert('data_penjualan_toko',$data);    
+}
 }
 
 

@@ -48,7 +48,7 @@
 <div class="row">
 <div class="col-md-6">    
 <label>Qty</label>
-<input type="text" id="qty_cost" class="form-control" id="jumlah_qty">
+<input type="text" id="qty_cost" value="1" class="form-control" id="jumlah_qty">
 
 <label>Nama kota</label>
 <input type="text" class="form-control" id="nama_kota">
@@ -192,4 +192,6 @@ showConfirmButton: true,
 }
 
 }
+
+
 </script>
