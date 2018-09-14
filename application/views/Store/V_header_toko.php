@@ -24,7 +24,7 @@ Kategori Buku
 
 <div class="row">
 <?php $kategori= $this->db->get('kategori_naskah'); foreach($kategori->result_array() as $kate){ ?>    
-<a class=" col-sm-4" href="<?php echo base_url('Store/kategori/'. base64_encode($kate['id_kategori_naskah'])) ?>"><div class="dropdown-item"> <span class="fa fa-book"></span> <?php echo $kate['nama_kategori'] ?> </div></a>
+    <a style="text-decoration: none;" class=" col-sm-4" href="<?php echo base_url('Store/kategori/'. base64_encode($kate['id_kategori_naskah'])) ?>"><div class="dropdown-item"> <span class="fa fa-book"></span> <?php echo $kate['nama_kategori'] ?> </div></a>
 
 <?php } ?>
 </div>
@@ -60,9 +60,9 @@ data-content="
 <button class="btn btn-secondary form-control  " data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" 
 data-content="
 
-<button class='btn btn-success btn-sm col form-control'>Konfirmasi Pembayaran <span class='fa fa-check'></span></button><br><hr>
-<button class='btn btn-success btn-sm col form-control'>Cek Status Pesanan <span class='fa fa-check-square-o'></span></button><br><hr>
-<button class='btn btn-success btn-sm col form-control'>Daftar Transaksi <span class='fa fa-list-alt'></span></button><br><hr>
+<a href='<?php echo base_url('Store/konfirmasi_pembayaran') ?>'><button class='btn btn-success btn-sm col form-control'>Konfirmasi Pembayaran <span class='fa fa-check'></span></button></a><br><hr>
+<a href='<?php echo base_url('Store/cek_pesanan') ?>'><button class='btn btn-success btn-sm col form-control'>Cek Status Pesanan <span class='fa fa-check-square-o'></span></button></a><br><hr>
+<a href='<?php echo base_url('Store/daftar_transaksi') ?>'><button class='btn btn-success btn-sm col form-control'>Daftar Transaksi <span class='fa fa-list-alt'></span></button><br</a><hr>
 
 <button class='btn btn-success btn-sm col form-control' onclick='logout();'>Logout <span class='fa fa-sign-out'></span></button><br>
 
@@ -235,7 +235,7 @@ text:"Logout Berhasil",
 type:"success",
 showConfirmButton: true,
 }).then(function() {
-window.location.href = "<?php echo base_url('Store') ?>";
+window.location.href = "<?php echo base_url('') ?>";
 });
     
 }

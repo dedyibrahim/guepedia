@@ -144,6 +144,31 @@ $this->db->insert('data_jumlah_penjualan_toko',$data);
 function input_data_penjualan_toko($data){
 $this->db->insert('data_penjualan_toko',$data);    
 }
+
+function data_konfirmasi_pembayaran(){
+$this->db->where(array('id_account' => $this->session->userdata('id_account_toko' ),'status'=>'pending'));
+$query = $this->db->get('data_jumlah_penjualan_toko');  
+return $query;;
+}
+
+function konfirmasi($data,$param){
+ 
+$this->db->update('data_jumlah_penjualan_toko',$data,array('id_penjualan_toko'=>$param));    
+}
+function json_transaksi(){
+$this->datatables->select('id_penjualan_toko,'
+. 'data_jumlah_penjualan_toko.invoices_toko as invoices_toko,'
+. 'data_jumlah_penjualan_toko.nama_penerima as nama_penerima,'
+. 'data_jumlah_penjualan_toko.nomor_kontak as nomor_kontak,'
+. 'data_jumlah_penjualan_toko.status as status,'
+);
+
+$this->datatables->from('data_jumlah_penjualan_toko');
+$this->datatables->where('id_account',$this->session->userdata('id_account_toko'));
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-download " href="'.base_url().'Store/download_invoices/$1"> Invoices </a>', 'base64_encode(id_penjualan_toko)');
+return $this->datatables->generate();
+}
+
 }
 
 

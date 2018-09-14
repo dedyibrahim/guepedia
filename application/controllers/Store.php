@@ -1,10 +1,15 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
+require APPPATH.'libraries/dompdf/autoload.inc.php';
+use Dompdf\Dompdf;
+
 class Store extends CI_Controller {
 public function __construct() {
 parent::__construct();
 $this->load->library('pagination');
 $this->load->model('M_store');
 $this->load->library('cart');
+$this->load->library('Datatables');
+$this->load->library('upload');
 }
 
 public function index(){
@@ -530,6 +535,7 @@ if($cek_alamat->num_rows() > 0){
     
 $data =array(
 'id_account_toko'   => $this->session->userdata('id_account_toko'),  
+'nama_penerima'     => $input['nama_penerima'],
 'nama_kota'         => $input['nama_kota'],
 'city_id'           => $input['city_id'],
 'nama_provinsi'     => $input['nama_provinsi'],
@@ -546,6 +552,7 @@ $this->M_store->update_alamat($data,$this->session->userdata('id_account_toko'))
     
 $data =array(
 'id_account_toko'   => $this->session->userdata('id_account_toko'),  
+'nama_penerima'     => $input['nama_penerima'],
 'nama_kota'         => $input['nama_kota'],
 'city_id'           => $input['city_id'],
 'nama_provinsi'     => $input['nama_provinsi'],
@@ -622,16 +629,86 @@ if($this->input->post('metode_pembayaran')){
 $input = $this->input->post();
 $id_account = $this->session->userdata('id_account_toko');
 $alamat     = $this->M_store->cek_alamat($id_account)->row_array();
-
 $penjualan = $this->M_store->data_penjualan_toko()->num_rows();
 $angka = 6;
 $jumlah_penjualan = $penjualan;
 $invoices_toko = str_pad($jumlah_penjualan, $angka ,"0",STR_PAD_LEFT);
 
 
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($this->session->userdata('email_toko'));
+$this->email->cc("guepedia@gmail.com");
+$this->email->subject('Konfirmasi pesanan');
+$html =  "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
+        . "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer <br>"
+        . "dengan nomor rekening sebagai berikut<br> . . . "
+        . "Nama bank : Bank BCA <br>"
+        . "Nomor Rekenng : 2120077824 <br>"
+        . "Atas nama: Dianata Eka Putra <br>";
+$html .= "Dengan Detail Produk sebagai berikut <br>";
+$html .= "<h3 align='center'>Store Guepedia <br> ".'INV/ST/'.$invoices_toko."</h3><hr>"; 
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+        <tr>
+        <th>No</th>   
+        <th>Nama Buku</th>   
+        <th>Harga</th>   
+        <th>Qty</th>   
+        <th>Jumlah</th>   
+        </tr>';
+$d=1 ;
+foreach ($this->cart->contents() as $items){
+$html .='<tr>';    
+$html .='<td>'.$d++.'</td>';
+$html .='<td>'.$items['name'].'</td>';
+$html .='<td>Rp.'.number_format($items['price']).'</td>';       
+$html .='<td>'.$items['qty'].'</td>';
+$html .='<td>Rp. '.number_format($items['subtotal']).'</td>';       
+$html .='</tr>';
+} 
+
+$html .="<tr>
+<td colspan='2'>Total Belanja</td>    
+<td colspan='3'>Rp.".number_format($this->cart->total())."</td>    
+</tr>
+<tr>
+<td colspan='2'>Ongkir </td>    
+<td  colspan='3'>Rp.".number_format($this->session->userdata('ongkir'))." </td>    
+</tr>";
+if($this->session->userdata('nilai_kupon')){ 
+$html .= "<tr>
+<td colspan='2'>Kode promo ".$this->session->userdata('nama_kupon')."</td>    
+<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($this->session->userdata('hasil_kupon'))."</td>    
+</tr>";
+ }
+$html.= 
+"<tr>
+<td colspan='2'>Total Bayar</td>    
+<td  colspan='3'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon'))."</td>    
+</tr></table><hr>";
+$html .= "Nama Penerima :".$alamat['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : <br>".$alamat['nama_kecamatan']." ".$alamat['nama_kota']." ".$alamat['nama_provinsi']." ".$alamat['alamat_lengkap']." ".$alamat['kode_pos']."<br>"; 
+$html .= $alamat['nomor_kontak']."<br>"; 
+
+$this->email->message($html);
+
+if (!$this->email->send()){    
+echo $this->email->print_debugger();
+}else{
 $penjualan_toko = array(
 'invoices_toko'     => 'INV/ST/'.$invoices_toko,
 'id_account'        => $this->session->userdata('id_account_toko'),
+'nama_penerima'     => $alamat['nama_penerima'],
 'nama_kota'         => $alamat['nama_kota'],
 'nomor_kontak'      => $alamat['nomor_kontak'],
 'nama_kecamatan'    => $alamat['nama_kecamatan'],
@@ -673,15 +750,219 @@ $unset = array(
 'service',        
 );
 $this->session->unset_userdata($unset);
-
+}
 }else{
 
 redirect(404);    
-
-
+}
 }
 
+function konfirmasi_pembayaran(){
+if($this->session->userdata('id_account_toko')){
+  
+$konfirmasi = $this->M_store->data_konfirmasi_pembayaran();
+    
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_konfirmasi_pembayaran',['konfirmasi'=>$konfirmasi]);
+$this->load->view('Umum/V_footer_toko');    
+}else{
+redirect('Store/login_akun');   
+}    
 }
+
+function konfirmasi(){
+if($this->input->post('jumlah_bayar')){
+$input = $this->input->post();
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$config['upload_path']          = './uploads/bukti_bayar/';
+$config['allowed_types']        = 'pdf|jpeg|jpg|png|';
+$config['file_size']            = "2004800";
+$config['encrypt_name']         = TRUE;
+
+$this->upload->initialize($config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($this->session->userdata('email_toko'));
+$this->email->cc("guepedia@gmail.com");
+$this->email->subject('Konfirmasi pembayaran berhasil');
+
+$id = $input['inv'];
+$this->db->where(array('id_penjualan_toko'=>$id,'id_account'=>$this->session->userdata('id_account_toko')));    
+$query = $this->db->get('data_jumlah_penjualan_toko');
+$static = $query->row_array();
+
+$data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
+$d=1 ;
+
+$html  ="<h3>Terimakasih anda telah melakukan  konfirmasi pembayaran di store guepedia dengan  detail produk sebagai berikut </h3><br>";
+$html .="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
+$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+        <tr>
+        <th>No</th>   
+        <th>Nama Buku</th>   
+        <th>Harga</th>   
+        <th>Qty</th>   
+        <th>Jumlah</th>   
+        </tr>';
+
+foreach ($data_orderan->result_array() as $data){
+$html .='<tr>';    
+$html .='<td>'.$d++.'</td>';
+$html .='<td>'.$data['nama_buku'].'</td>';
+$html .='<td>Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td>'.$data['qty'].'</td>';
+$html .='<td>Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='</tr>';
+} 
+
+$html .="<tr>
+<td colspan='2'>Total Belanja</td>    
+<td colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+</tr>
+<tr>
+<td colspan='2'>Ongkir </td>    
+<td  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+</tr>";
+if($static['nilai_kupon']){ 
+$html .= "<tr>
+<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+ }
+$html.= 
+"<tr>
+<td colspan='2'>Total Bayar</td>    
+<td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+</tr></table><hr>";
+$html .= "Nama Penerima :".$static['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
+$html .= $static['nomor_kontak']."<br>"; 
+
+$this->email->message($html);
+if (!$this->email->send()){    
+echo $this->email->print_debugger();
+}else{
+if (!$this->upload->do_upload('bukti_bayar')){
+
+echo $this->upload->display_errors();
+
+
+}else{  
+$data = array(
+'nilai_transfer' => $input['jumlah_bayar'],
+'bukti_transfer' => $this->upload->data('file_name'),  
+'status'         => 'proses',
+);
+ 
+$this->M_store->konfirmasi($data,$input['inv']);
+
+echo "berhasil";
+
+}
+}
+}else{
+redirect(404);    
+}    
+    
+}
+function download_invoices(){
+if($this->session->userdata('id_account_toko')){
+$id = base64_decode($this->uri->segment(3));
+
+$this->db->where(array('id_penjualan_toko'=>$id,'id_account'=>$this->session->userdata('id_account_toko')));    
+$query = $this->db->get('data_jumlah_penjualan_toko');
+$static = $query->row_array();
+
+$data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
+$d=1 ;
+$html  ="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
+$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
+
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+        <tr>
+        <th>No</th>   
+        <th>Nama Buku</th>   
+        <th>Harga</th>   
+        <th>Qty</th>   
+        <th>Jumlah</th>   
+        </tr>';
+
+foreach ($data_orderan->result_array() as $data){
+$html .='<tr>';    
+$html .='<td>'.$d++.'</td>';
+$html .='<td>'.$data['nama_buku'].'</td>';
+$html .='<td>Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td>'.$data['qty'].'</td>';
+$html .='<td>Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='</tr>';
+} 
+
+$html .="<tr>
+<td colspan='2'>Total Belanja</td>    
+<td colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+</tr>
+<tr>
+<td colspan='2'>Ongkir </td>    
+<td  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+</tr>";
+if($static['nilai_kupon']){ 
+$html .= "<tr>
+<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+ }
+$html.= 
+"<tr>
+<td colspan='2'>Total Bayar</td>    
+<td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+</tr></table><hr>";
+$html .= "Nama Penerima :".$static['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
+$html .= $static['nomor_kontak']."<br>"; 
+
+ 
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+    
+    
+}else{
+redirect('Store/login_akun');   
+} 
+}
+
+public function json_transaksi(){
+echo $this->M_store->json_transaksi();       
+}
+
+function daftar_transaksi(){
+if($this->session->userdata('id_account_toko')){
+ 
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_daftar_transaksi');
+$this->load->view('Umum/V_footer_toko');     
+    
+}else{
+redirect(404);    
+}    
+}
+
 
 }
 

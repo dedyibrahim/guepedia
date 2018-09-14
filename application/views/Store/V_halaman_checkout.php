@@ -1,5 +1,4 @@
 <?php  $alamat = $data_alamat->row_array(); ?>
-
 <div class="container" style="background-color: #fff; margin-top: 6.5%;">
 
 <h4 align="center"><span class="fa fa-list-ul fa-3x fa-color"></span><br>Checkout</h4><hr>
@@ -9,6 +8,9 @@
 <?php if(!$alamat){ ?>    
 <label>Nomor kontak</label>
 <input type="text" class="form-control" id="nomor_kontak">
+
+<label>Penerima</label>
+<input type="text" class="form-control" value="<?php echo $this->session->userdata('nama_lengkap') ?>" id="nama_penerima">
 
 <label>Nama kota</label>
 <input type="text" class="form-control" id="nama_kota">
@@ -25,6 +27,7 @@
 <button class="btn btn-success form-control" id="simpan_alamat">Simpan Alamat <span class="fa fa-save"></span></button>
 <?php } else { ?>
 
+Penerima : <?php echo $alamat['nama_penerima'] ?><br>
 Nama kota : <?php echo $alamat['nama_kota'] ?><br>
 Nama kota : <?php echo $alamat['nomor_kontak'] ?><br>
 Nama Provinsi : <?php echo $alamat['nama_provinsi'] ?><br>
@@ -72,7 +75,7 @@ Ongkos kirim  <b  class="float-right">Rp.<?php echo number_format($this->session
  <?php } ?>
 
 <?php if ($this->session->userdata('hasil_kupon')){ ?>
-Kupon  <b  class="float-right">Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
+Kupon  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
 <hr>
  <?php } ?>
 <?php if ($this->session->userdata('ongkir')){ ?>
@@ -147,6 +150,7 @@ showConfirmButton: true,
 $(document).ready(function(){
 $("#simpan_alamat").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
+var nama_penerima   = $("#nama_penerima").val();
 var nama_kota       = $("#nama_kota").val();
 var city_id         = $("#city_id").val();
 var nama_provinsi   = $("#nama_provinsi").val();
@@ -156,12 +160,12 @@ var alamat_lengkap  = $("#alamat_lengkap").val();
 var subdistrict_id  = $("#subdistrict_id  option:selected").val();
 var nama_kecamatan  = $("#subdistrict_id option:selected").html();
 
-if(nomor_kontak !='' && nama_kecamatan !='' && nama_kota !='' && city_id !='' && nama_provinsi !='' && kode_pos !='' && alamat_lengkap !='' && subdistrict_id !='' ){
+if(nama_penerima !='' && nomor_kontak !='' && nama_kecamatan !='' && nama_kota !='' && city_id !='' && nama_provinsi !='' && kode_pos !='' && alamat_lengkap !='' && subdistrict_id !='' ){
 
 $.ajax({
 type :"POST",
 url  :"<?php echo base_url('Store/simpan_alamat') ?>",
-data :"token="+token+"&nomor_kontak="+nomor_kontak+"&nama_kota="+nama_kota+"&city_id="+city_id+"&nama_provinsi="+nama_provinsi+"&kode_pos="+kode_pos+"&alamat_lengkap="+alamat_lengkap+"&subdistrict_id="+subdistrict_id+"&nama_kecamatan="+nama_kecamatan,
+data :"token="+token+"&nama_penerima="+nama_penerima+"&nomor_kontak="+nomor_kontak+"&nama_kota="+nama_kota+"&city_id="+city_id+"&nama_provinsi="+nama_provinsi+"&kode_pos="+kode_pos+"&alamat_lengkap="+alamat_lengkap+"&subdistrict_id="+subdistrict_id+"&nama_kecamatan="+nama_kecamatan,
 success:function(data){
 if(data == "berhasil"){
 swal({
