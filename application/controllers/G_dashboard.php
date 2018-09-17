@@ -101,6 +101,11 @@ echo $this->M_dashboard->json_customer_royalti();
 public function json_transfer_royalti(){
 echo $this->M_dashboard->json_transfer_royalti();       
 }
+
+public function json_all_order(){
+echo $this->M_dashboard->json_all_order();       
+}
+
 public function data_file_naskah(){
 
 $this->load->view('Umum/V_header');
@@ -453,7 +458,7 @@ $this->M_dashboard->hapus_penulis($id_account);
 redirect('G_dashboard/penulis');
 }
 
-function pengaturan_toko(){
+function produk_laris(){
 
 $produk_laris = $this->M_dashboard->data_produk_laris();
 
@@ -512,7 +517,7 @@ $cek_sesi = $this->session->userdata('data_kasir');
 
 $data_lama = $this->session->userdata('data_kasir');
 if($cek_sesi != NULL){
-    
+
 foreach ($query->result_array() as $buku){
 $array2 = array(
 'id_account'    =>$buku['id_account'],
@@ -526,7 +531,7 @@ $array2 = array(
 'royalti'       =>$buku['harga'] * 15 / 100,
 'bersih'        =>$buku['harga'] - $buku['harga'] * 15 / 100,    
 'penulis'       =>$buku['penulis'],
-    
+
 );
 }
 array_push($data_lama, $array2);    
@@ -548,10 +553,10 @@ $array['data_kasir'][]=[
 'royalti'       =>$buku['harga'] * 15 / 100,
 'bersih'        =>$buku['harga'] - $buku['harga'] * 15 / 100,    
 'penulis'       =>$buku['penulis'],
-    
+
 ];
 $this->session->set_userdata($array);    
-    
+
 }
 }
 
@@ -559,10 +564,10 @@ $this->session->set_userdata($array);
 echo print_r($this->session->userdata());
 
 }else{
-    
+
 redirect(404);    
 }    
-    
+
 }
 function canvas_kasir(){
 $data = $this->session->userdata('data_kasir'); 
@@ -574,13 +579,13 @@ $bersih         = 0;
 $nilai_diskon   = 0;
 if (is_array($data) || is_object($data)){
 foreach($data as $i=>$ht){
-    
- $subtotal      += $data[$i]['jumlah'];
- $royalti       += $data[$i]['royalti'];
- $bersih        += $data[$i]['bersih'];
- $nilai_diskon  += $data[$i]['nilai_diskon'];
-    
- }
+
+$subtotal      += $data[$i]['jumlah'];
+$royalti       += $data[$i]['royalti'];
+$bersih        += $data[$i]['bersih'];
+$nilai_diskon  += $data[$i]['nilai_diskon'];
+
+}
 }
 $total = array(
 'subtotal'      =>$subtotal,    
@@ -592,24 +597,24 @@ $total = array(
 );
 
 $this->session->set_userdata($total);
-   
 
 
-    
+
+
 echo "<table class='table table-striped table-sm table-bordered table-condensed table-hover'>"
-    . "<tr>"
-        . "<th style='width: 20%;'>Judul</th>"
-        . "<th>Id Account</th>"
-        . "<th>Penulis</th>"
-        . "<th style='width: 5%;'>Qty</th>"
-        . "<th>Harga</th>"
-        . "<th>Jumlah</th>"
-        . "<th style='width: 5%;'>Diskon </th>"
-        . "<th>Nilai Diskon </th>"
-        . "<th>Royalti</th>"
-        . "<th>Bersih</th>"
-        . "<th>Aksi</th>"
-    . "</tr>";
+. "<tr>"
+. "<th style='width: 20%;'>Judul</th>"
+. "<th>Id Account</th>"
+. "<th>Penulis</th>"
+. "<th style='width: 5%;'>Qty</th>"
+. "<th>Harga</th>"
+. "<th>Jumlah</th>"
+. "<th style='width: 5%;'>Diskon </th>"
+. "<th>Nilai Diskon </th>"
+. "<th>Royalti</th>"
+. "<th>Bersih</th>"
+. "<th>Aksi</th>"
+. "</tr>";
 
 if (is_array($data) || is_object($data)){
 
@@ -629,18 +634,18 @@ echo "
 <td>".number_format($data[$i]['bersih'])."</td>
 <td><button onclick='hapus_datakasir(".$i.");' class='btn btn-danger'><span class='fa fa-close'></span></button> || <button onclick='beri_diskon(".$i.");' class='btn btn-warning'><span class='fa fa fa-percent'></span></button></td>
 </tr>";
-    
+
 }
 }
 echo "<tr>"
 . "<td colspan='5'>Sub Total</td>"
 . "<td colspan='2'>".number_format($this->session->userdata('subtotal'))."</td>"
-        
+
 . "<td>".number_format($this->session->userdata('nilai_diskon'))."</td>"
-        
-        
+
+
 . "<td>".number_format($this->session->userdata('royalti'))."</td>"
-        
+
 . "<td colspan='2'>".number_format($this->session->userdata('bersih'))."</td>"
 
 . "</tr>";
@@ -694,7 +699,7 @@ $array_items = array(
 'nilai_ppn',
 'diskon_total',
 'jumlah_diskon_total',    
-    
+
 );
 
 $this->session->unset_userdata($array_items);
@@ -721,7 +726,7 @@ $data2 = array(
 'royalti'       =>$d['harga']*$qty_kasir * 15 / 100,
 'bersih'        =>$d['harga']*$qty_kasir - $d['harga']*$qty_kasir * 15 / 100,    
 'penulis'       =>$d['penulis'],
-  );
+);
 
 array_push($detailsdata, $data2);
 
@@ -734,7 +739,7 @@ $array_items = array(
 'nilai_ppn',
 'diskon_total',
 'jumlah_diskon_total',    
-    
+
 );
 
 $this->session->unset_userdata($array_items);
@@ -763,27 +768,27 @@ $data2 = array(
 'royalti'       =>$d['harga'] * $d['qty'] * 15  / 100,
 'bersih'        =>$d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100 - $d['harga'] * $d['qty'] * 15  / 100,    
 'penulis'       =>$d['penulis'],
-  );
+);
 
 array_push($detailsdata, $data2);
 
 $this->session->set_userdata('data_kasir',$detailsdata);
 
 unset($_SESSION['data_kasir'][$id_qty]);
- $array_items = array(
+$array_items = array(
 'nama_biaya_lain',
 'jumlah_biaya_lain',
 'nilai_ppn',
 'diskon_total',
 'jumlah_diskon_total',    
-    
+
 );
 
 $this->session->unset_userdata($array_items);
-  
-    
+
+
 }else{
-    
+
 $id_qty    = $this->input->post('id_qty');
 $qty_kasir = $this->input->post('qty_kasir');
 $detailsdata = $this->session->userdata('data_kasir');
@@ -802,7 +807,7 @@ $data2 = array(
 'royalti'       =>0,
 'bersih'        =>$d['harga'] * $d['qty'] - $d['jumlah'] *  $input['nilai_diskon'] / 100 ,    
 'penulis'       =>$d['penulis'],
-    );
+);
 
 array_push($detailsdata, $data2);
 
@@ -815,20 +820,20 @@ $array_items = array(
 'nilai_ppn',
 'diskon_total',
 'jumlah_diskon_total',    
-    
+
 );
 
 $this->session->unset_userdata($array_items);
-   
-   
+
+
 }
 
 }else{
-    
-    redirect(404);    
+
+redirect(404);    
 }
-    
-    
+
+
 }
 
 function simpan_biaya_lain(){
@@ -842,66 +847,66 @@ $data = array(
 
 $this->session->set_userdata($data);
 }else{
-    
-    redirect(404);    
+
+redirect(404);    
 }    
-    
+
 }
 function set_ppn (){
- if($this->input->post('nilai_ppn')){
- 
- $nilai_ppn = $this->session->userdata('subtotal') * 10 / 100;
- $data = array(
- 'nilai_ppn' => $nilai_ppn,    
- );
- 
- $this->session->set_userdata($data);
- }else{
- redirect(404);   
- }   
-    
-    
+if($this->input->post('nilai_ppn')){
+
+$nilai_ppn = $this->session->userdata('subtotal') * 10 / 100;
+$data = array(
+'nilai_ppn' => $nilai_ppn,    
+);
+
+$this->session->set_userdata($data);
+}else{
+redirect(404);   
+}   
+
+
 }
 
 function set_diskon_total(){
 if($this->input->post('nilai_diskon_total')){
-    $input = $this->input->post();
-    
-    $nilai_diskon_total =  $this->session->userdata('subtotal') * $input['nilai_diskon_total'] / 100;
+$input = $this->input->post();
+
+$nilai_diskon_total =  $this->session->userdata('subtotal') * $input['nilai_diskon_total'] / 100;
 $data = array(
-    
+
 'diskon_total'       => $input['nilai_diskon_total'],    
 'jumlah_diskon_total'=> $nilai_diskon_total,
-    
+
 );
 $this->session->set_userdata($data);
-            
+
 }else{
-    
-    redirect(404);    
+
+redirect(404);    
 }    
-    
+
 }
 
 
 function simpan_customer_baru(){
 if($this->input->post('nama_customer')){
- $input = $this->input->post();
- 
- $data = array(
-  'nama_customer' => $input['nama_customer'],
-  'nomor_kontak' => $input['nomor_kontak'],
-  'alamat_lengkap'=>$input['alamat_lengkap'],   
- );
- 
- $this->M_dashboard->simpan_customer_baru($data);
- echo "berhasil";   
+$input = $this->input->post();
+
+$data = array(
+'nama_customer' => $input['nama_customer'],
+'nomor_kontak' => $input['nomor_kontak'],
+'alamat_lengkap'=>$input['alamat_lengkap'],   
+);
+
+$this->M_dashboard->simpan_customer_baru($data);
+echo "berhasil";   
 }else{
-    
- redirect(404);    
+
+redirect(404);    
 }    
-    
-    
+
+
 }
 
 function simpan_penjualan(){
@@ -937,7 +942,7 @@ $data1 = array(
 'total_royalti'         => $this->session->userdata('royalti'),
 'bersih'                => $this->session->userdata('bersih'),
 'status_penjualan'      => 'Pending',
- );
+);
 
 $this->M_dashboard->simpan_data_penjualan($data1);
 
@@ -959,7 +964,7 @@ $data2 = array (
 'royalti'               => $data[$i]['royalti'],
 'bersih'                => $data[$i]['bersih'],
 'tanggal_transaksi'     => date('d/m/Y'),
-    
+
 );    
 
 $this->M_dashboard->simpan_jumlah_penjualan($data2);
@@ -980,7 +985,7 @@ $array_items = array(
 );
 
 $this->session->unset_userdata($array_items);
-   
+
 
 echo "berhasil";
 
@@ -989,7 +994,7 @@ echo "berhasil";
 redirect(404);    
 
 }    
-    
+
 }
 
 function print_penjualan(){
@@ -1011,17 +1016,17 @@ $html .="Alamat lengkap :".$data_static['alamat_lengkap']."<br><br>";
 
 
 $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
-        . '<tr>'
-        . '<th>Judul Buku</th>'
-        . '<th>Penulis</th>'
-        . '<th>Harga</th>'
-        . '<th>Qty</th>'
-        . '<th>Jumlah</th>'
-        . '<th>Diskon</th>'
-        . '<th>Nilai Diskon</th>'
-        . '<th>Royalti</th>'
-        . '<th>Bersih</th>'
-        . '</tr>';
+. '<tr>'
+. '<th>Judul Buku</th>'
+. '<th>Penulis</th>'
+. '<th>Harga</th>'
+. '<th>Qty</th>'
+. '<th>Jumlah</th>'
+. '<th>Diskon</th>'
+. '<th>Nilai Diskon</th>'
+. '<th>Royalti</th>'
+. '<th>Bersih</th>'
+. '</tr>';
 
 
 foreach ($data->result_array() as $penjualan){
@@ -1089,22 +1094,22 @@ $html.= "<tr>"
 
 
 $html.= '</table>';
-    
-    
-    
+
+
+
 $dompdf = new Dompdf(array('enable_remote'=>true));
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
 $dompdf->stream('INV.pdf',array('Attachment'=>0));
-    
-    
+
+
 }
 
 
 public function buat_laporan(){
 if ($this->input->post('dates')){
-    
+
 $tanggal = $this->input->post('dates');
 $range = explode(' ', $tanggal);
 
@@ -1116,20 +1121,20 @@ $query = $this->db->get();
 
 $html  = "<h2 align='center'>Laporan penjualan <br>".$tanggal."</h2>";
 $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
-        . '<tr>'
-        . '<th>No invoices</th>'
-        . '<th>Customer</th>'
-        . '<th>Tanggal</th>'
-        . '<th>Judul Buku</th>'
-        . '<th>Penulis</th>'
-        . '<th>Harga</th>'
-        . '<th>Qty</th>'
-        . '<th>Jumlah</th>'
-        . '<th>Diskon</th>'
-        . '<th>Nilai Diskon</th>'
-        . '<th>Royalti</th>'
-        . '<th>Bersih</th>'
-        . '</tr>';
+. '<tr>'
+. '<th>No invoices</th>'
+. '<th>Customer</th>'
+. '<th>Tanggal</th>'
+. '<th>Judul Buku</th>'
+. '<th>Penulis</th>'
+. '<th>Harga</th>'
+. '<th>Qty</th>'
+. '<th>Jumlah</th>'
+. '<th>Diskon</th>'
+. '<th>Nilai Diskon</th>'
+. '<th>Royalti</th>'
+. '<th>Bersih</th>'
+. '</tr>';
 
 
 foreach ($query->result_array() as $penjualan){
@@ -1156,12 +1161,12 @@ $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
 $dompdf->stream('INV.pdf',array('Attachment'=>0));
-   
+
 
 }else{
 redirect(404);    
 }
-    
+
 }
 
 function cetak_label(){
@@ -1173,8 +1178,8 @@ $this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = da
 $this->db->where('data_penjualan.id_data_penjualan',$id_data_penjualan);
 $data = $this->db->get();
 $data_static = $data->row_array(); 
-  
-    
+
+
 $html  ="<img src='".base_url('assets/img/logo-toko.png')."'>";
 $html .="<br><hr>";
 
@@ -1193,31 +1198,31 @@ foreach ($data->result_array() as $penjualan){
 $html .= '' . $penjualan['judul_buku'] . ' (' . $penjualan['qty'].')<br>';
 }
 
-    
+
 $dompdf = new Dompdf(array('enable_remote'=>true));
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A5','landscape');
 $dompdf->render();
 $dompdf->stream('INV.pdf',array('Attachment'=>0));
-    
-    
+
+
 }
 
 public function update_status_penjualan(){
 if($this->input->post('id_data_penjualan')){
-   $input = $this->input->post();
-   
-   $data = array(
-   'status_penjualan' => $input['status_penjualan'],
-   'resi_pengiriman' => $input['resi_pengiriman'],  
-   );
-   
-   $this->M_dashboard->update_status_penjualan($data,$input['id_data_penjualan']);
+$input = $this->input->post();
+
+$data = array(
+'status_penjualan' => $input['status_penjualan'],
+'resi_pengiriman' => $input['resi_pengiriman'],  
+);
+
+$this->M_dashboard->update_status_penjualan($data,$input['id_data_penjualan']);
 }else{
-    
-    redirect(404);    
+
+redirect(404);    
 }    
-    
+
 }
 public function json_penjualan_customer($id){
 echo $this->M_dashboard->json_penjualan_customer($id);       
@@ -1247,17 +1252,17 @@ $html .="Alamat lengkap :".$data_static['alamat_lengkap']."<br><br>";
 
 
 $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
-        . '<tr>'
-        . '<th>Judul Buku</th>'
-        . '<th>Penulis</th>'
-        . '<th>Harga</th>'
-        . '<th>Qty</th>'
-        . '<th>Jumlah</th>'
-        . '<th>Diskon</th>'
-        . '<th>Nilai Diskon</th>'
-        . '<th>Royalti</th>'
-        . '<th>Bersih</th>'
-        . '</tr>';
+. '<tr>'
+. '<th>Judul Buku</th>'
+. '<th>Penulis</th>'
+. '<th>Harga</th>'
+. '<th>Qty</th>'
+. '<th>Jumlah</th>'
+. '<th>Diskon</th>'
+. '<th>Nilai Diskon</th>'
+. '<th>Royalti</th>'
+. '<th>Bersih</th>'
+. '</tr>';
 
 
 foreach ($data->result_array() as $penjualan){
@@ -1277,16 +1282,14 @@ $html .= '<tr>
 
 
 $html.= '</table>';
-    
-    
-    
+
 $dompdf = new Dompdf(array('enable_remote'=>true));
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
 $dompdf->stream('INV.pdf',array('Attachment'=>0));
-    
-    
+
+
 }
 public function penarikan(){
 
@@ -1321,9 +1324,7 @@ $config2['encrypt_name']         = TRUE;
 $this->upload->initialize($config2);
 
 if(!$this->upload->do_upload('bukti_transfer')){
-
 echo $this->upload->display_errors();
-
 }else{
 $data = array(
 'royalti'           => $input['royalti'],
@@ -1332,30 +1333,225 @@ $data = array(
 'royalti_bersih'    => $input['royalti_bersih'],   
 'bukti_transfer'    => $this->upload->data('file_name'),    
 );
-
 $this->M_dashboard->simpan_transfer($data);
-
 echo "berhasil";
 }
 
-
-    
-    
 }else{
-    
 redirect(404);    
 } 
-    
-   
- 
 }
 
 public function download_bukti(){
-
 $id_data_transfer = base64_decode($this->uri->segment(3));
-$bukti_transfer = $this->db->get_where('data_transfer_royalti',array('id_data_transfer_royalti'=>$id_data_transfer))->row_array();
-
-
+$bukti_transfer   = $this->db->get_where('data_transfer_royalti',array('id_data_transfer_royalti'=>$id_data_transfer))->row_array();
 force_download('./uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer'], NULL);
 }
+
+public function orderan_masuk(){
+  
+$orderan_masuk = $this->M_dashboard->orderan_masuk();
+    
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_menu_toko');
+$this->load->view('Halaman_dashboard/V_orderan_masuk',['orderan_masuk'=>$orderan_masuk]);
+$this->load->view('Umum/V_footer');
+}
+
+public function orderan_proses(){
+  
+$orderan_masuk = $this->M_dashboard->orderan_proses();
+    
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_menu_toko');
+$this->load->view('Halaman_dashboard/V_orderan_proses',['orderan_masuk'=>$orderan_masuk]);
+$this->load->view('Umum/V_footer');
+}
+
+function download_invoices(){
+if($this->session->userdata('id_admin')){
+$id = base64_decode($this->uri->segment(3));
+
+$this->db->where(array('id_penjualan_toko'=>$id));    
+$query = $this->db->get('data_jumlah_penjualan_toko');
+$static = $query->row_array();
+
+$data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
+$d=1 ;
+$html  ="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
+$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
+
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+        <tr>
+        <th>No</th>   
+        <th>Nama Buku</th>   
+        <th>Harga</th>   
+        <th>Qty</th>   
+        <th>Jumlah</th>   
+        </tr>';
+
+foreach ($data_orderan->result_array() as $data){
+$html .='<tr>';    
+$html .='<td>'.$d++.'</td>';
+$html .='<td>'.$data['nama_buku'].'</td>';
+$html .='<td>Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td>'.$data['qty'].'</td>';
+$html .='<td>Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='</tr>';
+} 
+
+$html .="<tr>
+<td colspan='2'>Total Belanja</td>    
+<td colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+</tr>
+<tr>
+<td colspan='2'>Ongkir </td>    
+<td  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+</tr>";
+if($static['nilai_kupon']){ 
+$html .= "<tr>
+<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+ }
+$html.= 
+"<tr>
+<td colspan='2'>Total Bayar</td>    
+<td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+</tr></table><hr>";
+$html .= "Nama Penerima :".$static['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
+$html .= $static['nomor_kontak']."<br>"; 
+
+ 
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+    
+    
+}else{
+redirect('Store/login_akun');   
+} 
+}
+
+
+function input_resi_toko(){
+if($this->input->post('resi')){
+$input = $this->input->post();
+
+$data = array(
+ 'status' =>'terkirim',
+ 'nomor_resi'=>$input['resi'],   
+);
+$this->M_dashboard->input_resi_toko($data,$input['id_penjualan_toko']);
+
+echo "berhasil";
+}else{
+redirect(404);    
+}    
+}
+
+public function orderan_kirim(){
+$orderan_kirim = $this->M_dashboard->orderan_kirim();
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_menu_toko');
+$this->load->view('Halaman_dashboard/V_orderan_kirim',['orderan_kirim'=>$orderan_kirim]);
+$this->load->view('Umum/V_footer');
+}
+
+public function orderan_selesai(){
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_menu_toko');
+$this->load->view('Halaman_dashboard/V_orderan_selesai');
+$this->load->view('Umum/V_footer');
+}
+
+function input_nama_penerima(){
+if($this->input->post('penerima')){
+$input = $this->input->post();
+
+$data = array(
+ 'status' =>'selesai',
+ 'penerima_paket'=>$input['penerima'],   
+);
+$this->M_dashboard->input_nama_penerima($data,$input['id_penjualan_toko']);
+
+echo "berhasil";
+}else{
+redirect(404);    
+}    
+}
+function input_alasan_penolakan(){
+if($this->input->post('alasan')){
+$input = $this->input->post();
+
+$data = array(
+ 'status' =>'tolak',
+ 'alasan_penolakan'=>$input['alasan'],   
+);
+$this->M_dashboard->input_alasan_penolakan($data,$input['id_penjualan_toko']);
+
+echo "berhasil";
+}else{
+redirect(404);    
+}    
+}
+function input_balance(){
+if($this->input->post('nilai_balance')){
+$input = $this->input->post();
+$data = array(
+'royalti_diperoleh' =>$input['nilai_balance']    
+);
+$this->M_dashboard->simpan_balance($data,$input['id_account']);
+
+echo "berhasil";    
+}else{
+redirect(404);    
+}
+
+    
+}
+function promo_kupon(){
+$produk_laris = $this->M_dashboard->data_produk_laris();
+$data_promo = $this->M_dashboard->data_promo();
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_menu_toko');
+$this->load->view('Halaman_dashboard/V_promo_kupon',['data_promo'=>$data_promo,'produk_laris'=>$produk_laris]);
+$this->load->view('Umum/V_footer');
+
+
+}
+
+function set_promo(){
+if($this->input->post('nilai_promo')){
+$input = $this->input->post();
+
+$data = array(
+'kode_promo'  =>$input['kode_promo'],
+'nilai_promo' =>$input['nilai_promo'],    
+);
+
+$this->M_dashboard->input_promo($data);
+
+echo "berhasil";
+}else{
+redirect(404);    
+}        
+}
+
+function hapus_kupon(){
+$id = $this->uri->segment(3);
+
+$this->M_dashboard->hapus_promo($id);
+
+redirect('G_dashboard/promo_kupon');
+}
+
 }

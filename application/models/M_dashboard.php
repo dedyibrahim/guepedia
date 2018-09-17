@@ -371,4 +371,71 @@ return $this->datatables->generate();
       
 }
 
+function json_all_order(){
+$this->datatables->select('data_jumlah_penjualan_toko.id_penjualan_toko,'
+.'data_jumlah_penjualan_toko.invoices_toko as invoices_toko,'
+.'data_jumlah_penjualan_toko.nomor_kontak as nomor_kontak,'
+.'data_jumlah_penjualan_toko.penerima_paket as penerima_paket,'
+.'data_jumlah_penjualan_toko.status as status,'
+.'data_jumlah_penjualan_toko.nomor_resi as nomor_resi,'
+        
+);
+$this->datatables->where('status','selesai');
+$this->datatables->or_where('status','expired');
+$this->datatables->or_where('status','tolak');
+$this->datatables->from('data_jumlah_penjualan_toko');
+$this->datatables->add_column('view','<a href='. base_url('G_dashboard/download_invoices/$1').' class="btn btn-sm btn-success fa fa-download "> Download invoices </a>', 'base64_encode(id_penjualan_toko)');
+return $this->datatables->generate();
+      
+}
+
+function orderan_masuk(){
+
+$query = $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'pending'));
+
+return $query;
+}
+
+function orderan_proses(){
+
+$query = $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'proses'));
+
+return $query;
+}
+
+function orderan_kirim(){
+
+$query = $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'terkirim'));
+
+return $query;
+}
+
+function input_resi_toko($data,$param){
+$this->db->update('data_jumlah_penjualan_toko',$data,array('id_penjualan_toko'=>$param));    
+}
+
+function input_nama_penerima($data,$param){
+$this->db->update('data_jumlah_penjualan_toko',$data,array('id_penjualan_toko'=>$param));    
+}
+
+function input_alasan_penolakan($data,$param){
+$this->db->update('data_jumlah_penjualan_toko',$data,array('id_penjualan_toko'=>$param));    
+}
+
+function simpan_balance($data,$param){
+$this->db->update('akun_penulis',$data,array('id_account'=> base64_decode($param)));    
+}
+
+function input_promo($data){
+ $this->db->insert('data_kode_promo',$data);   
+}
+function data_promo(){
+$query = $this->db->get('data_kode_promo');
+return $query;
+    
+}
+function hapus_promo($id){
+$this->db->delete('data_kode_promo',array('id_data_kode_promo'=> base64_decode($id)));    
+}
+
 }

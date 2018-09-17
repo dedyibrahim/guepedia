@@ -232,7 +232,7 @@ $input = $this->input->post();
 
 $data = array(
 'password'=> md5($input['password']),    
-    
+'status'=>'aktif',        
 );
 $this->M_penulis->update_password($data,$input['e']);
 

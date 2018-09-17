@@ -177,7 +177,7 @@ if(data == 'tidak'){
     
 swal({
 title:"Akun tidak aktif", 
-text:"Maaf untuk alasan keamanan kami menonaktifkan akun anda jika anda adalah pemilik akun ini silahkan hubungi kami via telephone : 081287602508, email : admin@guepedia.com, atas perhatian dan kerjasamnya kami ucapkan terimakasih",
+text:"Mohon maaf kami sedang melakukan perbaikan system agar dapat masuk silahkan perbaharui password anda terlebih dahulu",
 type:"warning",
 showConfirmButton: true,
 }).then(function() {

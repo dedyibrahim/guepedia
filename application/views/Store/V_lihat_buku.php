@@ -120,7 +120,10 @@ timer: 2000
 </script>
 
 <script type="text/javascript">
-$("#zoom_01").elevateZoom();
+$("#zoom_01").elevateZoom({
+zoomType				: "inner",
+cursor: "crosshair"
+});
 </script>
 
 <script type="text/javascript">

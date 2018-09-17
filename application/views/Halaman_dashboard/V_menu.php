@@ -18,8 +18,8 @@
 </nav>
 <div class="container" style="background-color:#eee; border-radius:0px 0px  10px 10px; border-bottom:4px solid  #2c3e50;">
 <div class="row" style="text-align: center;">
-    <div class="col"  ><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard'); ?>"><span class="fa fa-book fa-3x"></span><br> Kategori</a></div>        
-<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/pengaturan_toko'); ?>"> <span class="fa fa-gears fa-3x"></span><br> Pengaturan Toko</a></div>  
+<div class="col"  ><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard'); ?>"><span class="fa fa-book fa-3x"></span><br> Kategori</a></div>        
+<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/orderan_masuk'); ?>"> <span class="fa fa-gears fa-3x"></span><br> Pengaturan Toko</a></div>  
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/data_file_naskah'); ?>"> <span class="fa fa-download fa-3x"></span><br> File Naskah</a></div>   
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/halaman_publish'); ?>"> <span class="fa fa-bookmark-o fa-3x"></span><br> Halaman Publish</a></div>    
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/laporan_penjualan'); ?>"> <span class="fa fa-bar-chart-o fa-3x"></span><br> Laporan </a></div>   

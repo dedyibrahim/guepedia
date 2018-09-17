@@ -130,7 +130,7 @@ function buat_alamat_baru($id_account){
 $this->db->delete('data_alamat',array('id_account_toko'=>$id_account));    
 }
 function  cek_kupon($kupon){
-$query = $this->db->get_where('data_kupon',array('kupon'=>$kupon));
+$query = $this->db->get_where('data_kode_promo',array('kode_promo'=>$kupon));
 return $query;
 }
 function data_penjualan_toko(){
@@ -168,6 +168,8 @@ $this->datatables->where('id_account',$this->session->userdata('id_account_toko'
 $this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-download " href="'.base_url().'Store/download_invoices/$1"> Invoices </a>', 'base64_encode(id_penjualan_toko)');
 return $this->datatables->generate();
 }
+
+
 
 }
 

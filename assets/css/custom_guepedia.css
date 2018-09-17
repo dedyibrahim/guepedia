@@ -245,3 +245,8 @@ display: none;
     width:348px;
     height:247px
  }
+  .cover3 {
+    object-fit: contain;
+    width:311px;
+    height:247px
+ }

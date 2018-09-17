@@ -606,12 +606,12 @@ $kupon = $this->input->post('kupon');
 $query = $this->M_store->cek_kupon($kupon);    
 
 if($query->num_rows() > 0){
-$data_kupon = $query->row_array();
+$data_promo = $query->row_array();
 
 $data = array(
-'nilai_kupon' => $data_kupon['nilai_kupon'],
-'hasil_kupon' => $this->cart->total() * $data_kupon['nilai_kupon'] / 100,
-'nama_kupon'  => $data_kupon['kupon'],   
+'nilai_kupon' => $data_promo['nilai_promo'],
+'hasil_kupon' => $this->cart->total() * $data_promo['nilai_promo'] / 100,
+'nama_kupon'  => $data_promo['kode_promo'],   
 );
 $this->session->set_userdata($data);
         

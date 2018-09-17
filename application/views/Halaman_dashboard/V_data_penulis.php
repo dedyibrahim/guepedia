@@ -116,7 +116,12 @@ echo number_format($total_r);
 ?>
 <hr>
 Jumlah Naskah : <?php echo $total_naskah->num_rows(); ?>
+<hr>
+<label>Input balance</label>
+<input type="text" class="form-control" id="balance" placeholder="Input balance . . .">
+<hr>
 
+<button id="btn_balance" class="btn btn-success pull-right">Simpan Balance <span class="fa fa-balance-scale"></span></button>
 </div>
 
 
@@ -224,3 +229,49 @@ $('td:eq(0)', row).html(index);
 </table>
 
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+$("#btn_balance").click(function(){
+var id_account   = "<?php echo $this->uri->segment(3) ?>";
+var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       
+var nilai_balance = $("#balance").val();
+if(nilai_balance !=''){
+$.ajax({
+type:"post",
+url:"<?php echo base_url('G_dashboard/input_balance') ?>",
+data:"token="+token+"&id_account="+id_account+"&nilai_balance="+nilai_balance,
+success:function(data){
+if(data == "berhasil"){ 
+swal({
+title:"", 
+text:"Nilai balance berhasil ditambahkan",
+type:"success",
+showConfirmButton: true,
+});
+}else{
+swal({
+title:"", 
+text:data,
+type:"error",
+showConfirmButton: true,
+});    
+    
+}
+
+}
+
+});
+        
+}else{
+swal({
+title:"", 
+text:"Nilai balance belum di input",
+type:"question",
+showConfirmButton: true,
+});    
+}
+
+
+});        
+});    
+</script>    
