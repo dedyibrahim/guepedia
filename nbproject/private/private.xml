@@ -3,12 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/gueped/application/views/Store/V_konfirmasi_pembayaran.php</file>
-            <file>file:/C:/xampp/htdocs/gueped/application/views/Store/V_daftar_transaksi.php</file>
-            <file>file:/C:/xampp/htdocs/gueped/application/views/Store/V_header_toko.php</file>
+            <file>file:/C:/xampp/htdocs/gueped/application/controllers/G_dashboard.php</file>
             <file>file:/C:/xampp/htdocs/gueped/application/views/Store/V_halaman_checkout.php</file>
+            <file>file:/C:/xampp/htdocs/gueped/application/controllers/Penulis.php</file>
             <file>file:/C:/xampp/htdocs/gueped/application/controllers/Store.php</file>
-            <file>file:/C:/xampp/htdocs/gueped/application/models/M_store.php</file>
+            <file>file:/C:/xampp/htdocs/gueped/application/controllers/G_login.php</file>
+            <file>file:/C:/xampp/htdocs/gueped/application/views/Store/V_checkout.php</file>
         </group>
     </open-files>
 </project-private>

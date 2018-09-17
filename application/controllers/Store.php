@@ -126,7 +126,20 @@ $data = array(
 );
 
 $this->cart->insert($data);
-echo $query['judul']; 
+echo $query['judul'];
+
+$unset = array(
+'nilai_kupon', 
+'hasil_kupon',
+'nama_kupon',
+'ongkir',
+'kurir',
+'service',        
+'nilai_promo', 
+'hasil_promo',
+'nama_promo',
+);
+$this->session->unset_userdata($unset);
 }else{
 redirect(404);    
 }    
@@ -183,6 +196,18 @@ $data = array(
 );
 echo print_r($input);
 $this->cart->update($data);
+$unset = array(
+'nilai_kupon', 
+'hasil_kupon',
+'nama_kupon',
+'ongkir',
+'kurir',
+'service',        
+'nilai_promo', 
+'hasil_promo',
+'nama_promo',
+);
+$this->session->unset_userdata($unset);
 
 }else{
 redirect(404);    
@@ -600,18 +625,18 @@ unset($_SESSION['service']);
     
 }
 
-function set_kupon(){
-if($this->input->post('kupon')){
-$kupon = $this->input->post('kupon');
+function set_promo(){
+if($this->input->post('promo')){
+$kupon = $this->input->post('promo');
 $query = $this->M_store->cek_kupon($kupon);    
 
 if($query->num_rows() > 0){
 $data_promo = $query->row_array();
 
 $data = array(
-'nilai_kupon' => $data_promo['nilai_promo'],
-'hasil_kupon' => $this->cart->total() * $data_promo['nilai_promo'] / 100,
-'nama_kupon'  => $data_promo['kode_promo'],   
+'nilai_promo' => $data_promo['nilai_promo'],
+'hasil_promo' => $this->cart->total() * $data_promo['nilai_promo'] / 100,
+'nama_promo'  => $data_promo['kode_promo'],   
 );
 $this->session->set_userdata($data);
         
@@ -626,6 +651,9 @@ echo "tidak tersedia";
 }
 function bayar(){
 if($this->input->post('metode_pembayaran')){
+
+if($this->session->userdata('ongkir')){    
+    
 $input = $this->input->post();
 $id_account = $this->session->userdata('id_account_toko');
 $alamat     = $this->M_store->cek_alamat($id_account)->row_array();
@@ -718,13 +746,16 @@ $penjualan_toko = array(
 'nilai_kupon'       => $this->session->userdata('nilai_kupon'), 
 'hasil_kupon'       => $this->session->userdata('hasil_kupon'),
 'nama_kupon'        => $this->session->userdata('nama_kupon'),
+'nilai_promo'       => $this->session->userdata('nilai_promo'), 
+'hasil_promo'       => $this->session->userdata('hasil_promo'),
+'nama_promo'        => $this->session->userdata('nama_promo'),    
 'ongkir'            => $this->session->userdata('ongkir'),
 'kurir'             => $this->session->userdata('kurir'),
 'service'           => $this->session->userdata('service'),    
 'metode_pembayaran' => $input['metode_pembayaran'],
 'status'            => 'pending',    
 'total_belanja'     => $this->cart->total(),    
-'total_bayar'       => $this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon'),    
+'total_bayar'       => $this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon') - $this->session->userdata('hasil_promo'),    
 ); 
 $this->M_store->input_data_jumlah_penjualan_toko($penjualan_toko);
 
@@ -748,8 +779,14 @@ $unset = array(
 'ongkir',
 'kurir',
 'service',        
+'nilai_promo', 
+'hasil_promo',
+'nama_promo',
 );
 $this->session->unset_userdata($unset);
+}
+}else{
+   echo "error";    
 }
 }else{
 
@@ -920,10 +957,18 @@ $html .="<tr>
 </tr>";
 if($static['nilai_kupon']){ 
 $html .= "<tr>
-<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td colspan='2'>Kode kupon ".$static['nama_kupon']."</td>    
 <td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
 </tr>";
  }
+ 
+ if($static['nilai_promo']){ 
+$html .= "<tr>
+<td colspan='2'>Kode promo ".$static['nama_promo']."</td>    
+<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_promo'])."</td>    
+</tr>";
+ }
+ 
 $html.= 
 "<tr>
 <td colspan='2'>Total Bayar</td>    
@@ -963,6 +1008,43 @@ redirect(404);
 }    
 }
 
+function set_kupon(){
+if($this->input->post('kupon')){
+$input = $this->input->post();
 
+$query = $this->M_store->data_kupon($input['kupon']);
+$cek = $query->row_array();
+
+if($query->num_rows() > 0){
+if( $cek['syarat_kupon'] < $this->cart->total()){
+
+$data = array(
+'nilai_kupon' => $cek['nilai_kupon'],
+'hasil_kupon' => $this->cart->total() * $cek['nilai_kupon'] / 100,
+'nama_kupon'  => $cek['nama_kupon'],   
+);
+$this->session->set_userdata($data);
+     
+    
+echo "berhasil";    
+
+
+}else{
+
+echo "tidak_lolos";    
+}
+ 
+
+}else{
+echo "gaada";    
+} 
+
+}else{
+
+redirect(404);    
+
+
+}    
+}
 }
 

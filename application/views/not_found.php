@@ -7,7 +7,7 @@
     <body>
         
         <h1 align="center" style="margin:0 auto;">
-        <img src="../../assets/img/logo-toko.png" alt=""/>
+            <img src="<?php echo base_url() ?>assets/img/logo-toko.png" alt=""/>
         <br>
         Halaman yang anda cari tidak tersedia
         </h1>

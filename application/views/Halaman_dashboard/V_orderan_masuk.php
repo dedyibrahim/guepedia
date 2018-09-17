@@ -48,6 +48,12 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 <td  colspan="3" style="color:#dc3545;"> - Rp.<?php echo number_format($konfir['hasil_kupon']) ?> </td>    
 </tr>
 <?php  } ?>
+<?php if($konfir['nilai_promo']){ ?>
+<tr>
+<td colspan="2">Kode promo <?php echo $konfir['nama_promo'] ?> </td>    
+<td  colspan="3" style="color:#dc3545;"> - Rp.<?php echo number_format($konfir['hasil_promo']) ?> </td>    
+</tr>
+<?php  } ?>
 <tr>
 <td colspan="2">Total Bayar</td>    
 <td  colspan="3">Rp.<?php echo number_format($konfir['total_bayar']) ?> </td>    

@@ -438,4 +438,28 @@ function hapus_promo($id){
 $this->db->delete('data_kode_promo',array('id_data_kode_promo'=> base64_decode($id)));    
 }
 
+function hapus_kupon($id){
+$this->db->delete('data_kode_kupon',array('id_data_kupon'=> base64_decode($id)));    
+}
+function input_kupon($data){
+
+$this->db->insert('data_kode_kupon',$data);    
+}
+
+function json_kode_kupon(){
+$this->datatables->select('data_kode_kupon.id_data_kupon,'
+.'data_kode_kupon.id_data_kupon as id_data_kupon,'
+.'data_kode_kupon.email_penulis as email_penulis,'
+.'data_kode_kupon.nama_penulis as penerima,'
+.'data_kode_kupon.nama_kupon as nama_kupon,'
+.'data_kode_kupon.nilai_kupon as nilai_kupon,'
+.'data_kode_kupon.syarat_kupon as syarat_kupon,'
+);
+
+$this->datatables->from('data_kode_kupon');
+$this->datatables->add_column('view','<a href='. base_url('G_dashboard/hapus_kupon/$1').' class="btn btn-sm btn-danger fa fa-close">  </a>', 'base64_encode(id_data_kupon)');
+return $this->datatables->generate();
+      
+}
+
 }

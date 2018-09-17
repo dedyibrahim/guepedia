@@ -169,6 +169,10 @@ $this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-dow
 return $this->datatables->generate();
 }
 
+function data_kupon($kupon){
+$query = $this->db->get_where('data_kode_kupon',array('nama_kupon'=>$kupon,'id_account'=>$this->session->userdata('id_account_toko')));
+return $query;    
+}
 
 
 }

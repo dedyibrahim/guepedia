@@ -75,12 +75,18 @@ Ongkos kirim  <b  class="float-right">Rp.<?php echo number_format($this->session
  <?php } ?>
 
 <?php if ($this->session->userdata('hasil_kupon')){ ?>
-Kupon  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
+Kupon <?php echo $this->session->userdata('nama_kupon') ?>  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_promo')) ?></b>
 <hr>
  <?php } ?>
+
+<?php if ($this->session->userdata('hasil_promo')){ ?>
+Promo <?php echo $this->session->userdata('nama_promo') ?>  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
+<hr>
+ <?php } ?>
+
 <?php if ($this->session->userdata('ongkir')){ ?>
 
-Total bayar <b  class="float-right">Rp.<?php echo number_format($this->session->userdata('ongkir') + $this->cart->total() - $this->session->userdata('hasil_kupon')) ?></b>
+Total bayar <b  class="float-right">Rp.<?php echo number_format($this->session->userdata('ongkir') + $this->cart->total() - $this->session->userdata('hasil_kupon') - $this->session->userdata('hasil_promo')) ?></b>
 <hr>
 <button data-toggle="modal" data-target="#metode"  class="form-control btn btn-success">Bayar <span class=" fa fa-money"></span></button>
 <hr>
@@ -92,7 +98,9 @@ Total bayar <b  class="float-right">Rp.<?php echo number_format($this->session->
 </div>
 <hr>
 </div>
-<script type="text/javascript">
+
+
+  <script type="text/javascript">
 $(function () {
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
 
@@ -229,21 +237,21 @@ halaman_checkout();
 });
 
 
-$("#tambah_kupon").click(function(){
+$("#tambah_promo").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
-var kupon = $("#kupon").val();
-if (kupon !=''){
+var promo = $("#promo").val();
+if (promo !=''){
 $.ajax({
 type:"POST",
-url :"<?php echo base_url('Store/set_kupon') ?>",
-data:"token="+token+"&kupon="+kupon,
+url :"<?php echo base_url('Store/set_promo') ?>",
+data:"token="+token+"&promo="+promo,
 success:function(data){
 if(data == "berhasil") {   
 halaman_checkout();
 
 swal({
 title:"", 
-text:"Kupon berhasil ditambahkan",
+text:"Kode Promo berhasil ditambahkan",
 type:"success",
 showConfirmButton: true,
 });
@@ -269,6 +277,55 @@ showConfirmButton: true,
 }
 
 });
+
+$("#tambah_kupon").click(function(){
+var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
+var kupon = $("#kode_kupon").val();
+if (kupon !=''){
+$.ajax({
+type:"POST",
+url :"<?php echo base_url('Store/set_kupon') ?>",
+data:"token="+token+"&kupon="+kupon,
+success:function(data){
+if(data == "berhasil") {   
+halaman_checkout();
+
+swal({
+title:"", 
+text:"Kode kupon berhasil ditambahkan",
+type:"success",
+showConfirmButton: true,
+});
+
+}else if(data == "tidak_lolos"){ 
+swal({
+title:"", 
+text:"Syarat atau Ketentuan tidak terpenuhi",
+type:"error",
+showConfirmButton: true,
+});   
+} else {
+swal({
+title:"", 
+text:"Maaf kupon tidak tersedia",
+type:"error",
+showConfirmButton: true,
+});    
+}
+
+}
+});
+}else{
+swal({
+title:"", 
+text:"Kupon harus di isi",
+type:"question",
+showConfirmButton: true,
+});   
+}
+
+});
+
 });
 
 function set_ongkir(id){
@@ -288,4 +345,3 @@ halaman_checkout();
 
 }
 </script>
-

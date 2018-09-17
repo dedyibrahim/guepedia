@@ -23,12 +23,11 @@
 <div class="col">
 <h5 align="center">Bantuan  <span class="fa fa-question"></span> <hr></h5>
 <ul class="list-inline">
- <li><a href="#">Cara Belanja</a></li>   
-<li><a href="#">Konfirmasi Pembayaran</a></li>   
-<li><a href="#">Menjadi Penulis</a></li>   
-<li><a href="#">Layanan</a></li>   
-<li><a href="#">Faq</a></li>   
-<li><a href="#">Hubungi Kami</a></li>   
+    <li><a href="<?php echo base_url('Store/konfirmasi_pembayaran'); ?>">Konfirmasi Pembayaran</a></li>   
+    <li><a href="<?php echo base_url('Penulis'); ?>">Menjadi Penulis</a></li>   
+<li><a href="<?php echo base_url('Store/layanan'); ?>">Layanan</a></li>   
+<li><a href="<?php echo base_url('Store/faq'); ?>">Faq</a></li>   
+<li><a href="<?php echo base_url('Store/hubungi_kami'); ?>">Hubungi Kami</a></li>   
 </ul>
 </div>
 

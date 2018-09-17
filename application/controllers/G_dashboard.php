@@ -106,6 +106,9 @@ public function json_all_order(){
 echo $this->M_dashboard->json_all_order();       
 }
 
+public function json_kode_kupon(){
+echo $this->M_dashboard->json_kode_kupon();       
+}
 public function data_file_naskah(){
 
 $this->load->view('Umum/V_header');
@@ -334,11 +337,10 @@ $json[]= array(
 );   
 
 }
-
-
-
 echo json_encode($json);
 }
+
+
 public function cari_customer(){
 $term = strtolower($this->input->get('term'));    
 
@@ -1412,8 +1414,14 @@ $html .="<tr>
 </tr>";
 if($static['nilai_kupon']){ 
 $html .= "<tr>
-<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td colspan='2'>Kode kupon ".$static['nama_kupon']."</td>    
 <td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+ }
+ if($static['nilai_promo']){ 
+$html .= "<tr>
+<td colspan='2'>Kode promo ".$static['nama_promo']."</td>    
+<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_promo'])."</td>    
 </tr>";
  }
 $html.= 
@@ -1546,12 +1554,42 @@ redirect(404);
 }        
 }
 
-function hapus_kupon(){
+function set_kupon(){
+if($this->input->post('nilai_kupon')){
+$input = $this->input->post();
+
+$data = array(
+'nama_kupon'    => $input['nama_kupon'],
+'id_account'    => $input['id_account'],
+'email_penulis' => $input['email_penulis'],
+'nama_penulis'  => $input['nama_penulis'],
+'nilai_kupon'   => $input['nilai_kupon'],
+'syarat_kupon'  => $input['syarat_kupon'],
+);
+
+$this->M_dashboard->input_kupon($data);
+
+echo "berhasil";
+}else{
+redirect(404);    
+}        
+}
+
+function hapus_promo(){
 $id = $this->uri->segment(3);
 
 $this->M_dashboard->hapus_promo($id);
 
 redirect('G_dashboard/promo_kupon');
 }
+
+function hapus_kupon(){
+$id = $this->uri->segment(3);
+
+$this->M_dashboard->hapus_kupon($id);
+
+redirect('G_dashboard/promo_kupon');
+}
+
 
 }
