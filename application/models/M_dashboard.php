@@ -375,7 +375,7 @@ function json_all_order(){
 $this->datatables->select('data_jumlah_penjualan_toko.id_penjualan_toko,'
 .'data_jumlah_penjualan_toko.invoices_toko as invoices_toko,'
 .'data_jumlah_penjualan_toko.nomor_kontak as nomor_kontak,'
-.'data_jumlah_penjualan_toko.penerima_paket as penerima_paket,'
+.'data_jumlah_penjualan_toko.nama_penerima as nama_penerima,'
 .'data_jumlah_penjualan_toko.status as status,'
 .'data_jumlah_penjualan_toko.nomor_resi as nomor_resi,'
         
@@ -403,9 +403,9 @@ $query = $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'pros
 return $query;
 }
 
-function orderan_kirim(){
+function orderan_terima(){
 
-$query = $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'terkirim'));
+$query = $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'terima'));
 
 return $query;
 }
@@ -460,6 +460,20 @@ $this->datatables->from('data_kode_kupon');
 $this->datatables->add_column('view','<a href='. base_url('G_dashboard/hapus_kupon/$1').' class="btn btn-sm btn-danger fa fa-close">  </a>', 'base64_encode(id_data_kupon)');
 return $this->datatables->generate();
       
+}
+
+function terima_pesanan($data,$param){
+$this->db->update('data_jumlah_penjualan_toko',$data,array('id_penjualan_toko'=>$param));    
+}
+
+function data_pembeli($param){
+    
+$this->db->select('akun_penulis.email');
+$this->db->from('data_jumlah_penjualan_toko');
+$this->db->join('akun_penulis', 'akun_penulis.id_account = data_jumlah_penjualan_toko.id_account');
+$this->db->where('data_jumlah_penjualan_toko.id_penjualan_toko',$param);
+$query = $this->db->get();    
+return $query;
 }
 
 }

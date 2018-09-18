@@ -109,7 +109,6 @@ window.location.href = "<?php echo base_url('Store') ?>";
 <label>Metode pembayaran</label>
 <select id="metode_pembayaran" class="form-control">
 <option>Bank Transfer</option>
-<option>Cash On Delivery</option>
 </select>
 </div>
     
@@ -119,8 +118,3 @@ window.location.href = "<?php echo base_url('Store') ?>";
 </div>
 </div>
 </div>
-  <?php
-$Date = "2010-09-17";
-echo date('Y-m-d', strtotime($Date. ' + 1 days'));
-echo date('Y-m-d', strtotime($Date. ' + 2 days'));
-?>

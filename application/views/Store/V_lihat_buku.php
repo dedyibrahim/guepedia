@@ -96,10 +96,11 @@ success:function(data){
 swal({
 type: 'success',
 html: data + ' <br>Berhasil di masukan ke keranjang',
-showConfirmButton: false,
+showConfirmButton: true,
 animation: false,
 customClass: 'animated bounceInDown',
-timer: 2000
+}).then(function() {
+window.location.href = "<?php echo base_url('Store/keranjang') ?>";
 });    
 }
 

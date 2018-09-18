@@ -61,7 +61,6 @@ data-content="
 data-content="
 
 <a href='<?php echo base_url('Store/konfirmasi_pembayaran') ?>'><button class='btn btn-success btn-sm col form-control'>Konfirmasi Pembayaran <span class='fa fa-check'></span></button></a><br><hr>
-<a href='<?php echo base_url('Store/cek_pesanan') ?>'><button class='btn btn-success btn-sm col form-control'>Cek Status Pesanan <span class='fa fa-check-square-o'></span></button></a><br><hr>
 <a href='<?php echo base_url('Store/daftar_transaksi') ?>'><button class='btn btn-success btn-sm col form-control'>Daftar Transaksi <span class='fa fa-list-alt'></span></button><br</a><hr>
 
 <button class='btn btn-success btn-sm col form-control' onclick='logout();'>Logout <span class='fa fa-sign-out'></span></button><br>
@@ -158,13 +157,15 @@ url  :"<?php echo base_url('Store/tambah_keranjang')  ?>",
 data :"token="+token+"&id_file_naskah="+data+"&qty="+"1",
 success:function(data){
 swal({
-  type: 'success',
-  html: data + ' <br>Berhasil di masukan ke keranjang',
-  showConfirmButton: false,
-  animation: false,
-  customClass: 'animated bounceInDown',
-  timer: 2000
+type: 'success',
+html: data + ' <br>Berhasil di masukan ke keranjang',
+showConfirmButton: true,
+animation: false,
+customClass: 'animated bounceInDown',
+}).then(function() {
+window.location.href = "<?php echo base_url('Store/keranjang') ?>";
 });    
+   
 }
     
 });

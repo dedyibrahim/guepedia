@@ -15,14 +15,14 @@
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff; ">
 <a style="text-decoration: none; color: #fff;" href="<?php echo base_url('G_dashboard/orderan_proses') ?>">
 <span class="fa fa-print fa-4x " style="position:absolute; "> </span>
-<h5 class="text-right">Orderan di proses</h5><br>
+<h5 class="text-right">Orderan di bayar</h5><br>
 <div class="text-center"><?php echo $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'proses'))->num_rows() ?></div>
 </a></div>
 
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff;  ">
-<a style="text-decoration: none; color: #fff;" href="<?php echo base_url('G_dashboard/orderan_kirim') ?>"><span class="fa fa-truck fa-4x " style="position:absolute; "> </span>
-<h5 class="text-right">Orderan di kirim</h5><br>
-<div class="text-center"><?php echo $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'terkirim'))->num_rows() ?></div>
+<a style="text-decoration: none; color: #fff;" href="<?php echo base_url('G_dashboard/orderan_terima') ?>"><span class="fa fa-truck fa-4x " style="position:absolute; "> </span>
+<h5 class="text-right">Orderan di terima</h5><br>
+<div class="text-center"><?php echo $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'terima'))->num_rows() ?></div>
 </a></div>
 
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff; ">

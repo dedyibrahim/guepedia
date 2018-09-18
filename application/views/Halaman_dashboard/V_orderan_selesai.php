@@ -43,7 +43,7 @@ columns: [
 "orderable": false
 },
 {"data": "invoices_toko"},
-{"data": "penerima_paket"},
+{"data": "nama_penerima"},
 {"data": "nomor_resi"},
 {"data": "status"},
 {"data": "view"},
@@ -71,7 +71,7 @@ $('td:eq(0)', row).html(index);
 <tr role="row">
 <th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Invoices</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Penerima paket</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Pembeli</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nomor Resi</th>
 <th   align="center"     aria-controls="datatable-fixed-header"  >Status</th>
 <th style="width: 15%;" align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>

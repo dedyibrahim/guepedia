@@ -129,7 +129,7 @@ success:function(data){
 if(data == "berhasil"){
 swal({
 title:"konfirmasi pembayaran berhasil", 
-text:"Terimakasih anda telah melakukan konfirmasi pembayaran pesanan anda sedang di proses dan akan dikirim 2 x 24 jam",
+text:"Terimakasih anda telah melakukan konfirmasi pembayaran, pembayaran anda akan kami periksa dalam 1x24 jam",
 type:"success",
 showConfirmButton: true,
 }).then(function() {

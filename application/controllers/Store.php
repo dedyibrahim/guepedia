@@ -185,6 +185,8 @@ echo '<tr>
 }
 
 echo '</table>'; 
+echo "<a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku <span class='fa fa fa-money'></span></button></a> <hr>";
+
 
 }
 function update_qty_keranjang(){
@@ -833,7 +835,7 @@ $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($this->session->userdata('email_toko'));
 $this->email->cc("guepedia@gmail.com");
-$this->email->subject('Konfirmasi pembayaran berhasil');
+$this->email->subject('Konfirmasi pembayaran terkirim');
 
 $id = $input['inv'];
 $this->db->where(array('id_penjualan_toko'=>$id,'id_account'=>$this->session->userdata('id_account_toko')));    
@@ -843,9 +845,10 @@ $static = $query->row_array();
 $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
 $d=1 ;
 
-$html  ="<h3>Terimakasih anda telah melakukan  konfirmasi pembayaran di store guepedia dengan  detail produk sebagai berikut </h3><br>";
+$html  ="<h3>Terimakasih anda telah melakukan  konfirmasi pembayaran , selanjutnya pembayaran akan kami periksa dalam waktu 1 X 24 JAM</h3><br>";
 $html .="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
 $html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
+$html .= "<h5 align='center'>Detail orderan </h5>"; 
 $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
         <tr>
         <th>No</th>   
@@ -1042,9 +1045,9 @@ echo "gaada";
 }else{
 
 redirect(404);    
-
-
 }    
 }
+
+
 }
 

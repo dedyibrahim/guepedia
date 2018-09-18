@@ -1,5 +1,5 @@
 <body onload="keranjang_total()" ></body>
-<div class="container" style="background-color: #fff; margin-top: 6.5%;">
+<div class="container " style="background-color: #fff; margin-top: 6.5%;">
 <h4 align="center"><span class="fa fa-shopping-basket fa-3x fa-color"></span><br>Keranjang Belanja Anda</h4><hr> 
 <div id="keranjang_total"></div>  
 </div>

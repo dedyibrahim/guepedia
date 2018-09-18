@@ -1181,24 +1181,23 @@ $this->db->where('data_penjualan.id_data_penjualan',$id_data_penjualan);
 $data = $this->db->get();
 $data_static = $data->row_array(); 
 
+$html  ="<h1 align='center'><img src='".base_url('assets/img/logo-toko.png')."'></h1><hr>";
 
-$html  ="<img src='".base_url('assets/img/logo-toko.png')."'>";
-$html .="<br><hr>";
-
-$html .="<h3 style='position:fixed;' align='center'> ALAMAT PENGIRIMAN <br><b>".$data_static['no_invoices']."</h3></b>";
-
-$html .="<h3 align ='center'> DARI : </h3>";
-$html .="<h4 align='center'> Bukit Golf Arcadia Blok A4 / 05 Bojong Nangka, Gunung Putri Bogor <br> Telp : 081287602508</h4>";
+$html .="<h4 >PENGIRIM : <br> GUEPEDIA<br> Bukit Golf Arcadia Blok A4 / 05 Bojong Nangka, Gunung Putri Bogor <br> Telp : 081287602508</h4>";
 
 
-$html .="<h3 align = 'center'> TUJUAN PENGIRIMAN :</h3><h4 align='center'>Nama Penerima : ".$data_static['nama_customer']."<br>";
+$html .="<h4 >KEPADA :<br>Nama Penerima : ".$data_static['nama_customer']."<br>";
 $html .="Nomor kontak  : ".$data_static['nomor_kontak']."<br>";
 $html .="Alamat lengkap : ".$data_static['alamat_lengkap']."</h4>";
 
 $html .="<hr>";
+$html .=$data_static['nama_biaya_lain']." ";
+$html .="Rp.".number_format($data_static['jumlah_biaya_lain'])."<br>";
+
 foreach ($data->result_array() as $penjualan){
 $html .= '' . $penjualan['judul_buku'] . ' (' . $penjualan['qty'].')<br>';
 }
+
 
 
 $dompdf = new Dompdf(array('enable_remote'=>true));
@@ -1451,24 +1450,101 @@ function input_resi_toko(){
 if($this->input->post('resi')){
 $input = $this->input->post();
 
+$pembeli = $this->M_dashboard->data_pembeli($input['id_penjualan_toko'])->row_array();
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($pembeli['email']);
+$this->email->subject('Resi pengiriman Guepedia');
+
+$this->db->where(array('id_penjualan_toko'=>$input['id_penjualan_toko']));    
+$query = $this->db->get('data_jumlah_penjualan_toko');
+$static = $query->row_array();
+
+$data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
+$d=1 ;
+
+$html  ="<h3>Hallo orderan anda telah kami menggunakan ". $static['kurir']." ".$static['service']."Nomor Resi".$input['resi']."</h3><br>";
+$html .="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
+$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
+$html .= "<h5 align='center'>Detail Pesanans </h5>"; 
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+        <tr>
+        <th>No</th>   
+        <th>Nama Buku</th>   
+        <th>Harga</th>   
+        <th>Qty</th>   
+        <th>Jumlah</th>   
+        </tr>';
+
+foreach ($data_orderan->result_array() as $data){
+$html .='<tr>';    
+$html .='<td>'.$d++.'</td>';
+$html .='<td>'.$data['nama_buku'].'</td>';
+$html .='<td>Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td>'.$data['qty'].'</td>';
+$html .='<td>Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='</tr>';
+} 
+
+$html .="<tr>
+<td colspan='2'>Total Belanja</td>    
+<td colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+</tr>
+<tr>
+<td colspan='2'>Ongkir </td>    
+<td  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+</tr>";
+if($static['nilai_kupon']){ 
+$html .= "<tr>
+<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+ }
+$html.= 
+"<tr>
+<td colspan='2'>Total Bayar</td>    
+<td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+</tr></table><hr>";
+$html .= "Nama Penerima :".$static['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
+$html .= $static['nomor_kontak']."<br>"; 
+
+$this->email->message($html);
+if (!$this->email->send()){    
+echo $this->email->print_debugger();
+
+}else{ 
 $data = array(
- 'status' =>'terkirim',
+ 'status' =>'selesai',
  'nomor_resi'=>$input['resi'],   
 );
 $this->M_dashboard->input_resi_toko($data,$input['id_penjualan_toko']);
 
 echo "berhasil";
+}
+
 }else{
 redirect(404);    
 }    
 }
 
-public function orderan_kirim(){
-$orderan_kirim = $this->M_dashboard->orderan_kirim();
+public function orderan_terima(){
+$orderan_terima = $this->M_dashboard->orderan_terima();
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
 $this->load->view('Halaman_dashboard/V_menu_toko');
-$this->load->view('Halaman_dashboard/V_orderan_kirim',['orderan_kirim'=>$orderan_kirim]);
+$this->load->view('Halaman_dashboard/V_orderan_terima',['orderan_terima'=>$orderan_terima]);
 $this->load->view('Umum/V_footer');
 }
 
@@ -1589,6 +1665,101 @@ $id = $this->uri->segment(3);
 $this->M_dashboard->hapus_kupon($id);
 
 redirect('G_dashboard/promo_kupon');
+}
+function terima_pesanan(){
+if($this->input->post('id_penjualan_toko')){
+$input = $this->input->post();
+
+$pembeli = $this->M_dashboard->data_pembeli($input['id_penjualan_toko'])->row_array();
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($pembeli['email']);
+$this->email->subject('Konfirmasi pembayaran berhasil');
+
+$this->db->where(array('id_penjualan_toko'=>$input['id_penjualan_toko']));    
+$query = $this->db->get('data_jumlah_penjualan_toko');
+$static = $query->row_array();
+
+$data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
+$d=1 ;
+
+$html  ="<h3>Pembayaran anda telah kami terima dan akan dikirim secepatnya , terimakasih atas kepercayaan anda berbelanja di Store Guepedia </h3><br>";
+$html .="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
+$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
+$html .= "<h5 align='center'>Detail orderan </h5>"; 
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+        <tr>
+        <th>No</th>   
+        <th>Nama Buku</th>   
+        <th>Harga</th>   
+        <th>Qty</th>   
+        <th>Jumlah</th>   
+        </tr>';
+
+foreach ($data_orderan->result_array() as $data){
+$html .='<tr>';    
+$html .='<td>'.$d++.'</td>';
+$html .='<td>'.$data['nama_buku'].'</td>';
+$html .='<td>Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td>'.$data['qty'].'</td>';
+$html .='<td>Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='</tr>';
+} 
+
+$html .="<tr>
+<td colspan='2'>Total Belanja</td>    
+<td colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+</tr>
+<tr>
+<td colspan='2'>Ongkir </td>    
+<td  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+</tr>";
+if($static['nilai_kupon']){ 
+$html .= "<tr>
+<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+ }
+$html.= 
+"<tr>
+<td colspan='2'>Total Bayar</td>    
+<td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+</tr></table><hr>";
+$html .= "Nama Penerima :".$static['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
+$html .= $static['nomor_kontak']."<br>"; 
+
+$this->email->message($html);
+if (!$this->email->send()){    
+echo $this->email->print_debugger();
+
+}else{ 
+   
+$input = $this->input->post();
+$data = array(
+ 'status' =>'terima'   
+);
+$this->M_dashboard->terima_pesanan($data,$input['id_penjualan_toko']);
+echo "berhasil";
+
+ }
+ 
+
+}else{
+redirect(404);    
+}    
+    
 }
 
 

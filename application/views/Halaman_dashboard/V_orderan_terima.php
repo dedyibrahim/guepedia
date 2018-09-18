@@ -1,11 +1,11 @@
 <div class="container" style="background-color: #fff;">
 <br>
 <h4 align="center"><span class=" fa-3x fa fa-color fa-truck"></span> <br> Orderan Terkirim </h4><hr>
-<?php foreach ($orderan_kirim->result_array() as $konfir) { ?>
+<?php foreach ($orderan_terima->result_array() as $konfir) { ?>
 <p align="center">
 <button class="btn btn-dark" type="button" data-toggle="collapse" data-target=".<?php echo $konfir['id_penjualan_toko'] ?>" aria-expanded="false" aria-controls="<?php echo $konfir['invoices_toko'] ?>">Order Number <?php echo $konfir['invoices_toko'] ?> <span class="fa fa-arrow-down"></span></button>
 <a href='<?php echo base_url('G_dashboard/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-success" type="button" >Download invoices <span class="fa fa-download"></span></button></a>
-<button onclick="kirim(<?php echo $konfir['id_penjualan_toko'] ?>);" class="btn btn-primary">Input penerima <span class="fa fa-hand-lizard-o"></span></button>
+<button onclick="kirim(<?php echo $konfir['id_penjualan_toko'] ?>);" class="btn btn-primary">Input Resi <span class="fa fa-hand-lizard-o"></span></button>
 </p>
 <div class="row">
 <div class="col">
@@ -66,29 +66,31 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 <div class="col-md-4">
 <div class="collapse <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
 <div class="card card-body">
-<img  class="cover3" id="zoom_01" data-zoom-image="<?php echo base_url('./uploads/bukti_bayar/'.$konfir['bukti_transfer']) ?>" src="<?php echo base_url('./uploads/bukti_bayar/'.$konfir['bukti_transfer']) ?>">
+<img  class="cover3" id="zoom<?php echo $konfir['id_penjualan_toko'] ?>" data-zoom-image="<?php echo base_url('./uploads/bukti_bayar/'.$konfir['bukti_transfer']) ?>" src="<?php echo base_url('./uploads/bukti_bayar/'.$konfir['bukti_transfer']) ?>">
 
 </div>
 </div>
 </div>
 
 </div><hr>
+<script type="text/javascript">
+$("#zoom<?php echo $konfir['id_penjualan_toko'] ?>").elevateZoom({
+zoomType: "inner",
+cursor: "crosshair"
+});
 
+
+</script> 
 <?php } ?>
 <hr>    
 </div>
 
 <script type="text/javascript">
-$("#zoom_01").elevateZoom({
-zoomType				: "inner",
-cursor: "crosshair"
-});
-
 function kirim(id){
 swal({
-title: 'Masukan nama penerima',
+title: 'Masukan resi pengiriman',
 input: 'text',
-inputPlaceholder: "Nama penerima packet buku",
+inputPlaceholder: "Resi pengiriman",
 showCancelButton: true,
 
 }).then(function(text) {
@@ -97,16 +99,16 @@ var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->s
 
 $.ajax({
 type:"post",
-url:"<?php echo base_url('G_dashboard/input_nama_penerima') ?>",
-data:"token="+token+"&id_penjualan_toko="+id+"&penerima="+text,
+url:"<?php echo base_url('G_dashboard/input_resi_toko') ?>",
+data:"token="+token+"&id_penjualan_toko="+id+"&resi="+text,
 success:function(data){
 if(data == "berhasil"){
 
 swal({
 type:"success",
-text:"Nama penerima berhasil di simpan"
+text:"Resi pengiriman tersimpan dan terkirim"
 }).then(function(){
-window.location.href = '<?php echo base_url('G_dashboard/orderan_kirim')  ?>';
+window.location.href = '<?php echo base_url('G_dashboard/orderan_terima')  ?>';
 });
 
 }else{
@@ -123,11 +125,10 @@ text:data,
 
 }else{
 swal({
-type:"error",
+type:"question",
 text:"Resi pengiriman belum di isi"
 })
 
 }
 })
-}
-</script>
+}</script>    
