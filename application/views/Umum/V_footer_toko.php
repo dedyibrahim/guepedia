@@ -32,12 +32,11 @@
 </div>
 
 <div class="col">
-<h5 align="center">Tentang Guedpedia <span class="fa fa-info"></span><hr></h5>
+<h5 align="center">Tentang Guepedia <span class="fa fa-info"></span><hr></h5>
 <ul class="list-inline">
- <li><a href="#">Tentang Kami</a></li>   
-<li><a href="#">Blog</a></li>   
-<li><a href="#">Kebijakan Privasi</a></li>   
-<li><a href="#">Syarat Ketentuan</a></li>   
+<li><a href="<?php echo base_url('Store/tentang_kami'); ?>">Tentang Kami</a></li>   
+<li><a href="<?php echo base_url('Store/privasi'); ?>">Kebijakan Privasi</a></li>   
+<li><a href="<?php echo base_url('Store/syarat'); ?>">Syarat Ketentuan</a></li>   
 </ul>
 </div>
 
@@ -54,9 +53,9 @@
 <div class="col">
 <h5 align="center">Sosial Media <span class="fa fa-internet-explorer"></span><hr></h5>
 <ul class="list-inline">
-<li><a href="#"><span class="fa fa-facebook fa-2x"></span> Facebook</a></li>   
-<li><a href="#"><span class="fa fa-instagram fa-2x"></span> Instagram</a></li>   
-<li><a href="#"><span class="fa fa-twitter fa-2x"></span> Twitter</a></li>   
+<li><a href="https://www.facebook.com/guepediapublisher"><span class="fa fa-facebook fa-2x"></span> Facebook</a></li>   
+<li><a href="https://www.instagram.com/guepedia_penerbitan_online/"><span class="fa fa-instagram fa-2x"></span> Instagram</a></li>   
+<li><a href="https://twitter.com/guepedia"><span class="fa fa-twitter fa-2x"></span> Twitter</a></li>   
 </ul>
 </div>
 
@@ -65,12 +64,22 @@
 </div>
 <div class="container-fluid" style="background-color:#a8cf45; color:#2c3e50;">
 <div class="container">
+    
 <div class="navbar-header">
-<a class="navbar-brand" style="color: #2c3e50;" href="<?php echo base_url() ?>">  <span class="fa fa-copyright"></span> 2018  guepedia.com    </a>
-<div class="navbar-brand pull-right d-none d-sm-block">
-Kecepatan server <strong>{elapsed_time}</strong> seconds
+<a class="navbar-brand" style="color: #2c3e50;" href="<?php echo base_url() ?>">  <span class="fa fa-copyright"></span> 2018  guepedia.com </a>
 </div>
-</div>
+    
 </div>
 </div>
 </html>
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/5ba1b89ec666d426648ae46d/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>

@@ -57,7 +57,7 @@ return $query;
 }
 
 function data_buku($id_file_naskah){
-$query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=> base64_decode($id_file_naskah)));  
+$query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=> base64_decode($id_file_naskah),'status'=>'Publish'));  
 
 return $query;    
 }
@@ -173,7 +173,10 @@ function data_kupon($kupon){
 $query = $this->db->get_where('data_kode_kupon',array('nama_kupon'=>$kupon,'id_account'=>$this->session->userdata('id_account_toko')));
 return $query;    
 }
-
+function hapus_kupon($data){
+$this->db->where($data);    
+$this->db->delete('data_kode_kupon');    
+}
 
 }
 

@@ -11,11 +11,9 @@ success:function(data){
 $("#halaman_checkout").html(data);    
 }
 });
-
 }
 
 $(document).ready(function(){
-
 $("#bayar").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
 var metode_pembayaran = $("#metode_pembayaran").val();    
@@ -66,7 +64,7 @@ window.location.href = "<?php echo base_url('Store') ?>";
 
 <ul class="nav nav-tabs" role="tablist">
 <li class="nav-item">
-<a class="nav-link " href="#tab_promo" role="tab" data-toggle="tab">Kode Promo</a>
+<a class="nav-link active show" href="#tab_promo" role="tab" data-toggle="tab" aria-selected="true">Kode Promo</a>
 </li>
 <li class="nav-item">
 <a class="nav-link" href="#tab_kupon" role="tab" data-toggle="tab">Kode Kupon</a>
@@ -74,18 +72,18 @@ window.location.href = "<?php echo base_url('Store') ?>";
 </ul>
 
 <div class="tab-content">
-<div role="tabpanel" class="tab-pane fade" id="tab_promo" >
+<div role="tabpanel" class="tab-pane fade active show" id="tab_promo" >
 <hr>
 <label>Kode promo </label>
 <input type="text" class="form-control" id="promo" value="" placeholder="Kode promo . . . " ><hr>
-<button type="button" class="btn btn-primary" id="tambah_promo">Tambahkan promo</button>
+<button type="button" class="btn btn-primary" id="tambah_promo">Tambahkan promo <span class="fa fa-plus"></span></button>
 
 </div>
 <div role="tabpanel" class="tab-pane fade" id="tab_kupon">
  <hr>   
 <label>Kode kupon </label>
 <input type="text" class="form-control" id="kode_kupon" value="" placeholder="Kode kupon . . . " ><hr>
-<button type="button" class="btn btn-primary" id="tambah_kupon">Tambahkan kupon</button>
+<button type="button" class="btn btn-primary" id="tambah_kupon">Tambahkan kupon <span class="fa fa-plus"></span></button>
 
     
 </div>

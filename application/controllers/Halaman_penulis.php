@@ -79,13 +79,47 @@ $this->load->view('Umum/V_footer');
 }
 
 public function proses_upload(){
+$input = $this->input->post();
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+$this->load->library('email',$config);
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($this->session->userdata('email'));
+$this->email->subject('Naskah Diterima '. $input['judul']);
+
+$data_kirim ="<h4 align='center'>Berikut data naskah yang Anda upload </h4><hr>
+<h5 align='center'>Judul Buku :".$input['judul']."<br>
+Penulis :".$input['penulis']."<br>
+Status : Pending <br></h5>
+"."<p>Naskah Anda telah kami terima. Naskah akan segera kami terbitkan setelah verifikasi dan mendapatkan ISBN dari guepedia.com.<br>" 
+."Naskah yang Anda berikan dipromosikan melalui toko buku online guepedia.com dan media promosi lainnya. 
+Anda bisa melakukan pemesanan melewati buku online guepedia.com</p></h3><br>
+
+";
+        
+
+$this->email->message($data_kirim);
+
+if (!$this->email->send()){    
+
+echo $this->email->print_debugger();
+
+
+}else{    
+    
 $config['upload_path']          = './uploads/dokumen_naskah/';
 $config['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
 $config['file_size']            = "2004800";
 $config['encrypt_name']         = TRUE;
 
 $this->upload->initialize($config);
-$input = $this->input->post();
 
 if (!$this->upload->do_upload('file_naskah')){
 
@@ -135,6 +169,7 @@ $data = array(
 $this->M_halaman_penulis->simpan_naskah($data);
 
 echo "berhasil";
+}
 }
 }
 }

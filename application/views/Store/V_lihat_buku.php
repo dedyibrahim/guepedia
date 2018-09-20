@@ -30,18 +30,16 @@
 
 <ul class="nav nav-tabs" role="tablist">
 <li class="nav-item">
-<a class="nav-link" href="#sinopsis" role="tab" data-toggle="tab">Sinopsis</a>
+<a class="nav-link nav-link active show" href="#sinopsis" role="tab" aria-selected="true" data-toggle="tab">Sinopsis</a>
 </li>
 <li class="nav-item">
 <a class="nav-link" href="#estimasi" role="tab" data-toggle="tab">Estimasi Ongkos kirim</a>
 </li>
-<li class="nav-item">
-<a class="nav-link" href="#ulasan" role="tab" data-toggle="tab">Ulasan</a>
-</li>
+
 </ul>
 
 <div class="tab-content">
-<div role="tabpanel" class="tab-pane fade in active" id="sinopsis">
+<div role="tabpanel" class="tab-pane fade in active show" id="sinopsis">
 <?php echo $lihat['sinopsis']; ?>   
 </div>
 <div role="tabpanel" class="tab-pane fade" id="estimasi">
@@ -77,9 +75,7 @@
 </div>
 
 </div>
-<div role="tabpanel" class="tab-pane fade" id="ulasan">
-...   
-</div>
+
 </div>
 </div>
 

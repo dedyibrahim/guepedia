@@ -3,7 +3,6 @@
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 <span class="navbar-toggler-icon"></span>
 </button>
-
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 <ul class="navbar-nav ">
 <li class="nav-item active">
@@ -18,7 +17,7 @@ min-width: 45rem;
 </style>
 <li class="nav-item dropdown active">
 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-Kategori Buku
+Kategori
 </a>
 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
@@ -50,7 +49,7 @@ data-content="
 </div>
 
 <div class="form-inline my-1 my-lg-0 col">
-<a  href="<?php echo base_url('penulis') ?>"><button class="btn btn-secondary  form-control">Penulis <span class="fa fa-pencil"></span></button> </a>
+<a  href="<?php echo base_url('penulis') ?>"><button class="btn btn-secondary  form-control">Jadi Penulis <span class="fa fa-pencil"></span></button> </a>
 </div>
 
 
@@ -246,6 +245,7 @@ window.location.href = "<?php echo base_url('') ?>";
 
 }
 </script>
+
 <div class="container" id="hasil_cari" style="display:none; margin-top:7%; "></div>
 
 <div id="konten">

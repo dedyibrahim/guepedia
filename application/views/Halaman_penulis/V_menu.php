@@ -23,7 +23,6 @@
 <li class="text-center"><a href="<?php echo base_url('Halaman_penulis/my_project'); ?>">Naskah saya <span class="fa fa-folder-open fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('Halaman_penulis/laporan_penjualan') ?>">Laporan Penjualan <span class="fa fa-bar-chart-o fa-3x"></span></a></li>   
 <li class="text-center"><a href="<?php echo base_url('Halaman_penulis/tarik_royalti'); ?>">Bagi hasil <span class="fa fa-money fa-3x"></span></a></li>   
-<li class="text-center"><a href="">Kontak Cepat <span class="fa fa-comments fa-3x"></span></a></li>   
 </ul> 
 </div>
 

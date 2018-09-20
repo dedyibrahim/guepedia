@@ -72,17 +72,17 @@ Total harga  <b  class="float-right">Rp.<?php echo number_format($this->cart->to
 <?php if ($this->session->userdata('ongkir')){ ?>
 Ongkos kirim  <b  class="float-right">Rp.<?php echo number_format($this->session->userdata('ongkir')) ?></b>
 <hr>
- <?php } ?>
+<?php } ?>
 
 <?php if ($this->session->userdata('hasil_kupon')){ ?>
 Kupon <?php echo $this->session->userdata('nama_kupon') ?>  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
 <hr>
- <?php } ?>
+<?php } ?>
 
 <?php if ($this->session->userdata('hasil_promo')){ ?>
 Promo <?php echo $this->session->userdata('nama_promo') ?>  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_promo')) ?></b>
 <hr>
- <?php } ?>
+<?php } ?>
 
 <?php if ($this->session->userdata('ongkir')){ ?>
 
@@ -100,7 +100,7 @@ Total bayar <b  class="float-right">Rp.<?php echo number_format($this->session->
 </div>
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
 $(function () {
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
 

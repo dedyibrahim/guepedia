@@ -44,13 +44,13 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 </tr>
 <?php if($konfir['nilai_kupon']){ ?>
 <tr>
-<td colspan="2">Kode promo <?php echo $konfir['nama_kupon'] ?> </td>    
+<td colspan="2">Kode Kupon <?php echo $konfir['nama_kupon'] ?> </td>    
 <td  colspan="3" style="color:#dc3545;"> - Rp.<?php echo number_format($konfir['hasil_kupon']) ?> </td>    
 </tr>
 <?php  } ?>
 <?php if($konfir['nilai_promo']){ ?>
 <tr>
-<td colspan="2">Kode promo <?php echo $konfir['nama_promo'] ?> </td>    
+<td colspan="2">Kode Promo <?php echo $konfir['nama_promo'] ?> </td>    
 <td  colspan="3" style="color:#dc3545;"> - Rp.<?php echo number_format($konfir['hasil_promo']) ?> </td>    
 </tr>
 <?php  } ?>
@@ -86,7 +86,7 @@ Jumlah bayar
 
 </div><hr>
 <?php } ?>
-<hr>    
+ 
 </div>
 <script type="text/javascript">
 function konfirmasi(inv){

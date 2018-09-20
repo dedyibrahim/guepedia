@@ -55,14 +55,19 @@ $from = $this->uri->segment(4);
 $this->pagination->initialize($config);		
 $kategori= $this->M_store->lihat_kategori($id_kategori,$config['per_page'],$from);
 
-
+if($kategori->num_rows() > 0){
+    
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_lihat_kategori',['kategori'=>$kategori]);
-
 echo $this->pagination->create_links();
-
 $this->load->view('Umum/V_footer_toko');
+}else{
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_kategori_kosong');
+$this->load->view('Umum/V_footer_toko');    
+}
 
 }else {
 redirect(404);    
@@ -102,13 +107,20 @@ echo "</div>";
 }
 
 function lihat_buku(){
+    
 $id_file_naskah = $this->uri->segment(3);
-
 $query = $this->M_store->data_buku($id_file_naskah);
+if($query->num_rows() > 0 ){
+    
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_lihat_buku',['data'=>$query]);
 $this->load->view('Umum/V_footer_toko');
+
+
+}else{
+redirect('Store');    
+}
 }
 function tambah_keranjang(){
 if($this->input->post('id_file_naskah')){
@@ -163,7 +175,12 @@ $this->load->view('Store/V_keranjang');
 $this->load->view('Umum/V_footer_toko');    
 }
 function keranjang_total(){
-echo '<table style="text-align:  center;" class="table table-sm table-bordered table-striped table-condensed">
+if($this->cart->total() == 0){
+    
+echo "<h1 align='center'>Keranjang anda masih kosong <br> <hr><a href='".base_url('Store')."'><button class='btn btn-success btn-lg'>Mulai Belanja !!!</button></a></h1><hr>"; 
+    
+}else{    
+echo '<table style="text-align:  center;" class="table table-md table-striped table-condensed">
 <tr>
 <th>No</th>  
 <th>Nama Buku</th>  
@@ -183,11 +200,15 @@ echo '<tr>
 </tr>';
 
 }
+echo "<tr style='backround-color:#f60;'>"
+        . "<td colspan='2'><b>Total</b></td>"
+        . "<td colspan='2'> <b>Rp. ".number_format($this->cart->total())."</b></td>"
+        . "<td colspan='2' ><a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku <span class='fa fa fa-money'></span></button></a></td>"
+        . "</tr>";
 
 echo '</table>'; 
-echo "<a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku <span class='fa fa fa-money'></span></button></a> <hr>";
 
-
+}
 }
 function update_qty_keranjang(){
 if($this->input->post('qty')){
@@ -330,7 +351,7 @@ $this->email->subject('Aktivasi akun');
 
 $data_kirim ="<h3>Terimakasih anda telah melakukan pendaftaran di Guepedia.com </h3><br>"
 . "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
-. "<a href='".base_url('Penulis/aktivasi/'. base64_encode($input['email']))."'>Konfirmasi akun anda disini</a><br><br>"
+. "<a href='".base_url('Penulis/aktivasi/'.base64_encode($input['email']))."'>Konfirmasi akun anda disini</a><br><br>"
 . "atas perhatian dan kerjasamanya kami ucapkan terimaksih <br>"
 . "<i>Note: Jika anda tidak merasa melakukan pendaftaran mohon abaikan email ini </i>";
 
@@ -418,15 +439,13 @@ echo " Estimasi ". $d['etd']." Hari <br>";
 }
 }
 }
-
-
 }    
 
 }else{
 redirect(404);    
 }
-
 }
+
 function login(){
 if($this->input->post('email')){
 $input = $this->input->post();
@@ -681,8 +700,8 @@ $this->email->to($this->session->userdata('email_toko'));
 $this->email->cc("guepedia@gmail.com");
 $this->email->subject('Konfirmasi pesanan');
 $html =  "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
-        . "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer <br>"
-        . "dengan nomor rekening sebagai berikut<br> . . . "
+        . "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal".date('d/m/Y', strtotime("+2 day"))."<br>"
+        . "<h4 align='center'>dengan nomor rekening sebagai berikut</h4> <br> "
         . "Nama bank : Bank BCA <br>"
         . "Nomor Rekenng : 2120077824 <br>"
         . "Atas nama: Dianata Eka Putra <br>";
@@ -758,6 +777,8 @@ $penjualan_toko = array(
 'status'            => 'pending',    
 'total_belanja'     => $this->cart->total(),    
 'total_bayar'       => $this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon') - $this->session->userdata('hasil_promo'),    
+'tanggal_order'     => date('d/m/Y'),
+'expired'           => date('d/m/Y', strtotime("+2 day")),       
 ); 
 $this->M_store->input_data_jumlah_penjualan_toko($penjualan_toko);
 
@@ -772,7 +793,14 @@ $data_penjualan =array(
 $this->M_store->input_data_penjualan_toko($data_penjualan);
 }
 
+$hapus_kupon = array(
+'nama_kupon' => $this->session->userdata('nama_kupon'),
+'id_account' => $this->session->userdata('id_account_toko'),   
+);
+$this->M_store->hapus_kupon($hapus_kupon);
+
 echo "berhasil";
+
 $this->cart->destroy();
 $unset = array(
 'nilai_kupon', 
@@ -929,7 +957,7 @@ $static = $query->row_array();
 $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
 $d=1 ;
 $html  ="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
-$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
+$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']." ".$static['status']."</h3><hr>"; 
 
 $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
         <tr>
@@ -977,9 +1005,9 @@ $html.=
 <td colspan='2'>Total Bayar</td>    
 <td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
 </tr></table><hr>";
-$html .= "Nama Penerima :".$static['nama_penerima']."<br>";
-$html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
-$html .= $static['nomor_kontak']."<br>"; 
+$html .= "Nama Penerima : ".$static['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : ".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
+$html .= "Nomor Kontak : ".$static['nomor_kontak']."<br>"; 
 
  
 $dompdf = new Dompdf(array('enable_remote'=>true));
@@ -1046,6 +1074,48 @@ echo "gaada";
 
 redirect(404);    
 }    
+}
+function layanan(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_layanan');
+$this->load->view('Umum/V_footer_toko');     
+       
+}
+
+function faq(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_faq');
+$this->load->view('Umum/V_footer_toko');     
+       
+}
+function hubungi_kami(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_hubungi_kami');
+$this->load->view('Umum/V_footer_toko');            
+}
+function tentang_kami(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_tentang_kami');
+$this->load->view('Umum/V_footer_toko');     
+       
+}
+function privasi(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_privasi');
+$this->load->view('Umum/V_footer_toko');     
+       
+}
+function syarat(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_syarat');
+$this->load->view('Umum/V_footer_toko');     
+       
 }
 
 
