@@ -84,7 +84,7 @@ $this->email->message($html);
 if (!$this->email->send()){    
 echo $this->email->print_debugger();
 }else{
-echo $html;
+
 echo "reminder orderan ".$static['nama_penerima']." Berhasil";    
 
 
