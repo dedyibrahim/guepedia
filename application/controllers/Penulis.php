@@ -231,8 +231,8 @@ if($this->input->post('password')){
 $input = $this->input->post();
 
 $data = array(
-'password'=> md5($input['password']),    
-'status'=>'aktif',        
+'password'    => md5($input['password']),    
+'status_akun' =>'aktif',        
 );
 $this->M_penulis->update_password($data,$input['e']);
 
