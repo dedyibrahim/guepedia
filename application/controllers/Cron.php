@@ -91,5 +91,23 @@ echo "reminder orderan ".$static['nama_penerima']." Berhasil";
 }
 }
 }
+
+function orderan_expired(){
+$data = array(
+'expired' => date('d/m/Y'),
+'status'  => 'pending'
+);
+$query = $this->M_cron->orderan_expired($data);
+
+foreach ($query->result_array() as $expire){
+$datax = array(
+'status' => 'expired',
+);
+
+$this->M_cron->set_expired($datax,$expire['invoices_toko'])    ;
+
+
+}
+}
 }
 

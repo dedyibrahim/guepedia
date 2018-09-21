@@ -12,6 +12,17 @@ $this->db->where('data_jumlah_penjualan_toko.status','pending');
 $query = $this->db->get();
 
 return $query;
-} 
+}
 
+function orderan_expired($data){
+$query =  $this->db->get_where('data_jumlah_penjualan_toko',$data);    
+
+return $query;
+}
+
+function set_expired($data,$param){
+    
+$this->db->update('data_jumlah_penjualan_toko',$data,array('invoices_toko'=>$param));
+
+}
 }
