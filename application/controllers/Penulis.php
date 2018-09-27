@@ -43,9 +43,9 @@ $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($input['email']);
 $this->email->subject('Aktivasi akun');
+$html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>Konfirmasi akun </h3>"; 
 
-$data_kirim ="<h3>Terimakasih anda telah melakukan pendaftaran di Guepedia.com </h3><br>"
-. "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
+$html .= "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
 . "<a href='".base_url('Penulis/aktivasi/'. base64_encode($input['email']))."'>Konfirmasi akun anda disini</a><br><br>"
 . "atas perhatian dan kerjasamanya kami ucapkan terimaksih <br>"
 . "<i>Note: Jika anda tidak merasa melakukan pendaftaran mohon abaikan email ini </i>";
@@ -176,15 +176,13 @@ $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($email);
 $this->email->subject('Reset Password');
+$html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'> Reset Password  Guepedia</h3>"; 
 
-$data_kirim ="<h3>Reset password</h3><br>"
-. "untuk melakukan reset password silahkan klik link di bawah ini<br><br>"
-. "<a href='".base_url('Penulis/reset/'. base64_encode($email))."'>Reset Password anda disini</a><br><br>"
-. "atas perhatian dan kerjasamanya kami ucapkan terimaksih <br>"
-. "<i>Note: Jika anda tidak merasa melakukan reset password tolong abaikan email ini </i>";
+$html  .="Untuk melakukan reset password silahkan anda klik link di bawah ini <br>";
+$html  .= base_url('Penulis/reset/'. base64_encode($email));
+$html  .="<br><i>Note:Jika anda tidak merasa melakukan reset password mohon abaikan email ini</i>";
 
-
-$this->email->message($data_kirim);
+$this->email->message($html);
 
 if (!$this->email->send()){    
 

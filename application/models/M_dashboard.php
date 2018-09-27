@@ -145,6 +145,7 @@ $this->datatables->select('id_data_penjualan,'
 .'data_penjualan.tanggal_transaksi as tanggal_transaksi,'
 .'data_penjualan.status_penjualan as status_penjualan,'
 .'data_penjualan.resi_pengiriman as resi_pengiriman,'
+.'data_penjualan.penjualan as penjualan,'
 );
 
 $this->datatables->from('data_penjualan');

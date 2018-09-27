@@ -61,8 +61,8 @@ redirect('G_dashboard');
 redirect(404);    
 }    
 
-
 }
+
 public function lihat_kategori(){
 $this->session->set_userdata(array('id_kategori_naskah'=> base64_decode($this->uri->segment(3))));    
 $this->load->view('Umum/V_header');
@@ -209,15 +209,15 @@ echo "berhasil";
 }else{ 
 
 $data =array(
-'id_account'      => $input['id_account'],    
-'penulis'         => $input['penulis'],
-'status'          => $input['status'],
+'id_account'        => $input['id_account'],    
+'penulis'           => $input['penulis'],
+'status'            => $input['status'],
 'id_kategori_naskah'=> $input['kategori'],
-'sinopsis'        => $input['sinopsis'],
-'judul'           => $input['judul'],
-'harga'           => $input['harga'],
-'berat_buku'      => $input['berat'],
-'jumlah_lembar'   => $input['jumlah_lembar'],
+'sinopsis'          => $input['sinopsis'],
+'judul'             => $input['judul'],
+'harga'             => $input['harga'],
+'berat_buku'        => $input['berat'],
+'jumlah_lembar'     => $input['jumlah_lembar'],
 );  
 
 $this->M_dashboard->update_naskah($data,$param);
@@ -573,12 +573,15 @@ redirect(404);
 }
 function canvas_kasir(){
 $data = $this->session->userdata('data_kasir'); 
-$ht = count($data);
+if (is_array($data) || is_object($data)){
 
+$ht = count($data);
+}
 $subtotal       = 0;
 $royalti        = 0;
 $bersih         = 0;
 $nilai_diskon   = 0;
+
 if (is_array($data) || is_object($data)){
 foreach($data as $i=>$ht){
 
@@ -944,6 +947,7 @@ $data1 = array(
 'total_royalti'         => $this->session->userdata('royalti'),
 'bersih'                => $this->session->userdata('bersih'),
 'status_penjualan'      => 'Pending',
+'penjualan'             => $input['penjualan'],    
 );
 
 $this->M_dashboard->simpan_data_penjualan($data1);
@@ -1474,48 +1478,53 @@ $static = $query->row_array();
 $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
 $d=1 ;
 
-$html  ="<h3>Hallo orderan anda telah kami menggunakan ". $static['kurir']." ".$static['service']."Nomor Resi".$input['resi']."</h3><br>";
-$html .="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
-$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
-$html .= "<h5 align='center'>Detail Pesanans </h5>"; 
-$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+$html  ="Halo orderan anda telah kami kirim menggunakan ". $static['kurir']." dengan Service ".$static['service']." Nomor Resi ".$input['resi']."<br>";
+$html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".$static['invoices_toko']."</h3>"; 
+
+$html .='<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0"  >
         <tr>
-        <th>No</th>   
-        <th>Nama Buku</th>   
-        <th>Harga</th>   
-        <th>Qty</th>   
-        <th>Jumlah</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69)">No</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69)">Nama Buku</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69)">Harga</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69)">Qty</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69)">Jumlah</th>   
         </tr>';
 
 foreach ($data_orderan->result_array() as $data){
 $html .='<tr>';    
-$html .='<td>'.$d++.'</td>';
-$html .='<td>'.$data['nama_buku'].'</td>';
-$html .='<td>Rp. '.number_format($data['harga_buku']).'</td>';       
-$html .='<td>'.$data['qty'].'</td>';
-$html .='<td>Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$d++.'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$data['nama_buku'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$data['qty'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">Rp. '.number_format($data['subtotal']).'</td>';       
 $html .='</tr>';
 } 
 
 $html .="<tr>
-<td colspan='2'>Total Belanja</td>    
-<td colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Total Belanja</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
 </tr>
 <tr>
-<td colspan='2'>Ongkir </td>    
-<td  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Ongkir </td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center'  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
 </tr>";
 if($static['nilai_kupon']){ 
 $html .= "<tr>
-<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
-<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td  style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3' style='color:#dc3545;'> - Rp.".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+ }
+ if($static['nilai_promo']){ 
+$html .= "<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode promo ".$static['nama_promo']."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center'  colspan='3' style='color:#dc3545;'> - Rp. ".number_format($static['hasil_promo'])."</td>    
 </tr>";
  }
 $html.= 
 "<tr>
-<td colspan='2'>Total Bayar</td>    
-<td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
-</tr></table><hr>";
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Total Bayar</td>    
+<td  style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+</tr></table>";
 $html .= "Nama Penerima :".$static['nama_penerima']."<br>";
 $html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
 $html .= $static['nomor_kontak']."<br>"; 
@@ -1530,7 +1539,6 @@ $data = array(
  'nomor_resi'=>$input['resi'],   
 );
 $this->M_dashboard->input_resi_toko($data,$input['id_penjualan_toko']);
-
 echo "berhasil";
 }
 
@@ -1573,6 +1581,103 @@ redirect(404);
 }
 function input_alasan_penolakan(){
 if($this->input->post('alasan')){
+    
+$input = $this->input->post();
+
+$pembeli = $this->M_dashboard->data_pembeli($input['id_penjualan_toko'])->row_array();
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($pembeli['email']);
+$this->email->subject('Konfirmasi pesanan di tolak');
+
+$this->db->where(array('id_penjualan_toko'=>$input['id_penjualan_toko']));    
+$query = $this->db->get('data_jumlah_penjualan_toko');
+$static = $query->row_array();
+
+$data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
+$d=1 ;
+
+$html  ="Maaf pesanan anda kami tolak dengan alasan ".$input['alasan']."<br>";
+
+$html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".$static['invoices_toko']."</h3>"; 
+
+$html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
+        <tr>
+        <th style="border-bottom: 1px solid rgb(168,207,69);">No</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Nama Buku</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Harga</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Qty</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Jumlah</th>   
+        </tr>';
+
+foreach ($data_orderan->result_array() as $data){
+$html .='<tr>';    
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$d++.'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$data['nama_buku'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$data['qty'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='</tr>';
+} 
+
+$html .="<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Total Belanja</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+</tr>
+<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Ongkir </td>    
+<td  style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+</tr>";
+
+if($static['nilai_kupon']){ 
+$html .= "<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);'  align='center' colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+}
+
+if($static['nilai_kupon']){ 
+$html .= "<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode kupon ".$static['nama_kupon']."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);'  align='center' colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+}
+
+if($static['nilai_promo']){ 
+$html .= "<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode Promo ".$static['nama_promo']."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);'  align='center' colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_promo'])."</td>    
+</tr>";
+ }
+ 
+$html.= 
+"<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Total Bayar</td>    
+<td  style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+</tr></table><hr>";
+
+$html .= "Nama Penerima :".$static['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
+$html .= $static['nomor_kontak']."<br>"; 
+
+$this->email->message($html);
+if (!$this->email->send()){   
+    
+echo $this->email->print_debugger();
+
+}else{     
+    
 $input = $this->input->post();
 
 $data = array(
@@ -1582,6 +1687,7 @@ $data = array(
 $this->M_dashboard->input_alasan_penolakan($data,$input['id_penjualan_toko']);
 
 echo "berhasil";
+}
 }else{
 redirect(404);    
 }    
@@ -1694,48 +1800,57 @@ $static = $query->row_array();
 $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
 $d=1 ;
 
-$html  ="<h3>Pembayaran anda telah kami terima dan akan dikirim secepatnya , terimakasih atas kepercayaan anda berbelanja di Store Guepedia </h3><br>";
-$html .="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
-$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
-$html .= "<h5 align='center'>Detail orderan </h5>"; 
-$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+$html  ="Pembayaran anda telah kami periksa dan kami terima , terimakasih atas kepercayaan anda berbelanja di Store Guepedia <br>";
+
+$html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".$static['invoices_toko']."</h3>"; 
+
+$html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
         <tr>
-        <th>No</th>   
-        <th>Nama Buku</th>   
-        <th>Harga</th>   
-        <th>Qty</th>   
-        <th>Jumlah</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">No</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Nama Buku</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Harga</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Qty</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Jumlah</th>   
         </tr>';
 
 foreach ($data_orderan->result_array() as $data){
 $html .='<tr>';    
-$html .='<td>'.$d++.'</td>';
-$html .='<td>'.$data['nama_buku'].'</td>';
-$html .='<td>Rp. '.number_format($data['harga_buku']).'</td>';       
-$html .='<td>'.$data['qty'].'</td>';
-$html .='<td>Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$d++.'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$data['nama_buku'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$data['qty'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">Rp. '.number_format($data['subtotal']).'</td>';       
 $html .='</tr>';
 } 
 
 $html .="<tr>
-<td colspan='2'>Total Belanja</td>    
-<td colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Total Belanja</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
 </tr>
 <tr>
-<td colspan='2'>Ongkir </td>    
-<td  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Ongkir </td>    
+<td  style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
 </tr>";
+
 if($static['nilai_kupon']){ 
 $html .= "<tr>
-<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
-<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);'  align='center' colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+</tr>";
+ }
+ 
+ if($static['nilai_promo']){ 
+$html .= "<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode promo ".$static['nama_promo']."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center'  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_promo'])."</td>    
 </tr>";
  }
 $html.= 
 "<tr>
-<td colspan='2'>Total Bayar</td>    
-<td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Total Bayar</td>    
+<td  style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
 </tr></table><hr>";
+
 $html .= "Nama Penerima :".$static['nama_penerima']."<br>";
 $html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
 $html .= $static['nomor_kontak']."<br>"; 

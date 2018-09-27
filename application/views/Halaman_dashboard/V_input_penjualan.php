@@ -36,6 +36,15 @@
 <input type="text" id="jumlah_uang" onkeyup="hitung_uang();"  class="form-control">
 <label>Kembalian : </label>
 <input type="text" id="kembalian" readonly="" class="form-control">
+<label>Penjualan</label>
+<select class="form-control" id="penjualan">
+    <option value="Store Guepedia">Store Guepedia</option>    
+    <option value="Bukalapak">Bukalapak</option>    
+    <option value="Lazada">Lazada</option>    
+    <option value="Tokopedia">Tokopedia</option>    
+    <option value="Other">Other</option>    
+    
+</select>
 <hr>
 <button class="btn btn-success form-control" id="simpan_penjualan"> Simpan Penjualan <span class="fa fa-save"></span></button>
 </div>
@@ -502,8 +511,9 @@ var alamat_lengkap = $("#alamat_lengkap").val();
 var jumlah_bayar = $("#jumlah_uang").val();
 var total_bayar   = $("#total_bayar").val();
 var kembalian     = $("#kembalian").val();
+var penjualan     = $("#penjualan option:selected ").val();
 
-if (nama_customer !='' && jumlah_bayar !=''){
+if (nama_customer !='' && jumlah_bayar !='' && penjualan !=''){
 if (parseInt(jumlah_bayar) <  parseInt(total_bayar)){
 swal({
 title:"", 
@@ -515,7 +525,7 @@ showConfirmButton: true,
 $.ajax({
 type:"POST",
 url:"<?php echo base_url('G_dashboard/simpan_penjualan') ?>",
-data:"token="+token+"&nama_customer="+nama_customer+"&nomor_kontak="+nomor_kontak+"&alamat_lengkap="+alamat_lengkap+"&jumlah_uang="+jumlah_bayar+"&kembalian="+kembalian,
+data:"token="+token+"&penjualan="+penjualan+"&nama_customer="+nama_customer+"&nomor_kontak="+nomor_kontak+"&alamat_lengkap="+alamat_lengkap+"&jumlah_uang="+jumlah_bayar+"&kembalian="+kembalian,
 success:function(data){
 if(data == "berhasil"){
 
@@ -635,6 +645,7 @@ columns: [
 {"data": "tanggal_transaksi"},
 {"data": "status_penjualan"},
 {"data": "resi_pengiriman"},
+{"data": "penjualan"},
 {"data": "view"},
 
 
@@ -671,6 +682,7 @@ $('td:eq(0)', row).html(index);
 <th  align="center"     aria-controls="datatable-fixed-header"  >Tanggal Transaksi</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Status penjualan</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Resi</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Penjualan</th>
 <th style="width: 25%;" align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
 </thead>
 <tbody align="center">

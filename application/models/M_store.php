@@ -173,10 +173,21 @@ function data_kupon($kupon){
 $query = $this->db->get_where('data_kode_kupon',array('nama_kupon'=>$kupon,'id_account'=>$this->session->userdata('id_account_toko')));
 return $query;    
 }
+
 function hapus_kupon($data){
 $this->db->where($data);    
 $this->db->delete('data_kode_kupon');    
 }
+
+function cek_email($email){
+$query = $this->db->get_where('akun_penulis',array('email'=>$email));
+return $query;
+}
+
+function set_password_baru($data,$email){
+ $this->db->update('akun_penulis',$data,array('email'=> base64_decode($email)));   
+}
+
 
 }
 

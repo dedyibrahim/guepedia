@@ -92,12 +92,16 @@ $this->email->set_newline("\r\n");
 $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($this->session->userdata('email'));
-$this->email->subject('Naskah Diterima '. $input['judul']);
+$this->email->subject('Naskah '. $input['judul']);
 
-$data_kirim ="<h4 align='center'>Berikut data naskah yang Anda upload </h4><hr>
-<h5 align='center'>Judul Buku :".$input['judul']."<br>
-Penulis :".$input['penulis']."<br>
-Status : Pending <br></h5>
+$html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>Naskah Berhasil di Upload</h3>"; 
+
+$html .="<h4 align='center'>Berikut data naskah yang Anda Upload </h4><hr>
+    
+Judul Buku :".$input['judul']."<hr>
+Penulis :".$input['penulis']."<hr>
+Status : Pending <br><hr><br>
+
 "."<p>Naskah Anda telah kami terima. Naskah akan segera kami terbitkan setelah verifikasi dan mendapatkan ISBN dari guepedia.com.<br>" 
 ."Naskah yang Anda berikan dipromosikan melalui toko buku online guepedia.com dan media promosi lainnya. 
 Anda bisa melakukan pemesanan melewati buku online guepedia.com</p></h3><br>
@@ -105,7 +109,7 @@ Anda bisa melakukan pemesanan melewati buku online guepedia.com</p></h3><br>
 ";
         
 
-$this->email->message($data_kirim);
+$this->email->message($html);
 
 if (!$this->email->send()){    
 

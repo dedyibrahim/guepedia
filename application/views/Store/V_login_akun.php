@@ -1,17 +1,18 @@
 <div class="container" style="background-color: #fff; margin-top: 6.5%; margin-bottom:1%; ">
 <h4 align="center"><span class="fa fa-lock fa-3x fa-color"></span><br>Login akun</h4><hr> 
 <div class="offset-3 col-md-6">
-    <label>Email :</label>
-    <input type="text" id="email_login" placeholder="Email . . ." class="form-control">    
-    <label>Password :</label>
-    <input type="password" id="password_login" placeholder="Password . . ." class="form-control">    
-    <hr>
-    <a  style="text-decoration:none; " href="<?php echo base_url('Store/daftar_akun') ?>">Belum Punnya akun ?</a>
-    <hr>
-    <button class="btn btn-success form-control" onclick="login_akun();">Login <span class="fa fa-sign-in"></span></button>
+<label>Email :</label>
+<input type="text" id="email_login" placeholder="Email . . ." class="form-control">    
+<label>Password :</label>
+<input type="password" id="password_login" placeholder="Password . . ." class="form-control">    
+<hr>
+<a  class="float-right" style="text-decoration:none; " href="<?php echo base_url('Store/lupa_sandi') ?>">Lupa Kata sandi ?</a>
+<a  style="text-decoration:none; " href="<?php echo base_url('Store/daftar_akun') ?>">Belum Punnya akun ?</a>
+<hr>
+<button class="btn btn-success form-control" onclick="login_akun();"> Login <span class="fa fa-sign-in"></span></button>
+</div>
 </div>
 
-</div>
 <script type="text/javascript">
 function login_akun(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
@@ -20,7 +21,7 @@ var password  = $("#password_login").val();
 
 
 if(email !='' && password !=''){
-    
+
 
 $.ajax({
 type:"POST",

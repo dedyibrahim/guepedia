@@ -56,7 +56,7 @@ $this->pagination->initialize($config);
 $kategori= $this->M_store->lihat_kategori($id_kategori,$config['per_page'],$from);
 
 if($kategori->num_rows() > 0){
-    
+
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_lihat_kategori',['kategori'=>$kategori]);
@@ -107,11 +107,11 @@ echo "</div>";
 }
 
 function lihat_buku(){
-    
+
 $id_file_naskah = $this->uri->segment(3);
 $query = $this->M_store->data_buku($id_file_naskah);
 if($query->num_rows() > 0 ){
-    
+
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_lihat_buku',['data'=>$query]);
@@ -176,9 +176,9 @@ $this->load->view('Umum/V_footer_toko');
 }
 function keranjang_total(){
 if($this->cart->total() == 0){
-    
+
 echo "<h1 align='center'>Keranjang anda masih kosong <br> <hr><a href='".base_url('Store')."'><button class='btn btn-success btn-lg'>Mulai Belanja !!!</button></a></h1><hr>"; 
-    
+
 }else{    
 echo '<table style="text-align:  center;" class="table table-md table-striped table-condensed">
 <tr>
@@ -201,10 +201,10 @@ echo '<tr>
 
 }
 echo "<tr style='backround-color:#f60;'>"
-        . "<td colspan='2'><b>Total</b></td>"
-        . "<td colspan='2'> <b>Rp. ".number_format($this->cart->total())."</b></td>"
-        . "<td colspan='2' ><a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku <span class='fa fa fa-money'></span></button></a></td>"
-        . "</tr>";
+. "<td colspan='2'><b>Total</b></td>"
+. "<td colspan='2'> <b>Rp. ".number_format($this->cart->total())."</b></td>"
+. "<td colspan='2' ><a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku <span class='fa fa fa-money'></span></button></a></td>"
+. "</tr>";
 
 echo '</table>'; 
 
@@ -321,6 +321,13 @@ $this->load->view('Store/V_login_akun');
 $this->load->view('Umum/V_footer_toko');        
 }
 
+public function lupa_sandi(){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_lupa_sandi');
+$this->load->view('Umum/V_footer_toko');        
+}
+
 public function daftar(){
 
 if($this->input->post('nama_lengkap')){
@@ -349,14 +356,16 @@ $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($input['email']);
 $this->email->subject('Aktivasi akun');
 
-$data_kirim ="<h3>Terimakasih anda telah melakukan pendaftaran di Guepedia.com </h3><br>"
+$html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>Konfirmasi akun </h3>"; 
+
+$html .="<h3>Terimakasih anda telah melakukan pendaftaran di Guepedia.com </h3><br>"
 . "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
 . "<a href='".base_url('Penulis/aktivasi/'.base64_encode($input['email']))."'>Konfirmasi akun anda disini</a><br><br>"
-. "atas perhatian dan kerjasamanya kami ucapkan terimaksih <br>"
+        
 . "<i>Note: Jika anda tidak merasa melakukan pendaftaran mohon abaikan email ini </i>";
 
 
-$this->email->message($data_kirim);
+$this->email->message($html);
 
 if (!$this->email->send()){    
 
@@ -486,7 +495,7 @@ $this->session->sess_destroy();
 function halaman_checkout(){        
 $query = $this->M_store->cek_alamat($this->session->userdata('id_account_toko'));
 
-    
+
 $this->load->view('Store/V_halaman_checkout',['data_alamat'=>$query]);
 
 
@@ -500,7 +509,7 @@ $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_checkout');
 $this->load->view('Umum/V_footer_toko');    
 }else{
-    redirect('Store');    
+redirect('Store');    
 }
 
 }else{
@@ -578,7 +587,7 @@ $input = $this->input->post();
 $cek_alamat = $this->M_store->cek_alamat($this->session->userdata('id_account_toko'));
 
 if($cek_alamat->num_rows() > 0){
-    
+
 $data =array(
 'id_account_toko'   => $this->session->userdata('id_account_toko'),  
 'nama_penerima'     => $input['nama_penerima'],
@@ -592,10 +601,10 @@ $data =array(
 'nama_kecamatan'    => $input['nama_kecamatan'],
 );
 $this->M_store->update_alamat($data,$this->session->userdata('id_account_toko'));
-    
-    
+
+
 }else{
-    
+
 $data =array(
 'id_account_toko'   => $this->session->userdata('id_account_toko'),  
 'nama_penerima'     => $input['nama_penerima'],
@@ -643,7 +652,7 @@ function ubah_kurir(){
 unset($_SESSION['ongkir']);
 unset($_SESSION['kurir']);
 unset($_SESSION['service']);
-    
+
 }
 
 function set_promo(){
@@ -660,21 +669,21 @@ $data = array(
 'nama_promo'  => $data_promo['kode_promo'],   
 );
 $this->session->set_userdata($data);
-        
+
 echo "berhasil";
 }else{
 echo "tidak tersedia";    
 }    
 }else{
- redirect(404);    
+redirect(404);    
 }    
-    
+
 }
 function bayar(){
 if($this->input->post('metode_pembayaran')){
 
 if($this->session->userdata('ongkir')){    
-    
+
 $input = $this->input->post();
 $id_account = $this->session->userdata('id_account_toko');
 $alamat     = $this->M_store->cek_alamat($id_account)->row_array();
@@ -683,13 +692,16 @@ $angka = 6;
 $jumlah_penjualan = $penjualan;
 $invoices_toko = str_pad($jumlah_penjualan, $angka ,"0",STR_PAD_LEFT);
 
+$expir = date('d-m-Y', strtotime("+2 day"));
+$date1= date_create($expir);
+$tanggal_expir = date_format($date1,"d F o");
+
 
 $config['protocol'] = 'sendmail';
 $config['mailpath'] = '/usr/sbin/sendmail';
 $config['charset']  = 'utf-8';
 $config['mailtype'] = 'html';
 $config['wordwrap'] = TRUE;
-
 
 $this->load->library('email',$config);
 
@@ -699,52 +711,66 @@ $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($this->session->userdata('email_toko'));
 $this->email->cc("guepedia@gmail.com");
 $this->email->subject('Konfirmasi pesanan');
-$html =  "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
-        . "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal".date('d/m/Y', strtotime("+2 day"))."<br>"
-        . "<h4 align='center'>dengan nomor rekening sebagai berikut</h4> <br> "
-        . "Nama bank : Bank BCA <br>"
-        . "Nomor Rekenng : 2120077824 <br>"
-        . "Atas nama: Dianata Eka Putra <br>";
-$html .= "Dengan Detail Produk sebagai berikut <br>";
-$html .= "<h3 align='center'>Store Guepedia <br> ".'INV/ST/'.$invoices_toko."</h3><hr>"; 
-$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
-        <tr>
-        <th>No</th>   
-        <th>Nama Buku</th>   
-        <th>Harga</th>   
-        <th>Qty</th>   
-        <th>Jumlah</th>   
-        </tr>';
-$d=1 ;
+
+$html   = "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
+. "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal ".$tanggal_expir."<br>"
+. "<h3 align='center' style='padding:2%;color:#fff;background-color:rgb(168,207,69)'>Rekening Pembayaran</h3> "
+
+. "Nama bank : Bank BCA <hr>"
+. "Nomor Rekenng : 2120077824 <hr>"
+. "Atas nama: Dianata Eka Putra <hr>";
+
+$html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".'INV/ST/'.$invoices_toko."</h3>"; 
+
+$html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
+<tr>
+<th style="border-bottom: 1px solid rgb(168,207,69);">No</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69);">Nama Buku</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69);">Harga</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69);">Qty</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69);">Jumlah</th>   
+</tr>';
+$d = 1 ;
+
 foreach ($this->cart->contents() as $items){
 $html .='<tr>';    
-$html .='<td>'.$d++.'</td>';
-$html .='<td>'.$items['name'].'</td>';
-$html .='<td>Rp.'.number_format($items['price']).'</td>';       
-$html .='<td>'.$items['qty'].'</td>';
-$html .='<td>Rp. '.number_format($items['subtotal']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center" >'.$d++.'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center" >'.$items['name'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center" > Rp.'.number_format($items['price']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center" >'.$items['qty'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center" >Rp. '.number_format($items['subtotal']).'</td>';       
 $html .='</tr>';
-} 
+}
 
 $html .="<tr>
-<td colspan='2'>Total Belanja</td>    
-<td colspan='3'>Rp.".number_format($this->cart->total())."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center'  colspan='2'>Total Belanja</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($this->cart->total())."</td>    
 </tr>
 <tr>
-<td colspan='2'>Ongkir </td>    
-<td  colspan='3'>Rp.".number_format($this->session->userdata('ongkir'))." </td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Ongkir </td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);'  align='center' colspan='3'>Rp.".number_format($this->session->userdata('ongkir'))." </td>    
 </tr>";
+
 if($this->session->userdata('nilai_kupon')){ 
 $html .= "<tr>
-<td colspan='2'>Kode promo ".$this->session->userdata('nama_kupon')."</td>    
-<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($this->session->userdata('hasil_kupon'))."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' colspan='2' align='center'>Kode kupon ".$this->session->userdata('nama_kupon')."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' colspan='3' align='center' style='color:#dc3545;'> - Rp".number_format($this->session->userdata('hasil_kupon'))."</td>    
 </tr>";
- }
+}
+
+if($this->session->userdata('nilai_promo')){ 
+$html .= "<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' colspan='2' align='center'>Kode promo ".$this->session->userdata('nama_promo')."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' colspan='3' align='center' style='color:#dc3545;'> - Rp".number_format($this->session->userdata('hasil_promo'))."</td>    
+</tr>";
+}
+
 $html.= 
 "<tr>
-<td colspan='2'>Total Bayar</td>    
-<td  colspan='3'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon'))."</td>    
-</tr></table><hr>";
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center'  colspan='2'>Total Bayar</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon'))."</td>    
+</tr></table>";
+
 $html .= "Nama Penerima :".$alamat['nama_penerima']."<br>";
 $html .= "Alamat pengiriman : <br>".$alamat['nama_kecamatan']." ".$alamat['nama_kota']." ".$alamat['nama_provinsi']." ".$alamat['alamat_lengkap']." ".$alamat['kode_pos']."<br>"; 
 $html .= $alamat['nomor_kontak']."<br>"; 
@@ -816,7 +842,7 @@ $unset = array(
 $this->session->unset_userdata($unset);
 }
 }else{
-   echo "error";    
+echo "error";    
 }
 }else{
 
@@ -826,9 +852,9 @@ redirect(404);
 
 function konfirmasi_pembayaran(){
 if($this->session->userdata('id_account_toko')){
-  
+
 $konfirmasi = $this->M_store->data_konfirmasi_pembayaran();
-    
+
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_konfirmasi_pembayaran',['konfirmasi'=>$konfirmasi]);
@@ -863,7 +889,7 @@ $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($this->session->userdata('email_toko'));
 $this->email->cc("guepedia@gmail.com");
-$this->email->subject('Konfirmasi pembayaran terkirim');
+$this->email->subject('Konfirmasi pembayaran diterima');
 
 $id = $input['inv'];
 $this->db->where(array('id_penjualan_toko'=>$id,'id_account'=>$this->session->userdata('id_account_toko')));    
@@ -873,48 +899,56 @@ $static = $query->row_array();
 $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
 $d=1 ;
 
-$html  ="<h3>Terimakasih anda telah melakukan  konfirmasi pembayaran , selanjutnya pembayaran akan kami periksa dalam waktu 1 X 24 JAM</h3><br>";
-$html .="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
-$html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']."</h3><hr>"; 
-$html .= "<h5 align='center'>Detail orderan </h5>"; 
-$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
-        <tr>
-        <th>No</th>   
-        <th>Nama Buku</th>   
-        <th>Harga</th>   
-        <th>Qty</th>   
-        <th>Jumlah</th>   
-        </tr>';
+$html  ="Terimakasih anda telah melakukan  konfirmasi pembayaran , selanjutnya pembayaran akan kami periksa dalam waktu 1 X 24 JAM<br>";
+
+$html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".$static['invoices_toko']."</h3>"; 
+
+$html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
+<tr>
+<th style="border-bottom: 1px solid rgb(168,207,69);" align="center">No</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69);" align="center">Nama Buku</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69);" align="center">Harga</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69);" align="center">Qty</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69);" align="center">Jumlah</th>   
+</tr>';
 
 foreach ($data_orderan->result_array() as $data){
 $html .='<tr>';    
-$html .='<td>'.$d++.'</td>';
-$html .='<td>'.$data['nama_buku'].'</td>';
-$html .='<td>Rp. '.number_format($data['harga_buku']).'</td>';       
-$html .='<td>'.$data['qty'].'</td>';
-$html .='<td>Rp. '.number_format($data['subtotal']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$d++.'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$data['nama_buku'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">Rp. '.number_format($data['harga_buku']).'</td>';       
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">'.$data['qty'].'</td>';
+$html .='<td style="border-bottom: 1px solid rgb(168,207,69);" align="center">Rp. '.number_format($data['subtotal']).'</td>';       
 $html .='</tr>';
 } 
 
 $html .="<tr>
-<td colspan='2'>Total Belanja</td>    
-<td colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Total Belanja</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_belanja'])."</td>    
 </tr>
 <tr>
-<td colspan='2'>Ongkir </td>    
-<td  colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Ongkir </td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['ongkir'])." </td>    
 </tr>";
 if($static['nilai_kupon']){ 
 $html .= "<tr>
-<td colspan='2'>Kode promo ".$static['nama_kupon']."</td>    
-<td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode kupon ".$static['nama_kupon']."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center'  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
 </tr>";
- }
+}
+
+if($static['nilai_promo']){ 
+$html .= "<tr>
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Kode promo ".$static['nama_promo']."</td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center'  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_promo'])."</td>    
+</tr>";
+}
 $html.= 
 "<tr>
-<td colspan='2'>Total Bayar</td>    
-<td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
-</tr></table><hr>";
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Total Bayar</td>    
+<td  style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
+</tr></table>";
+
 $html .= "Nama Penerima :".$static['nama_penerima']."<br>";
 $html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
 $html .= $static['nomor_kontak']."<br>"; 
@@ -934,7 +968,7 @@ $data = array(
 'bukti_transfer' => $this->upload->data('file_name'),  
 'status'         => 'proses',
 );
- 
+
 $this->M_store->konfirmasi($data,$input['inv']);
 
 echo "berhasil";
@@ -944,7 +978,7 @@ echo "berhasil";
 }else{
 redirect(404);    
 }    
-    
+
 }
 function download_invoices(){
 if($this->session->userdata('id_account_toko')){
@@ -960,13 +994,13 @@ $html  ="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.p
 $html .= "<h3 align='center'>Store Guepedia <br> ".$static['invoices_toko']." ".$static['status']."</h3><hr>"; 
 
 $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
-        <tr>
-        <th>No</th>   
-        <th>Nama Buku</th>   
-        <th>Harga</th>   
-        <th>Qty</th>   
-        <th>Jumlah</th>   
-        </tr>';
+<tr>
+<th>No</th>   
+<th>Nama Buku</th>   
+<th>Harga</th>   
+<th>Qty</th>   
+<th>Jumlah</th>   
+</tr>';
 
 foreach ($data_orderan->result_array() as $data){
 $html .='<tr>';    
@@ -991,15 +1025,15 @@ $html .= "<tr>
 <td colspan='2'>Kode kupon ".$static['nama_kupon']."</td>    
 <td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
 </tr>";
- }
- 
- if($static['nilai_promo']){ 
+}
+
+if($static['nilai_promo']){ 
 $html .= "<tr>
 <td colspan='2'>Kode promo ".$static['nama_promo']."</td>    
 <td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_promo'])."</td>    
 </tr>";
- }
- 
+}
+
 $html.= 
 "<tr>
 <td colspan='2'>Total Bayar</td>    
@@ -1009,14 +1043,14 @@ $html .= "Nama Penerima : ".$static['nama_penerima']."<br>";
 $html .= "Alamat pengiriman : ".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
 $html .= "Nomor Kontak : ".$static['nomor_kontak']."<br>"; 
 
- 
+
 $dompdf = new Dompdf(array('enable_remote'=>true));
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4');
 $dompdf->render();
 $dompdf->stream('INV.pdf',array('Attachment'=>0));
-    
-    
+
+
 }else{
 redirect('Store/login_akun');   
 } 
@@ -1028,12 +1062,12 @@ echo $this->M_store->json_transaksi();
 
 function daftar_transaksi(){
 if($this->session->userdata('id_account_toko')){
- 
+
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_daftar_transaksi');
 $this->load->view('Umum/V_footer_toko');     
-    
+
 }else{
 redirect(404);    
 }    
@@ -1055,8 +1089,8 @@ $data = array(
 'nama_kupon'  => $cek['nama_kupon'],   
 );
 $this->session->set_userdata($data);
-     
-    
+
+
 echo "berhasil";    
 
 
@@ -1064,7 +1098,7 @@ echo "berhasil";
 
 echo "tidak_lolos";    
 }
- 
+
 
 }else{
 echo "gaada";    
@@ -1080,7 +1114,7 @@ $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_layanan');
 $this->load->view('Umum/V_footer_toko');     
-       
+
 }
 
 function faq(){
@@ -1088,7 +1122,7 @@ $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_faq');
 $this->load->view('Umum/V_footer_toko');     
-       
+
 }
 function hubungi_kami(){
 $this->load->view('Umum/V_header');
@@ -1101,23 +1135,96 @@ $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_tentang_kami');
 $this->load->view('Umum/V_footer_toko');     
-       
+
 }
 function privasi(){
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_privasi');
 $this->load->view('Umum/V_footer_toko');     
-       
 }
+
 function syarat(){
 $this->load->view('Umum/V_header');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_syarat');
 $this->load->view('Umum/V_footer_toko');     
-       
+}
+function reset_password(){
+if($this->input->post('email')){
+$cek_email = $this->M_store->cek_email($this->input->post('email'));
+
+if($cek_email->num_rows() >0){
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($this->input->post('email'));
+$this->email->subject('Reset Password Guepedia');
+$html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'> Reset Password  Guepedia</h3>"; 
+
+$html  .="Untuk melakukan reset password silahkan anda klik link di bawah ini <br>";
+$html  .= base_url('Store/halaman_reset/'. base64_encode($this->input->post('email')));
+$html  .="<br><i>Note:Jika anda tidak merasa melakukan reset password mohon abaikan email ini</i>";
+$this->email->message($html);
+
+if (!$this->email->send()){    
+
+echo $this->email->print_debugger();
+
+
+}else{    
+echo "berhasil";
+
+
 }
 
+}else{
+echo "not_found";   
+}
+
+}else{
+redirect(404);    
+}
+
+}
+function halaman_reset(){
+if($this->uri->segment(3) != NULL){
+$this->load->view('Umum/V_header');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_halaman_reset');
+$this->load->view('Umum/V_footer_toko');  
+
+}else{
+    redirect(404);    
+}
+}
+function set_password_baru(){
+if($this->input->post('e')){
+$input = $this->input->post();
+
+$data = array(
+'password'    => md5($input['password']),    
+'status_akun' => 'aktif',    
+);
+
+$this->M_store->set_password_baru($data,$input['e']);
+
+echo "berhasil";    
+}else{
+redirect(404);    
+}
+    
+}
 
 }
 

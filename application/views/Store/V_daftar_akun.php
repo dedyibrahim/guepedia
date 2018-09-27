@@ -12,7 +12,7 @@
     <hr>
     <a  style="text-decoration:none; " href="<?php echo base_url('Store/login_akun') ?>">Sudah punya akun ?</a>
     <hr>
-    <button class="btn btn-success form-control" id="btn_daftar">Daftar <span class="fa fa-save"></span></button>
+    <button class="btn btn-success form-control" id="btn_daftar"> Daftar <span class="fa fa-save"></span></button>
 </div>
 
 </div>
@@ -45,7 +45,7 @@ text:"Pendaftaran berhasil silahkan aktivasi akun anda melalui email yang anda m
 type:"success",
 showConfirmButton: true,
 }).then(function() {
-window.location.href = '<?php echo base_url('Store') ?>';
+window.location.href = '<?php echo base_url('Store/login_akun') ?>';
 });  
 }else if (data == 'sudah_digunakan'){
 swal({
@@ -63,7 +63,7 @@ text:"Pendaftaran gagal",
 type:"error",
 showConfirmButton: true,
 }).then(function() {
-window.location.href = '<?php echo base_url('Penulis') ?>';
+window.location.href = '<?php echo base_url('Store/daftar_akun') ?>';
 });    
 }
 }        

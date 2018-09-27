@@ -31,6 +31,7 @@
 <div class="text-center"><?php 
 $this->db->where('status','selesai');
 $this->db->or_where('status','tolak');
+$this->db->or_where('status','expired');
 $this->db->from('data_jumlah_penjualan_toko');
 $query = $this->db->get();
 echo $query->num_rows();

@@ -3,30 +3,30 @@
 <div class="container" style="padding:1%; ">
 <div class="row">
 <style>
-    .list-inline li{
-     margin-top:3%;    
-     color: #a8cf45;
-     text-decoration: none;
-    }
-    .list-inline li a{
-     margin-top:3%;    
-     color: #2c3e50;
-     text-decoration: none;
-    }
-     .list-inline li a:hover{
-     margin-top:3%;    
-     color: #a8cf45;
-     text-decoration: none;
-    }
+.list-inline li{
+margin-top:3%;    
+color: #a8cf45;
+text-decoration: none;
+}
+.list-inline li a{
+margin-top:3%;    
+color: #2c3e50;
+text-decoration: none;
+}
+.list-inline li a:hover{
+margin-top:3%;    
+color: #a8cf45;
+text-decoration: none;
+}
 </style>
 
 <div class="col">
 <h5 align="center">Bantuan  <span class="fa fa-question"></span> <hr></h5>
 <ul class="list-inline">
-    <li><a href="<?php echo base_url('Store/konfirmasi_pembayaran'); ?>">Konfirmasi Pembayaran</a></li>   
-    <li><a href="<?php echo base_url('Penulis'); ?>">Menjadi Penulis</a></li>   
-<li><a href="<?php echo base_url('Store/layanan'); ?>">Layanan</a></li>   
-<li><a href="<?php echo base_url('Store/faq'); ?>">Faq</a></li>   
+<li><a href="<?php echo base_url('Store/konfirmasi_pembayaran'); ?>">Konfirmasi Pembayaran</a></li>   
+<li><a href="<?php echo base_url('Penulis'); ?>">Menjadi Penulis</a></li>   
+<!---<li><a href="<?php// echo base_url('Store/layanan'); ?>">Layanan</a></li>   
+<li><a href="<?php// echo base_url('Store/faq'); ?>">Faq</a></li> ---> 
 <li><a href="<?php echo base_url('Store/hubungi_kami'); ?>">Hubungi Kami</a></li>   
 </ul>
 </div>
@@ -64,11 +64,11 @@
 </div>
 <div class="container-fluid" style="background-color:#a8cf45; color:#2c3e50;">
 <div class="container">
-    
+
 <div class="navbar-header">
 <a class="navbar-brand" style="color: #2c3e50;" href="<?php echo base_url() ?>">  <span class="fa fa-copyright"></span> 2018  guepedia.com </a>
 </div>
-    
+
 </div>
 </div>
 </html>
