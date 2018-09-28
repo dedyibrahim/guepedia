@@ -167,7 +167,7 @@ text:"Maksimal berat adalah 1 TON",
 type:"error",
 showConfirmButton: true,
 });
-}else if(city_id !='' && total_berat !='' && subdistrict_id !=''){
+}else if(city_id !='' && total_berat !='' && subdistrict_id !='' && kurir !=''){
 
 $.ajax({
 type:"post",

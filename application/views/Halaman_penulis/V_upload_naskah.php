@@ -36,7 +36,8 @@ echo "<option value=".$kate['id_kategori_naskah'].">".$kate['nama_kategori']."</
 <div class="checkbox">
 <label>
 <input type="checkbox" id="ketentuan"  data-toggle="modal" data-target=".bd-example-modal-lg" value="setuju"  > Saya menyetujui dan mematuhi <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><strong><u>syarat dan ketentuan </u></strong></a> ( Perjanjian Guepedia dan Penulis ) dari guepedia.com<br>
-Jika Anda sudah memberikan centang pada pernyataan di atas, kami anggap Anda sudah membaca dan memahami segala syarat dan ketentuan yang diberlakukan di guepedia.com.
+Jika Anda sudah memberikan centang pada pernyataan di atas, kami anggap Anda sudah membaca dan memahami segala syarat dan ketentuan yang diberlakukan di guepedia.com, dan ini  sebagai dokumen sah perjanjian
+antara Guepedia dan Penulis.
 </label>
 </div>
 <hr>
@@ -154,8 +155,12 @@ window.location="<?php echo base_url('Halaman_penulis/download_tamplate'); ?>"
 <div class="modal-dialog modal-lg">
 <div class="modal-content">
 <div class="modal-header">
-<h5 class="modal-title" id="exampleModalLongTitle">Perjanjian Guepedia dan Penulis</h5>
-<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <div class="container">
+        <h4 align="center"><span style="color:#ff0000; ">Harap di baca sampai Habis </span></span> 
+      <br>Perjanjian Guepedia dan Penulis</h4>
+    </div>
+    
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
 </div>
@@ -164,7 +169,7 @@ window.location="<?php echo base_url('Halaman_penulis/download_tamplate'); ?>"
 <p>1. DEFINISI</p>
 
 <ul>
-	<li>Kepatuhan Anda: Sebelum menggunakan, mengakses atau memanfaatkan situs ini, Anda sudah membaca dengan baik setiap dan seluruh Syarat dan Ketentuan ini yang antara lain berisi mengenai Hak Cipta, Kewajiban Penulis, Royalty Penulis dan ketentuan menerbitkan buku yang berkaitan dengan penulis guepedia.com. Dan dengan melanjutkan penggunaan atau pemanfaatan fasilitas yang diberikan oleh guepedia.com maka Anda telah menyatakan persetujuan Anda terhadap setiap dan seluruh ketentuan dalam Syarat dan Ketentuan ini.</li>
+	<li>Kepatuhan Anda: Sebelum menggunakan, mengakses atau memanfaatkan situs ini, Anda sudah membaca dengan baik setiap dan seluruh Syarat dan Ketentuan ini yang antara lain berisi mengenai Hak Cipta, Kewajiban Penulis, Bagi hasil Penulis dan ketentuan menerbitkan buku yang berkaitan dengan penulis guepedia.com. Dan dengan melanjutkan penggunaan atau pemanfaatan fasilitas yang diberikan oleh guepedia.com maka Anda telah menyatakan persetujuan Anda terhadap setiap dan seluruh ketentuan dalam Syarat dan Ketentuan ini.</li>
 	<li>Keanggotaan di Guepedia.com adalah terbuk bagi semua kalangan, baik penulis buku, pembeli buku maupun penikmat buku.</li>
 	<li>Keanggotaan di Guepedia.com adalah GRATIS dengan mengisi form data keanggotaan secara lengkap dan benar.</li>
 </ul>
@@ -191,6 +196,7 @@ window.location="<?php echo base_url('Halaman_penulis/download_tamplate'); ?>"
 	<li>Penulis tidak diperkenankan membuat karangan lain yang judul dan isinya sama atau judul yang diubah tapi isi sama atau judul sama tapi isi di ubah atau dalam bentuk apa pun yang merugikan Guepedia.com dalam penjualan karya tersebut.</li>
 	<li>Penulis tidak di perkenankan menyuruh orang lain menerbitkan atau membantu usaha orang lain untuk menerbitkan karya yang judul &amp; isinya sama, atau judul yang diubah tapi isi sama atau judul sama tapi isi diubah atau dalam bentuk apa pun.</li>
 	<li>Penulis tetap mempunyai hak untuk melakukan revisi, perbaikan atau penyempurnaan apabila pada naskah tersebut ditemukan kesalahan atau ketidaksempurnaan atau apabila diminta oleh Guepedia.com</li>
+       
 </ul>
 
 <ul>
@@ -205,22 +211,24 @@ window.location="<?php echo base_url('Halaman_penulis/download_tamplate'); ?>"
 	<li>Guepedia.com akan mempromosikan serta memasarkan buku tersebut seluas mungkin.</li>
 	<li>Guepedia.com berhak memperbaiki naskah, menetapkan tata wajah, tata letak, bentuk buku, jumlah halaman, ilustrasi, penentuan harga, proses cetakan, dan cara penjualannya.</li>
 	<li>Guepedia.com juga diberikan hak untuk menyebarluaskan karya penulis tersebut dalam bentuk lain, seperti Film, Sinetron, Video, dan lain-lain, baik sebagian ataupun keseluruhan naskah.</li>
+        <li>Guepedia.com berhak untuk menarik dan tidak menerbitkan naskah yang sedang berjalan dengan atau tanpa alasan apapun.</li>
+        <li>Guepedia.com tidak bertanggung jawab atas isi naskah yang diterbitkan jika dikemudian hari ditemukann hal-hal yang melanggar hukum,norma,dan asusila.</li>
 </ul>
 
 
-<p>5. HONORARIUM ATAU ROYALTY</p>
+<p>5. ROYALTY ATAU BAGI HASIL</p>
 
 <ul>
-	<li>Guepedia.com akan membayar Royalty kepada Penulis sebesar 15% dari harga jual buku sebelum pajak tambahan. Dan Royalty akan dikurangkan pajak sesuai dengan UUD perpajakan yang berlaku di Indonesia.</li>
-	<li>Royalty penulis tidak terikat dalam jumlah 15% (bisa lebih dari 15%) tergantung promo yang akan ditawarkan oleh Guepedia.com</li>
-	<li>Penulis bisa menarik royalty setiap bulannya.</li>
+	<li>Guepedia.com akan membayar bagi hasil kepada Penulis sebesar 15% dari harga jual buku sebelum pajak tambahan. Dan bagi hasil akan dikurangkan pajak sesuai dengan UUD perpajakan yang berlaku di Indonesia.</li>
+	<li>Bagi hasil penulis tidak terikat dalam jumlah 15% (bisa lebih dari 15%) tergantung promo yang akan ditawarkan oleh Guepedia.com</li>
+	<li>Penulis bisa menarik bagi hasil setiap bulannya.</li>
 </ul>
 
 
 <p>6. PENERJEMAHAN NASKAH</p>
 
 <ul>
-	<li>Jika naskah atau buku di terbitkan dalam bahasa lain, maka Guepedia.om berhak menerjemahkannya. Segala biaya penerjemahan akan di bicarakan kepada penulisApabila penulis meninggaldunia, maka segala hak dan kewajibannya yang berhubungan 
+	<li>Jika naskah atau buku di terbitkan dalam bahasa lain, maka Guepedia.com berhak menerjemahkannya. Segala biaya penerjemahan akan di bicarakan kepada penulis Apabila penulis meninggal dunia, maka segala hak dan kewajibannya yang berhubungan 
 	dengan surat perjanjian ini beralih kepada ahli warisnya yang sah menurut hukum</li>
 	<li>Apabila ahli waris penulis lebih dari seorang, maka mereka harus menunjuk seorang ahli waris yang diberi surat kuasa penuh
 	untuk berhubungan dengan guepedia.com</li>
@@ -230,8 +238,43 @@ window.location="<?php echo base_url('Halaman_penulis/download_tamplate'); ?>"
 <p>7. PENYELESAIAN PERSELISIHAN</p>
 
 <ul>
-	<li>Apabila penulis sudah menyetujui perjanjian ini sebelum kurun waku lima tahun melanggar perjanjian maka royalty penulis akan dibekukan oleh Guepedia.com</li>
+	<li>Apabila penulis sudah menyetujui perjanjian ini sebelum kurun waktu lima tahun melanggar perjanjian maka bagi hasil penulis akan dibekukan oleh Guepedia.com</li>
 </ul>
+
+<p>8. UU ITE NO.11 TAHUN 2008 BAB III MENGENAI SURAT ELEKTRONIK </p>
+
+<ul>
+    <li>PASAL 5 <br> 
+     Informasi Elektronik dan/atau Dokumen
+Elektronik dan/atau hasil cetaknya merupakan
+alat bukti hukum yang sah. <br>
+PASAL 5 AYAT 4 <br>Surat yang menurut undang-undang harus
+dibuat tertulis meliputi tetapi tidak terbatas
+pada surat berharga, surat yang berharga,
+dan surat yang digunakan dalam proses
+penegakan hukum acara perdata, pidana, dan
+administrasi negara. 
+
+    </li>
+    <li>PASAL 6 <br> Dalam hal terdapat ketentuan lain selain yang
+diatur dalam Pasal 5 ayat (4) yang mensyaratkan
+bahwa suatu informasi harus berbentuk tertulis
+atau asli, Informasi Elektronik dan/atau Dokumen
+Elektronik dianggap sah sepanjang informasi yang
+tercantum di dalamnya dapat diakses, ditampilkan,
+dijamin keutuhannya, dan dapat
+dipertanggungjawabkan sehingga menerangkan
+suatu keadaan. </li>
+    <li>PASAL 7 <br>Setiap Orang yang menyatakan hak, memperkuat
+hak yang telah ada, atau menolak hak Orang lain
+berdasarkan adanya Informasi Elektronik dan/atau
+Dokumen Elektronik harus memastikan bahwa
+Informasi Elektronik dan/atau Dokumen
+Elektronik yang ada padanya berasal dari Sistem
+Elektronik yang memenuhi syarat berdasarkan
+Peraturan Perundang-undangan.  </li>
+</ul>
+
 
 
                               </div></div>

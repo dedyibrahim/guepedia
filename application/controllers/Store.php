@@ -771,7 +771,7 @@ $html.=
 <td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon'))."</td>    
 </tr></table>";
 
-$html .= "Nama Penerima :".$alamat['nama_penerima']."<br>";
+$html .= "Nama Pemesan :".$alamat['nama_penerima']."<br>";
 $html .= "Alamat pengiriman : <br>".$alamat['nama_kecamatan']." ".$alamat['nama_kota']." ".$alamat['nama_provinsi']." ".$alamat['alamat_lengkap']." ".$alamat['kode_pos']."<br>"; 
 $html .= $alamat['nomor_kontak']."<br>"; 
 
@@ -889,7 +889,7 @@ $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($this->session->userdata('email_toko'));
 $this->email->cc("guepedia@gmail.com");
-$this->email->subject('Konfirmasi pembayaran diterima');
+$this->email->subject('Konfirmasi pembayaran terkirim');
 
 $id = $input['inv'];
 $this->db->where(array('id_penjualan_toko'=>$id,'id_account'=>$this->session->userdata('id_account_toko')));    
@@ -949,7 +949,7 @@ $html.=
 <td  style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
 </tr></table>";
 
-$html .= "Nama Penerima :".$static['nama_penerima']."<br>";
+$html .= "Nama Pemesan :".$static['nama_penerima']."<br>";
 $html .= "Alamat pengiriman : <br>".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
 $html .= $static['nomor_kontak']."<br>"; 
 
@@ -1039,7 +1039,7 @@ $html.=
 <td colspan='2'>Total Bayar</td>    
 <td  colspan='3'>Rp.".number_format($static['total_bayar'])."</td>    
 </tr></table><hr>";
-$html .= "Nama Penerima : ".$static['nama_penerima']."<br>";
+$html .= "Nama Pemesan : ".$static['nama_penerima']."<br>";
 $html .= "Alamat pengiriman : ".$static['nama_kecamatan']." ".$static['nama_kota']." ".$static['nama_provinsi']." ".$static['alamat_lengkap']." ".$static['kode_pos']."<br>"; 
 $html .= "Nomor Kontak : ".$static['nomor_kontak']."<br>"; 
 

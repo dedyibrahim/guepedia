@@ -44,7 +44,7 @@
 <br><p align="center"><a href="#" id="belum_punnya" >Belum Punya akun ?</a></p>
 
 <hr>
-<a href="#" id="lupa_password" >Lupa Password ?</a>
+<a href="#" id="lupa_password" >Lupa Kata Sandi ?</a>
 <button class="btn btn-success float-right" id="btn_login" >Sign in <span class="fa fa-sign-in"></span></button>
 <div class="clearfix"></div><br>
 </div>
@@ -197,7 +197,7 @@ window.location.href = '<?php echo base_url('Halaman_penulis') ?>';
 }else if(data == "akun_gaada"){
 swal({
 title:"", 
-text:"Akun tidak tersedia silahkan daftar terlebih dahulu",
+text:"Email atau password yang anda masukan salah",
 type:"error",
 showConfirmButton: true,
 }).then(function() {
