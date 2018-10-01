@@ -19,7 +19,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 $("#btn_login").click(function(){
-var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"   
+var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>";   
 var email= $("#email_login").val();    
 var password= $("#password_login").val();     
 if (email == '' && password == ''){

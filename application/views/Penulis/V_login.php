@@ -86,7 +86,7 @@ $("#login").fadeIn(300);
 });
 
 $("#btn_daftar").click(function(){
-var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>"   
+var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
 var nama_pena         = $("#nama_pena").val(); 
 var nama_lengkap      = $("#nama_lengkap").val(); 
 var nomor_kontak      = $("#nomor_kontak").val();
@@ -161,7 +161,7 @@ showConfirmButton: true,
 
 
 $("#btn_login").click(function(){
-var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>"   
+var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
 
 var email_login    = $("#email_login").val();
 var password_login = $("#password_login").val();
@@ -230,7 +230,7 @@ showConfirmButton: true,
 });
 
 $("#btn_reset").click(function(){
-var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>"   
+var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
 var email_reset = $("#email_reset").val();
 
 if(email_reset !=''){
