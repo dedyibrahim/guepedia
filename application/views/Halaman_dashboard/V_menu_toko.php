@@ -50,5 +50,9 @@ echo $query->num_rows();
     <button class="btn btn-light">Kode Promo dan Kupon <span class="fa fa-plus-circle"></span></button>    
 </a>
 
+<a style="text-decoration: none; color: #fff;" href="<?php echo base_url('G_dashboard/input_seo') ?>">
+    <button class="btn btn-light">Input SEO <span class="fa fa-plus-circle"></span></button>    
+</a>
+    
 </div>
 

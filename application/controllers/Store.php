@@ -16,7 +16,7 @@ public function index(){
 $baru_terbit = $this->M_store->baru_terbit();    
 $terlaris    = $this->M_store->terlaris();    
 
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_banner');
 $this->load->view('Store/V_home',['baru_terbit'=>$baru_terbit,'terlaris'=>$terlaris]);
@@ -57,13 +57,13 @@ $kategori= $this->M_store->lihat_kategori($id_kategori,$config['per_page'],$from
 
 if($kategori->num_rows() > 0){
 
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_lihat_kategori',['kategori'=>$kategori]);
 echo $this->pagination->create_links();
 $this->load->view('Umum/V_footer_toko');
 }else{
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_kategori_kosong');
 $this->load->view('Umum/V_footer_toko');    
@@ -112,7 +112,7 @@ $id_file_naskah = $this->uri->segment(3);
 $query = $this->M_store->data_buku($id_file_naskah);
 if($query->num_rows() > 0 ){
 
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_lihat_buku',['data'=>$query]);
 $this->load->view('Umum/V_footer_toko');
@@ -169,7 +169,7 @@ echo "<hr><span style='color:#28a745; font-size:18px; text-align: center;'>Total
 
 }
 function keranjang(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_keranjang');
 $this->load->view('Umum/V_footer_toko');    
@@ -308,21 +308,21 @@ echo json_encode($json);
 }
 
 public function daftar_akun(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_daftar_akun');
 $this->load->view('Umum/V_footer_toko');        
 }
 
 public function login_akun(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_login_akun');
 $this->load->view('Umum/V_footer_toko');        
 }
 
 public function lupa_sandi(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_lupa_sandi');
 $this->load->view('Umum/V_footer_toko');        
@@ -504,7 +504,7 @@ $this->load->view('Store/V_halaman_checkout',['data_alamat'=>$query]);
 function checkout(){
 if($this->session->userdata('id_account_toko') !=NULL){
 if($this->cart->total()){    
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_checkout');
 $this->load->view('Umum/V_footer_toko');    
@@ -855,7 +855,7 @@ if($this->session->userdata('id_account_toko')){
 
 $konfirmasi = $this->M_store->data_konfirmasi_pembayaran();
 
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_konfirmasi_pembayaran',['konfirmasi'=>$konfirmasi]);
 $this->load->view('Umum/V_footer_toko');    
@@ -1063,7 +1063,7 @@ echo $this->M_store->json_transaksi();
 function daftar_transaksi(){
 if($this->session->userdata('id_account_toko')){
 
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_daftar_transaksi');
 $this->load->view('Umum/V_footer_toko');     
@@ -1110,7 +1110,7 @@ redirect(404);
 }    
 }
 function layanan(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_layanan');
 $this->load->view('Umum/V_footer_toko');     
@@ -1118,34 +1118,34 @@ $this->load->view('Umum/V_footer_toko');
 }
 
 function faq(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_faq');
 $this->load->view('Umum/V_footer_toko');     
 
 }
 function hubungi_kami(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_hubungi_kami');
 $this->load->view('Umum/V_footer_toko');            
 }
 function tentang_kami(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_tentang_kami');
 $this->load->view('Umum/V_footer_toko');     
 
 }
 function privasi(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_privasi');
 $this->load->view('Umum/V_footer_toko');     
 }
 
 function syarat(){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_syarat');
 $this->load->view('Umum/V_footer_toko');     
@@ -1199,7 +1199,7 @@ redirect(404);
 }
 function halaman_reset(){
 if($this->uri->segment(3) != NULL){
-$this->load->view('Umum/V_header');
+$this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_halaman_reset');
 $this->load->view('Umum/V_footer_toko');  

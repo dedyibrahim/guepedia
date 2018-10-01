@@ -41,6 +41,16 @@ $this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye
 return $this->datatables->generate();
 
 }
+function data_seo(){
+$this->datatables->select('id_kata_kunci,'
+. 'seo.kata_kunci as kata_kunci,'
+);
+
+$this->datatables->from('seo');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-danger fa fa-trash " href="'.base_url().'G_dashboard/hapus_seo/$1"></a>', 'base64_encode(id_kata_kunci)');
+return $this->datatables->generate();
+
+}
 function lihat_file_naskah(){
 $this->datatables->select('id_file_naskah,'
 . 'file_naskah_penulis.judul as judul,'
@@ -475,6 +485,15 @@ $this->db->join('akun_penulis', 'akun_penulis.id_account = data_jumlah_penjualan
 $this->db->where('data_jumlah_penjualan_toko.id_penjualan_toko',$param);
 $query = $this->db->get();    
 return $query;
+}
+
+function simpan_kata_kunci($data){
+    
+$this->db->insert('SEO',$data);    
+}
+
+function hapus_seo($param){ 
+$this->db->delete('seo',array('id_kata_kunci'=> base64_decode($param)));    
 }
 
 }

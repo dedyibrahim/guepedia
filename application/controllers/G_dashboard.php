@@ -73,6 +73,9 @@ $this->load->view('Umum/V_footer');
 public function json_lihat_kategori(){
 echo $this->M_dashboard->lihat_kategori();       
 }
+public function json_data_seo(){
+echo $this->M_dashboard->data_seo();       
+}
 public function json_file_naskah(){
 echo $this->M_dashboard->lihat_file_naskah();       
 }
@@ -1876,6 +1879,37 @@ redirect(404);
 }    
     
 }
+public function input_seo(){
+  
 
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_menu_toko');
+$this->load->view('Halaman_dashboard/V_data_seo');
+$this->load->view('Umum/V_footer');
+}
+
+public function simpan_kata_kunci(){
+if($this->input->post('kata_kunci')){
+  
+  $data = array(
+  'kata_kunci' => $this->input->post('kata_kunci')     
+  );
+  $this->M_dashboard->simpan_kata_kunci($data);
+  
+}else{
+redirect(404);    
+}
+}
+
+public function hapus_seo(){
+if($this->uri->segment(3) !=''){
+
+$this->M_dashboard->hapus_seo($this->uri->segment(3));
+redirect('G_dashboard/input_seo');
+}else{
+redirect(404);    
+}    
+}
 
 }
