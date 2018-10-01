@@ -489,7 +489,7 @@ return $query;
 
 function simpan_kata_kunci($data){
     
-$this->db->insert('SEO',$data);    
+$this->db->insert('seo',$data);    
 }
 
 function hapus_seo($param){ 
