@@ -11,6 +11,7 @@ redirect(base_url('G_dashboard'));
 }
 
 public function index(){
+    
 $this->load->view('Umum/V_header');
 $this->load->view('Login/V_login');
 }
