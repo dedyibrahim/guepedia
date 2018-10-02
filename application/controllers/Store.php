@@ -79,7 +79,7 @@ public function cari_buku(){
 $kata_kunci = $this->input->post('kata_kunci');
 
 $hasil_cari = $this->M_store->cari_buku($kata_kunci);    
-
+if($hasil_cari->num_rows() > 0){
 echo "<div class='row'>";
 foreach ($hasil_cari->result_array() as $data){
 
@@ -103,6 +103,9 @@ echo '<button onclick="tambah_keranjang('."'".base64_encode($data['id_file_naska
 </div>";
 }
 echo "</div>";
+}else{
+ $this->load->view('not_found.php');     
+}
 
 }
 

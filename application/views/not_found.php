@@ -1,17 +1,23 @@
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        
-        <h1 align="center" style="margin:0 auto;">
-            <img src="<?php echo base_url() ?>assets/img/logo-toko.png" alt=""/>
-        <br>
-        Halaman yang anda cari tidak tersedia
-        </h1>
-       <p style="text-align: center; font-size:100px; ">404</p>
+
+<div class="container " style="margin-top:6.7%; ">
+  <h1 align="center">Halaman Tidak Ditemukan</h1>
+ <p align="center">Maaf, halaman yang anda tuju tidak ditemukan (<span class="muted">error 404</span>).</p>
+  
+ <div class="row">
+     <div class="col">
+         <br><br><br><br><br><br>
+<h4 class="fs-14 mb-0">Apa yang dapat Anda lakukan selanjutnya ?</h4>
+<ol>
+    <li>Periksa kembali apakah alamat URL yang Anda masukkan sudah benar.</li>
+    <li>Anda dapat kembali ke halaman <a href="<?php echo base_url() ?>">Beranda Guepedia</a>.</li>
+    <li>Gunakan kolom pencarian (search) di bagian atas halaman Guepedia untuk mencari buku yang Anda inginkan.</li>
+</ol>         
+     </div>
+     <div class="col">
+         <img style="vertical-align:middle;" src="<?php echo base_url() ?>/assets/img/404.png" alt=""/>
+     </div>
      
-    </body>
-</html>
+      </div>
+
+
+</div>
