@@ -9,7 +9,7 @@
 
   gtag('config', 'UA-71848071-1');
 </script>
-    
+  
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="Guepedia.com">
@@ -41,7 +41,7 @@
 <link href="<?php echo base_url(); ?>assets/daterange/daterangepicker.css" rel="stylesheet" type="text/css"/>
 
 </head>
-
+  
 <script type="text/javascript">
 $(document).ajaxStart(function(){
     $("#loading").show();

@@ -294,8 +294,7 @@ $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="
         . '<th>Jumlah</th>'
         . '<th>Diskon</th>'
         . '<th>Nilai Diskon</th>'
-        . '<th>Royalti</th>'
-        . '<th>Bersih</th>'
+        . '<th>Bagi Hasil</th>'
         . '</tr>';
 
 foreach ($data->result_array() as $penjualan){
@@ -308,7 +307,6 @@ $html .= '<tr>
 <td>' . $penjualan['diskon'] . ' %</td>
 <td>Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
 <td>Rp.' . number_format($penjualan['royalti']) . '</td>
-<td>Rp.' . number_format($penjualan['bersih']) . '</td>
 </tr>';
 }
 

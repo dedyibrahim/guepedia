@@ -34,7 +34,9 @@
     <option>Pending</option>  
     <option>Proses</option> 
     <option>Publish</option>
-</select>
+    <option>Di tarik</option>  
+    <option>Di tolak</option>  
+       </select>
 
 
 </div>

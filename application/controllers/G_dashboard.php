@@ -519,8 +519,8 @@ $id_file_naskah = $this->input->post('id_file_naskah');
 $query = $this->M_dashboard->file_naskah_penulis($id_file_naskah);
 $cek_sesi = $this->session->userdata('data_kasir');
 
-
 $data_lama = $this->session->userdata('data_kasir');
+
 if($cek_sesi != NULL){
 
 foreach ($query->result_array() as $buku){
@@ -532,8 +532,8 @@ $array2 = array(
 'jumlah'        =>$buku['harga'],
 'harga'         =>$buku['harga'],
 'diskon'        =>0,
-'nilai_diskon'  =>0,    
-'royalti'       =>$buku['harga'] * 15 / 100,
+'nilai_diskon'  =>0,
+'royalti'       =>$buku['harga'] * 15 / 100  ,
 'bersih'        =>$buku['harga'] - $buku['harga'] * 15 / 100,    
 'penulis'       =>$buku['penulis'],
 
@@ -607,19 +607,17 @@ $total = array(
 $this->session->set_userdata($total);
 
 
-
-
 echo "<table class='table table-striped table-sm table-bordered table-condensed table-hover'>"
 . "<tr>"
-. "<th style='width: 20%;'>Judul</th>"
-. "<th>Id Account</th>"
 . "<th>Penulis</th>"
-. "<th style='width: 5%;'>Qty</th>"
+. "<th>Id Penulis</th>"
+. "<th style='width: 20%;'>Judul</th>"
 . "<th>Harga</th>"
+. "<th style='width: 5%;'>Qty</th>"
 . "<th>Jumlah</th>"
 . "<th style='width: 5%;'>Diskon </th>"
 . "<th>Nilai Diskon </th>"
-. "<th>Royalti</th>"
+. "<th>Royalti 15 %</th>"
 . "<th>Bersih</th>"
 . "<th>Aksi</th>"
 . "</tr>";
@@ -630,17 +628,17 @@ foreach($data as $i=>$ht){
 
 echo "
 <tr>
-<td> ".$data[$i]['judul']."</td>
-<td> ".$data[$i]['id_account']."</td>
 <td> ".$data[$i]['penulis']."</td>
-<td><input type='text' id='qty_kasir".$i."' onchange='update_qty_kasir(".$i.");' class='form-control' value='".$data[$i]['qty']."'></td>
+<td> ".$data[$i]['id_account']."</td>
+<td> ".$data[$i]['judul']."</td>
 <td>".number_format($data[$i]['harga'])."</td>
+<td><input type='text' id='qty_kasir".$i."' onchange='update_qty_kasir(".$i.");' class='form-control' value='".$data[$i]['qty']."'></td>
 <td>".number_format($data[$i]['jumlah'])."</td>
 <td><input readonly='' type='text' id='id_diskon".$i."' onchange='set_diskon(".$i.");' class='form-control' value='".$data[$i]['diskon']."'></td>
 <td>".number_format($data[$i]['nilai_diskon'])."</td>
 <td>".number_format($data[$i]['royalti'])."</td>
 <td>".number_format($data[$i]['bersih'])."</td>
-<td><button onclick='hapus_datakasir(".$i.");' class='btn btn-danger'><span class='fa fa-close'></span></button> || <button onclick='beri_diskon(".$i.");' class='btn btn-warning'><span class='fa fa fa-percent'></span></button></td>
+<td><button onclick='hapus_datakasir(".$i.");' class='btn btn-sm btn-danger'><span class='fa fa-close'></span></button> || <button onclick='beri_diskon(".$i.");' class='btn btn-sm btn-warning'><span class='fa fa fa-percent'></span></button></td>
 </tr>";
 
 }
@@ -772,9 +770,9 @@ $data2 = array(
 'harga'         =>$d['harga'],
 'diskon'        =>$input['nilai_diskon'],
 'nilai_diskon'  =>$d['jumlah'] * $input['nilai_diskon'] / 100 ,        
-'jumlah'        =>$d['jumlah'] ,   
-'royalti'       =>$d['harga'] * $d['qty'] * 15  / 100,
-'bersih'        =>$d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100 - $d['harga'] * $d['qty'] * 15  / 100,    
+'jumlah'        =>$d['jumlah'],   
+'royalti'       => ($d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100) * 15 /100,
+'bersih'        =>$d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100  ,    
 'penulis'       =>$d['penulis'],
 );
 
@@ -949,7 +947,7 @@ $data1 = array(
 'jumlah_diskon'         => $this->session->userdata('nilai_diskon'),
 'total_royalti'         => $this->session->userdata('royalti'),
 'bersih'                => $this->session->userdata('bersih'),
-'status_penjualan'      => 'Pending',
+'status_penjualan'      => 'Selesai',
 'penjualan'             => $input['penjualan'],    
 );
 
@@ -1033,7 +1031,7 @@ $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="
 . '<th>Jumlah</th>'
 . '<th>Diskon</th>'
 . '<th>Nilai Diskon</th>'
-. '<th>Royalti</th>'
+. '<th>Bagi Hasil</th>'
 . '<th>Bersih</th>'
 . '</tr>';
 
