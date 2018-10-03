@@ -65,7 +65,7 @@ $('td:eq(0)', row).html(index);
 
 </script>    
 <div class="container" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-<h4 align="center"> Data Transferan Royalti</h4><hr>
+<h4 align="center"> Data Transferan Bagi Hasil</h4><hr>
 
 <table id="data_transfer" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
@@ -73,9 +73,9 @@ $('td:eq(0)', row).html(index);
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nama Lengkap</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nomor Kontak</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Email</th>
-<th   align="center"     aria-controls="datatable-fixed-header"  >Royalti</th>
+<th   align="center"     aria-controls="datatable-fixed-header"  >Bagi hasil</th>
 <th   align="center"     aria-controls="datatable-fixed-header"  >Admin</th>
-<th   align="center"     aria-controls="datatable-fixed-header"  >Royalti Bersih</th>
+<th   align="center"     aria-controls="datatable-fixed-header"  >Bagi Hasil Bersih</th>
 <th style="width: 15%;" align="center"     aria-controls="datatable-fixed-header"  >Bukti Transfer</th>
 </thead>
 <tbody align="center">

@@ -606,7 +606,6 @@ $total = array(
 
 $this->session->set_userdata($total);
 
-
 echo "<table class='table table-striped table-sm table-bordered table-condensed table-hover'>"
 . "<tr>"
 . "<th>Penulis</th>"
@@ -617,7 +616,7 @@ echo "<table class='table table-striped table-sm table-bordered table-condensed 
 . "<th>Jumlah</th>"
 . "<th style='width: 5%;'>Diskon </th>"
 . "<th>Nilai Diskon </th>"
-. "<th>Royalti 15 %</th>"
+. "<th>Bagi hasil 15 %</th>"
 . "<th>Bersih</th>"
 . "<th>Aksi</th>"
 . "</tr>";

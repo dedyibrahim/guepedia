@@ -88,7 +88,7 @@ success:function(data){
 if(data == "berhasil"){
 swal({
 title:"", 
-text:"Upload produk berhasil",
+text:"Upload Naskah Berhasil",
 type:"success",
 showConfirmButton: true,
 }).then(function() {
@@ -117,7 +117,7 @@ window.location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>
 swal({
 title:"", 
 text:"Syarat dan ketentuan Belum di pilih.",
-type:"error",
+type:"warning",
 showConfirmButton: true,
 });   
 }
