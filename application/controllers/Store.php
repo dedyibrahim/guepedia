@@ -75,7 +75,6 @@ redirect(404);
 }
 public function cari_buku(){
 
-
 $kata_kunci = $this->input->post('kata_kunci');
 
 $hasil_cari = $this->M_store->cari_buku($kata_kunci);    

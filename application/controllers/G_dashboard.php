@@ -771,8 +771,8 @@ $data2 = array(
 'diskon'        =>$input['nilai_diskon'],
 'nilai_diskon'  =>$d['jumlah'] * $input['nilai_diskon'] / 100 ,        
 'jumlah'        =>$d['jumlah'],   
-'royalti'       => ($d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100) * 15 /100,
-'bersih'        =>$d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100  ,    
+'royalti'       =>($d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100) * 15 /100,
+'bersih'        => ($d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100) - (($d['jumlah'] - $d['jumlah'] * $input['nilai_diskon'] / 100) * 15 /100) ,    
 'penulis'       =>$d['penulis'],
 );
 
