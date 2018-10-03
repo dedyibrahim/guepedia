@@ -12,6 +12,8 @@
 <link href="<?php echo base_url(); ?>assets/css/custom_guepedia.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo base_url(); ?>assets/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="<?php echo base_url(); ?>assets/swal/animate.css" rel="stylesheet" type="text/css"/>
+<script src="<?php echo base_url(); ?>assets/nprogress/nprogress.js" type="text/javascript"></script>
+<link href="<?php echo base_url(); ?>assets/nprogress/nprogress.css" rel="stylesheet" type="text/css"/>
 
 <script src="<?php echo base_url(); ?>assets/swal/dist/sweetalert2.all.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
@@ -29,11 +31,12 @@
 </head>
 <script type="text/javascript">
 $(document).ajaxStart(function(){
-    $("#loading").show();
+NProgress.start();
 });
 
 $(document).ajaxComplete(function(){
-    $("#loading").hide();
+NProgress.done();
+NProgress.remove();
 });
 
 $(function () {
