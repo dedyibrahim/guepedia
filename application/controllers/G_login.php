@@ -34,6 +34,7 @@ if($query->num_rows() > 0){
 $datases = array(
 'nama_admin' => $ambil['nama_admin'],
 'email'      => $ambil['email'],
+'level'      => $ambil['level'],
 'id_admin'   => $ambil['id_admin'],   
 );
 $this->session->set_userdata($datases);

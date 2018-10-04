@@ -1,7 +1,7 @@
-<body class="bg_dashboard">
+<body class="bg_dashboard_admin">
 
 <div class="offset-4 col-md-4" style="margin-top:3%;" id="login">
-<div style="background-color:#fff; padding:5%; border:1px solid #eee; color:#555;  ">
+<div style="background-color:#a8cf45; padding:5%; border:1px solid #eee; color:#000000;  ">
 <h1><span class="fa fa-sign-in fa-2x float-right"></span></h1>
 <h2>Sign in</h2>
 <h5>To Dashboard Page</h5>

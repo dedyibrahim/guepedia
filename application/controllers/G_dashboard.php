@@ -296,6 +296,7 @@ if($this->input->post('nama_admin')){
 $input= $this->input->post();
 $data = array(
 'nama_admin'=>$input['nama_admin'],
+'level'     =>$input['level'],
 'email'     =>$input['email'],
 'password'  => md5($input['password']),
 );

@@ -1,4 +1,4 @@
-
+<?php if($this->session->userdata('level') == 'Super Admin'){ ?>
 <script type="text/javascript">
 $(document).ready(function() {
 $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
@@ -43,6 +43,7 @@ columns: [
 },
 {"data": "nama_admin"},
 {"data": "email"},
+{"data": "level"},
 {"data": "view"},
 
 
@@ -62,7 +63,7 @@ $('td:eq(0)', row).html(index);
 $(document).ready(function(){
 
 $("#simpan_user").click(function(){
-    
+var level      = $("#level option:selected ").val();
 var nama_admin = $("#nama_admin").val();
 var email      = $("#email").val();
 var password   = $("#password").val();
@@ -70,7 +71,7 @@ var password1  = $("#password1").val();
 var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>";       
 
 
-if(nama_admin !='' && email !='' && password1 !=''&& password !=''){
+if(nama_admin !='' && level !='' && email !='' && password1 !=''&& password !=''){
     
 if(password1 != password){
 swal({
@@ -85,7 +86,7 @@ showConfirmButton: true,
 $.ajax({
 type:"POST",
 url:"<?php echo base_url('G_dashboard/tambah_user') ?>",
-data:"token="+token+"&nama_admin="+nama_admin+"&email="+email+"&password="+password,
+data:"token="+token+"&nama_admin="+nama_admin+"&email="+email+"&password="+password+"&level="+level,
 success:function(data){
 if(data == "berhasil"){
     
@@ -136,7 +137,8 @@ showConfirmButton: true,
 
 });
 
-</script>    
+</script>
+
 <div class="container" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;  ">
     <div class="row">
     <div class="col-md-6">
@@ -146,6 +148,11 @@ showConfirmButton: true,
 <input type="text" class="form-control" value="" name="nama_admin" id="nama_admin" placeholder="Nama admin . . .">
 <label>Email</label>
 <input type="text" class="form-control" value="" name="email" id="email" placeholder="Email . . . ">
+<label>Level</label>
+<select class="form-control" id="level">
+    <option>Admin</option>    
+    <option>Super Admin</option>    
+</select>
 <label>Password</label>
 <input type="password" class="form-control" value="" name="password" id="password" placeholder="Password . . .">
 <label>Ulangi Password</label>
@@ -162,6 +169,7 @@ showConfirmButton: true,
 <th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nama User</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Email</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Level</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
 </thead>
 <tbody align="center">
@@ -169,3 +177,4 @@ showConfirmButton: true,
     </div>    
     </div></div>
 
+<?php } ?> 

@@ -127,7 +127,7 @@
 </div>
 </div>
 </div>
-
+<?php if($this->session->userdata('level') == 'Super Admin'){ ?>
 <?php
 $this->db->group_by('data_penjualan.tanggal_transaksi');
 $tanggal = $this->db->get('data_penjualan');
@@ -266,7 +266,7 @@ return s.join(dec);
 
 
 </div>
-
+<?php } ?>
 <script type="text/javascript">
 $(function () {
 var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       

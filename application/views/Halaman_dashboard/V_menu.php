@@ -1,4 +1,4 @@
-<body class="bg_dashboard">
+<body class="bg_dashboard_admin">
 <nav class="navbar navbar-expand-lg"style="background-color:#2c3e50; color:#fff; border-bottom:4px solid #fff;  ">
 <a class="navbar-brand" href="<?php echo base_url('G_dashboard') ?>"><img style="height:30px; " src="<?php echo base_url() ?>assets/img/logo.png" alt=""/></a>
 
@@ -16,7 +16,9 @@
 </div>
 </div>
 </nav>
-<div class="container" style="background-color:#eee; border-radius:0px 0px  10px 10px; border-bottom:4px solid  #2c3e50;">
+
+
+    <div class="container" style="background-color:#eee; border-radius:0px 0px  10px 10px; border-bottom:4px solid  #2c3e50;">
 <div class="row" style="text-align: center;">
 <div class="col"  ><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard'); ?>"><span class="fa fa-book fa-3x"></span><br> Kategori</a></div>        
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/orderan_masuk'); ?>"> <span class="fa fa-gears fa-3x"></span><br> Pengaturan Toko</a></div>  
@@ -27,7 +29,7 @@
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/user'); ?>"> <span class="fa fa-user fa-3x"></span><br> Kontak</a></div>   
 </div>
 </div>
-
+<?php if($this->session->userdata('level') == 'Super Admin'){ ?>
 <div class="container" style="background-color:#eee; border-radius:5px;  margin-top:1%;  ">
 
 <div class="row">
@@ -65,5 +67,6 @@ echo number_format($royalti);
 </div>
 </div>
 
-</div>   
+</div>
+<?php } ?>
 

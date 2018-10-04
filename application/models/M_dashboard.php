@@ -106,6 +106,7 @@ function json_user(){
 $this->datatables->select('id_admin,'
 . 'user.nama_admin as nama_admin,'
 . 'user.email as email,'
+. 'user.level as level,'
 );
 
 $this->datatables->from('user');
