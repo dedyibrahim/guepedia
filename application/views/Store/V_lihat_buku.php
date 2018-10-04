@@ -11,6 +11,8 @@
 <hr>
 <h5>Berat : <span id="berat"><?php echo $lihat['berat_buku'] ?></span> Gram</h5>
 <hr>
+<h5>Halaman : <span ><?php echo $lihat['jumlah_lembar'] ?></span></h5>
+<hr>
 <h5>Penulis : <?php echo $lihat['penulis'] ?></h5>
 <hr>
 <div class="row">
