@@ -879,12 +879,12 @@ $config['wordwrap'] = TRUE;
 
 $this->load->library('email',$config);
 
-$config['upload_path']          = './uploads/bukti_bayar/';
-$config['allowed_types']        = 'pdf|jpeg|jpg|png|';
-$config['file_size']            = "2004800";
-$config['encrypt_name']         = TRUE;
+$config2['upload_path']          = './uploads/bukti_bayar/';
+$config2['allowed_types']        = 'pdf|jpeg|jpg|png|';
+$config2['file_size']            = "2004800";
+$config2['encrypt_name']         = TRUE;
 
-$this->upload->initialize($config);
+$this->upload->initialize($config2);
 
 $this->email->set_newline("\r\n");
 $this->email->set_mailtype("html");
