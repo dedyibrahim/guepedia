@@ -98,10 +98,9 @@ window.location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>
 
 swal({
 title:"", 
-html:true,
 text:data,
 type:"error",
-showConfirmButton: true,
+showConfirmButton: true
 }).then(function() {
 window.location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>';
 });
