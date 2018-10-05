@@ -129,7 +129,7 @@ $this->load->library('upload',$config2);
 if (!$this->upload->do_upload('file_naskah')){
 
 echo $this->upload->display_errors();
-
+echo "dokumen naskah";
 }else{  
 
     
@@ -176,6 +176,7 @@ $this->M_halaman_penulis->simpan_naskah($data);
 
 echo "berhasil";
 }
+
 }
 }
 }
