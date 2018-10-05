@@ -187,7 +187,7 @@ echo '<table style="text-align:  center;" class="table table-md table-striped ta
 <th>No</th>  
 <th>Nama Buku</th>  
 <th>Harga</th>  
-<th style="width: 10%;">Qty</th>  
+<th style="width: 8%;">Qty</th>  
 <th>Jumlah</th>  
 <th>Aksi</th>  
 </tr>';
@@ -196,7 +196,7 @@ echo '<tr>
 <td>'.$no ++.'</td>   
 <td><a style="text-decoration:none;" href="'.base_url('Store/lihat_buku/'. base64_encode($items['id'])).'" > '.$items['name'] .'</a></td>
 <td>Rp.'.number_format($items['price']) .'</td>
-<td><input type="text" id="qty'.$items['id'].'" onchange="update_qty_keranjang('.$items['id'].')" class="form-control" value="'.$items['qty'].'"></td>
+<td><input type="text" id="qty'.$items['id'].'" maxlength="3" onchange="update_qty_keranjang('.$items['id'].')" class="form-control" value="'.$items['qty'].'"></td>
 <td>Rp. '.number_format($items['subtotal']).'</td>
 <td><button onclick="hapus_cart('.$items['id'].');" class="btn btn-danger"><span class="fa fa-close"></span></button></td>
 </tr>';
@@ -278,14 +278,10 @@ if ($err) {
 echo "cURL Error #:" . $err;
 } else {
 }
-echo "Nama Kecamatan<br>";
-echo "<select name='kecamatan' class='form-control' id='subdistrict_id'>";
-echo "<option></option>";
 $data = json_decode($response, true);
 for ($i=0; $i < count($data['rajaongkir']['results']); $i++) {
 echo "<option id='subdistrict_id' value='".$data['rajaongkir']['results'][$i]['subdistrict_id']."'>".$data['rajaongkir']['results'][$i]['subdistrict_name']."</option>";
-}
-echo "</select>";   
+}   
 }else{
 redirect(404);    
 } 
@@ -694,7 +690,7 @@ $angka = 6;
 $jumlah_penjualan = $penjualan;
 $invoices_toko = str_pad($jumlah_penjualan, $angka ,"0",STR_PAD_LEFT);
 
-$expir = date('d-m-Y', strtotime("+2 day"));
+$expir = date('d-m-Y', strtotime("+3 day"));
 $date1= date_create($expir);
 $tanggal_expir = date_format($date1,"d F o");
 

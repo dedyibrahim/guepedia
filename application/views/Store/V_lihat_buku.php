@@ -16,12 +16,17 @@
 <h5>Penulis : <?php echo $lihat['penulis'] ?></h5>
 <hr>
 <div class="row">
-<div class="col-md-4">
-<input id="qty" value="1" placeholder="jumlah Beli. . ." type="text" class="form-control">   
+<div class="col-md-2">
+<input id="qty" value="1"  maxlength="3" placeholder="Jumlah . . ." type="text" class="form-control">   
 </div>
 <div class="col">
-<button onclick="tambah_keranjang_lihat('<?php echo base64_encode($lihat['id_file_naskah']) ?>')" class="btn btn-success form-control">Beli <span class=" fa fa-shopping-basket"></span></button> 
+<button onclick="tambah_keranjang_lihat('<?php echo base64_encode($lihat['id_file_naskah']) ?>')" class="btn btn-dark form-control">Tambahkan ke keranjang <span class=" fa fa-plus-circle"></span></button> 
 </div>
+
+<div class="col">
+<button onclick="langsung_beli('<?php echo base64_encode($lihat['id_file_naskah']) ?>')" class="btn btn-success form-control">Beli Buku</button> 
+</div>
+
 </div>
 </div>
 </div>
@@ -47,33 +52,58 @@
 <div role="tabpanel" class="tab-pane fade" id="estimasi">
 <div class="row">
 <div class="col-md-6">    
+<div class="row">
+<div class="col-md-2">
 <label>Qty</label>
-<input type="text" id="qty_cost" value="1" class="form-control" id="jumlah_qty">
+<input type="text"  maxlength="3" id="qty_cost" value="1" class="form-control" id="jumlah_qty">
 
-<label>Nama kota</label>
+</div>
+<div class="col-md-5">
+<label>Nama Kota</label>
 <input type="text" class="form-control" id="nama_kota">
 <input type="hidden" id="city_id" class="form-control" id="city_id">
 
-<div id="data_kecamatan"></div>    
+</div>
+<div class="col-md-5">
 
+<label>Nama Kecamatan</label>
+<select  name='kecamatan' class='form-control' id='subdistrict_id'>
+</select>
 
+</div>
+<div class="col-md-2">
+<label>Kurir</label>
+<select class="form-control" id="kurir" onchange="cek_cost();">
+<option ></option>    
+<option value="jne">JNE</option>    
+<option value="wahana">WAHANA</option>    
+</select>
+</div>            
+
+<div class="col-md-5">
 <label>Nama Provinsi</label>
 <input type="text" readonly=""  class="form-control" id="nama_provinsi">
 
+</div>
+<div class="col-md-5">
 <label>Kode pos</label>
 <input type="text" readonly="" class="form-control" id="kode_pos">
 
-<label>Nama Kurir</label>
-<select class="form-control" id="kurir" onchange="cek_cost();">
-    <option ></option>    
-    <option value="jne">JNE</option>    
-    <option value="wahana">WAHANA</option>    
- </select>
 </div>
-    <div class="col" id="data_kost">
-        
-    </div>
-    
+
+</div>
+</div>
+
+
+
+
+
+
+
+<div class="col" id="data_kost">
+
+</div>
+
 </div>
 
 </div>
@@ -119,6 +149,43 @@ timer: 2000
 </script>
 
 <script type="text/javascript">
+function langsung_beli(data){
+var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
+var qty = $("#qty").val();    
+if(qty !=''){
+$.ajax({
+type :"POST",
+url  :"<?php echo base_url('Store/tambah_keranjang')  ?>",
+data :"token="+token+"&id_file_naskah="+data+"&qty="+qty,
+success:function(data){
+swal({
+type: 'success',
+html: data + ' <br>Berhasil di masukan ke keranjang',
+showConfirmButton: true,
+animation: false,
+customClass: 'animated bounceInDown',
+}).then(function() {
+window.location.href = "<?php echo base_url('Store/checkout') ?>";
+});    
+}
+
+});
+}else{
+swal({
+type: 'error',
+text:'Jumlah pembelian belum di isi',
+showConfirmButton: false,
+animation: false,
+customClass: 'animated tada',
+timer: 2000
+});
+
+}
+
+}
+</script>
+
+<script type="text/javascript">
 $("#zoom_01").elevateZoom({
 zoomType				: "inner",
 cursor: "crosshair"
@@ -127,7 +194,7 @@ cursor: "crosshair"
 
 <script type="text/javascript">
 $(function () {
-    var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
+var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
 
 $("#nama_kota").autocomplete({
 minLength:0,
@@ -143,9 +210,9 @@ type:"POST",
 url:"<?php echo base_url('Store/data_kecamatan') ?>",
 data:"token="+token+"&city_id="+ui.item.city_id,
 success:function(data){
-$("#data_kecamatan").html(data);    
+$("#subdistrict_id").html(data);    
 }
-    
+
 });
 }
 
@@ -172,7 +239,7 @@ showConfirmButton: true,
 }else if(city_id !='' && total_berat !='' && subdistrict_id !='' && kurir !=''){
 
 $.ajax({
-type:"post",
+type:"POST",
 url:"<?php echo base_url('Store/cek_cost') ?>",
 data:"token="+token+"&city_id="+city_id+"&total_berat="+total_berat+"&subdistrict_id="+subdistrict_id+"&kurir="+kurir,
 success:function(data){
@@ -190,7 +257,7 @@ text:"Masih ada data yang harus di isi",
 type:"error",
 showConfirmButton: true,
 });    
-    
+
 }
 
 }

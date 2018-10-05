@@ -15,7 +15,10 @@
 <label>Nama kota</label>
 <input type="text" class="form-control" id="nama_kota">
 <input type="hidden" id="city_id" class="form-control" id="city_id">
-<div id="data_kecamatan"></div>    
+
+<label>Nama Kecamatan</label>
+<select  name='kecamatan' class='form-control' id='subdistrict_id'>
+</select>
 
 <label>Nama Provinsi</label>
 <input type="text" readonly=""  class="form-control" id="nama_provinsi">
@@ -118,7 +121,7 @@ type:"POST",
 url:"<?php echo base_url('Store/data_kecamatan') ?>",
 data:"token="+token+"&city_id="+ui.item.city_id,
 success:function(data){
-$("#data_kecamatan").html(data);    
+$("#subdistrict_id").html(data);    
 }
 
 });

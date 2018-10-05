@@ -70,13 +70,10 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 <label>Upload bukti bayar</label>
 <div class="input-group mb-3">
 <div class="custom-file">
-<input type="file" id="bukti_bayar<?php echo $konfir['id_penjualan_toko'] ?>" name="bukti_bayar" class="custom-file-input" id="inputGroupFile01">
-<label class="custom-file-label" for="inputGroupFile01">Bukti bayar</label>
+<input type="file" id="bukti_bayar<?php echo $konfir['id_penjualan_toko'] ?>" name="bukti_bayar" >
 </div>
 </div>
-<label>
-Jumlah bayar
-</label>
+<label>Jumlah bayar</label>
 <input type="text" id="jumlah_bayar<?php echo $konfir['id_penjualan_toko'] ?>" placeholder="Jumlah bayar . . . " class="form-control">
 <hr>
 <button class="btn btn-success" onclick="konfirmasi(<?php echo $konfir['id_penjualan_toko'] ?>)">Konfirmasi <span class="fa fa-check-square-o"></span> </button>
