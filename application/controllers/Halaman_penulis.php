@@ -123,7 +123,8 @@ $config2['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|c
 $config2['file_size']            = "2004800";
 $config2['encrypt_name']         = TRUE;
 
-$this->upload->initialize($config2);
+$this->load->library('upload',$config2);
+//$this->upload->initialize($config2);
 
 if (!$this->upload->do_upload('file_naskah')){
 
@@ -138,7 +139,8 @@ $config3['upload_path']          = './uploads/file_cover/';
 $config3['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
 $config3['file_size']            = "2004800";
 $config3['encrypt_name']         = TRUE;
-$this->upload->initialize($config3);
+//$this->upload->initialize($config3);
+$this->load->library('upload',$config3);
 
 if($this->upload->do_upload('file_cover') != NULL){
 
