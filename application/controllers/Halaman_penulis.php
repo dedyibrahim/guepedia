@@ -118,12 +118,12 @@ echo $this->email->print_debugger();
 
 }else{    
     
-$config['upload_path']          = './uploads/dokumen_naskah/';
-$config['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
-$config['file_size']            = "2004800";
-$config['encrypt_name']         = TRUE;
+$config2['upload_path']          = './uploads/dokumen_naskah/';
+$config2['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
+$config2['file_size']            = "2004800";
+$config2['encrypt_name']         = TRUE;
 
-$this->upload->initialize($config);
+$this->upload->initialize($config2);
 
 if (!$this->upload->do_upload('file_naskah')){
 
@@ -134,11 +134,11 @@ echo $this->upload->display_errors();
     
 $file_naskah = $this->upload->data('file_name');
 
-$config2['upload_path']          = './uploads/file_cover/';
-$config2['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
-$config2['file_size']            = "2004800";
-$config2['encrypt_name']         = TRUE;
-$this->upload->initialize($config2);
+$config3['upload_path']          = './uploads/file_cover/';
+$config3['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
+$config3['file_size']            = "2004800";
+$config3['encrypt_name']         = TRUE;
+$this->upload->initialize($config3);
 
 if($this->upload->do_upload('file_cover') != NULL){
 
