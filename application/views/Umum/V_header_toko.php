@@ -12,8 +12,8 @@ gtag('config', 'UA-71848071-1');
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="Guepedia.com">
-<meta name="description" content="Jembatan bagi penulis-penulis yang ingin menerbitkan karya tanpa mengeluarkan biaya sepeserpun.">
+<meta name="title" content="Publisher Online Indonesia - Guepedia">
+<meta name="description" content="Jembatan bagi penulis-penulis yang ingin menerbitkan karya tanpa mengeluarkan biaya sepeserpun dan Penerbit Buku Online yang Berikan Banyak Keuntungan Bagi Penulis">
 <meta name="keywords" content="<?php  $query = $this->db->get('seo'); 
 foreach ($query->result_array() as $seo){
 echo $seo['kata_kunci'].",";
