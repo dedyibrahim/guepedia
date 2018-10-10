@@ -64,7 +64,7 @@ text:"Set laris berhasil",
 type:"success",
 showConfirmButton: true,
 }).then(function(){
-window.location.href = '<?php echo base_url('G_dashboard/pengaturan_toko')  ?>';
+window.location.href = '<?php echo base_url('G_dashboard/produk_laris')  ?>';
 });  
     
 }else{

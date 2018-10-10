@@ -485,6 +485,7 @@ $data = array('id_file_naskah'=>$this->input->post('id_file_naskah'));
 $this->M_dashboard->set_laris($data);
 
 echo "berhasil";
+
 }else{
 
 redirect(404);    
@@ -497,7 +498,7 @@ $param = $this->uri->segment(3);
 
 $this->M_dashboard->hapus_terlaris($param);
 
-redirect(base_url('G_dashboard/pengaturan_toko'));
+redirect(base_url('G_dashboard/produk_laris'));
 
 }else{
 
