@@ -7,13 +7,12 @@ $this->load->model('M_login');
 if($this->session->userdata('nama_admin')  && $this->session->userdata('id_admin') ){
 redirect(base_url('G_dashboard')); 
 }
-
 }
 
-public function index(){
-    
+public function index(){   
 $this->load->view('Umum/V_header');
 $this->load->view('Login/V_login');
+
 }
 
 public function login(){
