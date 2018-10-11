@@ -26,7 +26,7 @@
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/halaman_publish'); ?>"> <span class="fa fa-bookmark-o fa-3x"></span><br> Halaman Publish</a></div>    
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/laporan_penjualan'); ?>"> <span class="fa fa-bar-chart-o fa-3x"></span><br> Laporan </a></div>   
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;"  href="<?php echo base_url('G_dashboard/penarikan'); ?>"><span class="fa fa-exchange fa-3x"></span><br> Penarikan</a></div>   
-<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/user'); ?>"> <span class="fa fa-user fa-3x"></span><br> Kontak</a></div>   
+<div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/user'); ?>"> <span class="fa fa-user fa-3x"></span><br> User</a></div>   
 </div>
 </div>
 <?php if($this->session->userdata('level') == 'Super Admin'){ ?>

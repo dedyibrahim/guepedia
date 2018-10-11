@@ -43,7 +43,7 @@ $html .="<h3 align='center'>Harap melakukan pembayaran di Store Guepedia sebelum
 
 $html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".'INV/ST/'.$static['invoices_toko']."</h3>"; 
 
-$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
+$html .='<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2" >
         <tr>
         <thstyle="border-bottom: 1px solid rgb(168,207,69);" align="center">No</th>   
         <th style="border-bottom: 1px solid rgb(168,207,69);" align="center">Nama Buku</th>   
