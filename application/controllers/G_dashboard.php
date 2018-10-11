@@ -1126,39 +1126,39 @@ $this->db->where(array('data_jumlah_penjualan.tanggal_transaksi >='=>$range[0],'
 $this->db->from('data_penjualan');
 $this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
 $query = $this->db->get();
+$html  = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Laporan Penjualan ".$tanggal."</h3>"; 
 
-$html  = "<h2 align='center'>Laporan penjualan <br>".$tanggal."</h2>";
-$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
+$html .= '<table style="width:100%; style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:0px 0;padding:0"  >'
 . '<tr>'
-. '<th>No invoices</th>'
-. '<th>Customer</th>'
-. '<th>Tanggal</th>'
-. '<th>Judul Buku</th>'
-. '<th>Penulis</th>'
-. '<th>Harga</th>'
-. '<th>Qty</th>'
-. '<th>Jumlah</th>'
-. '<th>Diskon</th>'
-. '<th>Nilai Diskon</th>'
-. '<th>Royalti</th>'
-. '<th>Bersih</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">No invoices</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Customer</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Tanggal</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Judul Buku</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Penulis</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Harga</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Qty</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Jumlah</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Diskon</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Nilai Diskon</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Bagi Hasil</th>'
+. '<th style="border-bottom: 1px solid rgb(168,207,69);">Bersih</th>'
 . '</tr>';
 
 
 foreach ($query->result_array() as $penjualan){
 $html .= '<tr>
-<td>' . $penjualan['no_invoices'] . '</td>
-<td>' . $penjualan['nama_customer'] . '</td>
-<td>' . $penjualan['tanggal_transaksi'] . '</td>
-<td>' . $penjualan['judul_buku'] . '</td>
-<td>' . $penjualan['nama_penulis'] . '</td>
-<td>Rp.' . number_format($penjualan['harga']) . '</td>
-<td>' . $penjualan['qty'].'</td>
-<td>Rp.' . number_format($penjualan['jumlah']) . '</td>
-<td>' . $penjualan['diskon'] . ' %</td>
-<td>Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
-<td>Rp.' . number_format($penjualan['royalti']) . '</td>
-<td>Rp.' . number_format($penjualan['bersih']) . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['no_invoices'] . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['nama_customer'] . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['tanggal_transaksi'] . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['judul_buku'] . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['nama_penulis'] . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['harga']) . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['qty'].'</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['jumlah']) . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['diskon'] . ' %</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['royalti']) . '</td>
+<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['bersih']) . '</td>
 </tr>';
 }
 
@@ -1189,12 +1189,14 @@ $data_static = $data->row_array();
 
 $html  ="<h1 align='center'><img src='".base_url('assets/img/logo-toko.png')."'></h1><hr>";
 
-$html .="<h4 >PENGIRIM : <br> GUEPEDIA<br> Bukit Golf Arcadia Blok A4 / 05 Bojong Nangka, Gunung Putri Bogor <br> Telp : 081287602508</h4>";
 
 
 $html .="<h4 >KEPADA :<br>Nama Penerima : ".$data_static['nama_customer']."<br>";
 $html .="Nomor kontak  : ".$data_static['nomor_kontak']."<br>";
 $html .="Alamat lengkap : ".$data_static['alamat_lengkap']."</h4>";
+
+
+$html .="<h4 >PENGIRIM : <br> GUEPEDIA<br> Bukit Golf Arcadia Blok AR 118 , Bojong Nangka, Gunung Putri Bogor <br> Telp : 081287602508</h4>";
 
 $html .="<hr>";
 $html .=$data_static['nama_biaya_lain']." ";
@@ -1299,7 +1301,6 @@ $dompdf->stream('INV.pdf',array('Attachment'=>0));
 
 }
 public function penarikan(){
-
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
 $this->load->view('Halaman_dashboard/V_customer_royalti');
@@ -1911,4 +1912,44 @@ redirect(404);
 }    
 }
 
+public function laporan_bagi_hasil(){
+
+$html  = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Laporan Bagi Hasil ".date('d F o')."</h3>"; 
+
+$html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
+        <tr>
+        <th style="border-bottom: 1px solid rgb(168,207,69);">No</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">No Rekening</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Atas Nama</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Bank</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Penulis</th>   
+        <th style="border-bottom: 1px solid rgb(168,207,69);">Jumlah</th>   
+        </tr>';
+$query = $this->M_dashboard->laporan_bagi_hasil();
+$jml =1;
+
+foreach ($query ->result_array() as $lp){
+        $html .='<tr><td style="border-bottom: 1px solid rgb(168,207,69);">'.$jml++.'</td>   
+        <td style="border-bottom: 1px solid rgb(168,207,69);">'.$lp['nomor_rekening'].'</td>   
+        <td style="border-bottom: 1px solid rgb(168,207,69);">'.$lp['nama_pemilik_rekening'].'</td>   
+        <td style="border-bottom: 1px solid rgb(168,207,69);">'.$lp['nama_bank'].'</td>   
+        <td style="border-bottom: 1px solid rgb(168,207,69);">'.$lp['nama_lengkap'].'</td>   
+        <td style="border-bottom: 1px solid rgb(168,207,69);">Rp.'.number_format($lp['royalti_diperoleh']).'</td></tr>';   
+        
+    
+}
+
+
+$html .="</table>";
+
+    
+    
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+
+   
+}
 }

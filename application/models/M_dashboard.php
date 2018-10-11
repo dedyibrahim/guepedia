@@ -496,5 +496,11 @@ $this->db->insert('seo',$data);
 function hapus_seo($param){ 
 $this->db->delete('seo',array('id_kata_kunci'=> base64_decode($param)));    
 }
+function laporan_bagi_hasil(){
+
+$query = $this->db->get_where('akun_penulis',array('royalti_diperoleh >'=>1000));
+return $query;
+    
+}
 
 }

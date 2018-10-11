@@ -63,7 +63,12 @@ $('td:eq(0)', row).html(index);
 
 </script>    
 <div class="container" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-<h4 align="center"> Data Customer yang Memiliki Bagi Hasil</h4><hr>
+<div style="position: absolute;">
+
+    <a href="<?php echo base_url('G_dashboard/laporan_bagi_hasil') ?>"><button type="submit" class="btn btn-primary mb-2">Buat Laporan <span class="fa fa-list-alt"></span></button></a>
+</div>
+    
+<h4 align="center"> Data Penulis yang Memiliki Bagi Hasil</h4><hr>
 
 <table id="data_penulis" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">

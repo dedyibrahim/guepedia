@@ -144,7 +144,7 @@ window.location.href = "<?php echo base_url('G_dashboard/penarikan') ?>";
 
 swal({
 title:"", 
-text:data,
+html:data,
 type:"error",
 showConfirmButton: true,
 });  

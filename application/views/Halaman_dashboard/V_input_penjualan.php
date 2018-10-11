@@ -43,7 +43,6 @@
     <option value="Lazada">Lazada</option>    
     <option value="Tokopedia">Tokopedia</option>    
     <option value="Other">Other</option>    
-    
 </select>
 <hr>
 <button class="btn btn-success form-control" id="simpan_penjualan"> Simpan Penjualan <span class="fa fa-save"></span></button>
