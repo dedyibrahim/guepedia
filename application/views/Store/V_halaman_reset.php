@@ -1,6 +1,7 @@
 <div class="container" style="background-color: #fff; margin-top: 6.5%; margin-bottom:1%; ">
-<h4 align="center"><span class="fa fa-exchange fa-3x fa-color"></span><br>Masukan Password Baru</h4><hr> 
+<h4 align="center"><span class="fa fa-exchange fa-3x fa-color"></span><br>Masukan Password Baru</h4> 
 <div class="offset-3 col-md-6">
+    <hr>    
 <label>Password baru :</label>
 <input type="password" id="password_baru" placeholder="Password baru . . ." class="form-control">    
 
