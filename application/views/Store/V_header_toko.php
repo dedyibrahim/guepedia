@@ -225,7 +225,7 @@ text:"Logout Berhasil",
 type:"success",
 showConfirmButton: true,
 }).then(function() {
-window.location.href = "<?php echo base_url('') ?>";
+window.location.href = "<?php echo base_url('Store') ?>";
 });
     
 }
