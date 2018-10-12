@@ -167,7 +167,7 @@ $query = $this->db->get_where('data_penjualan',array('tanggal_transaksi'=>$penda
 
 $total_pendapatan = 0;
 foreach($query->result_array() as  $hasil_pendapatan){
-$total_pendapatan += $hasil_pendapatan['total'];
+$total_pendapatan += $hasil_pendapatan['subtotal'];
 }
 
 echo $total_pendapatan,',';
