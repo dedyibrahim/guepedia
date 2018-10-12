@@ -3,16 +3,16 @@
 
 <?php foreach ($konfirmasi->result_array() as $konfir) { ?>
 <p align="center">
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".<?php echo $konfir['id_penjualan_toko'] ?>" aria-expanded="false" aria-controls="<?php echo $konfir['invoices_toko'] ?>">Konfirmasi pembayaran <?php echo $konfir['invoices_toko'] ?> <span class="fa fa-arrow-down"></span></button>
+<button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target=".<?php echo $konfir['id_penjualan_toko'] ?>" aria-expanded="true" aria-controls="<?php echo $konfir['invoices_toko'] ?>">Konfirmasi pembayaran <?php echo $konfir['invoices_toko'] ?> <span class="fa fa-arrow-down"></span></button>
 <a href='<?php echo base_url('Store/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-success" type="button" >Download invoices <span class="fa fa-download"></span></button></a>
 </p>
 
 <div class="row">
 
 <div class="col">
-<div class="collapse <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
+<div class="collapse show <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
 <div class="card card-body">
-<h5 align="center">Data orderan</h5><hr>
+<h5 align="center">Detail orderan</h5><hr>
 <table class="table table-bordered table-sm table-condensed table-striped">
 <tr>
 <th>No</th>   
@@ -65,7 +65,7 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 </div>
 
 <div class="col-md-4">
-<div class="collapse <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
+<div class="collapse show <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
 <div class="card card-body">
 <label>Upload bukti bayar</label>
 <div class="input-group mb-3">
@@ -126,7 +126,7 @@ success:function(data){
 if(data == "berhasil"){
 swal({
 title:"konfirmasi pembayaran berhasil", 
-text:"Terimakasih anda telah melakukan konfirmasi pembayaran, pembayaran anda akan kami periksa dalam 1x24 jam",
+text:"Terimakasih anda telah melakukan konfirmasi pembayaran, pembayaran anda akan kami periksa dalam waktu 1x24 jam",
 type:"success",
 showConfirmButton: true,
 }).then(function() {

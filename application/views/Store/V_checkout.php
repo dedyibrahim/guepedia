@@ -25,7 +25,7 @@ success:function(data){
 if(data == "berhasil"){    
 swal({
 title:"Proses Berhasil", 
-text:"untuk tahap selanjutnya silahkan anda melakukan konfirmasi pembayaran",
+html:"Untuk tahap selanjutnya silahkan anda melakukan konfirmasi pembayaran melalui Bank transfer, yang telah kami berikan detail rekeningnya via email, jika anda tidak mendapatkan email pembayaran anda bisa menghubungi kami di email: <a href='mailto:guepedia@gmail.com'>guepedia@gmail.com</a> / WA 081287602508",
 type:"success",
 showConfirmButton: true,
 }).then(function() {

@@ -1,6 +1,7 @@
 <div class="container" style="background-color: #fff; margin-top: 6.5%; margin-bottom:1%; ">
-<h4 align="center"><span class="fa fa-pencil-square-o fa-3x fa-color"></span><br>Daftar akun</h4><hr> 
+<h4 align="center"><span class="fa fa-pencil-square-o fa-3x fa-color"></span><br>Daftar akun</h4>
 <div class="offset-3 col-md-6">
+    <hr>
     <label>Nama Lengkap :</label>
     <input type="text" id="nama_lengkap" placeholder="Nama lengkap . . ." class="form-control">    
     <label>Email :</label>

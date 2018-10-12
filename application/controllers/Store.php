@@ -358,7 +358,7 @@ $html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69
 
 $html .="<h3>Terimakasih anda telah melakukan pendaftaran di Guepedia.com </h3><br>"
 . "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
-. "<a href='".base_url('Penulis/aktivasi/'.base64_encode($input['email']))."'>Konfirmasi akun anda disini</a><br><br>"
+. "<a href='".base_url('Store/aktivasi/'.base64_encode($input['email']))."'>Konfirmasi akun anda disini</a><br><br>"
         
 . "<i>Note: Jika anda tidak merasa melakukan pendaftaran mohon abaikan email ini </i>";
 
@@ -1221,6 +1221,21 @@ echo "berhasil";
 }else{
 redirect(404);    
 }
+    
+}
+public function aktivasi(){
+if($this->uri->segment(3) != ''){
+$email =  $this->uri->segment(3);
+
+$data = array(
+'status_akun'=>'aktif'    
+);
+
+$this->M_store->aktivasi($data,$email);
+redirect(base_url('Store'));    
+}else{
+redirect(404);    
+}    
     
 }
 

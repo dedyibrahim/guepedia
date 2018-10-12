@@ -1,6 +1,7 @@
 <div class="container" style="background-color: #fff; margin-top: 6.5%; margin-bottom:1%; ">
-<h4 align="center"><span class="fa fa-lock fa-3x fa-color"></span><br>Login akun</h4><hr> 
+<h4 align="center"><span class="fa fa-lock fa-3x fa-color"></span><br>Login akun</h4>  
 <div class="offset-3 col-md-6">
+    Jika anda belum pernah bertransaksi  di <a style="text-decoration: none;" href="<?php echo base_url(); ?>"> guepedia.com </a> silahkan anda melakukan proses pendaftaran terlebih dahulu dengan cara  klik belum punnya akun atau klik <a style="text-decoration: none;" href="<?php echo base_url('Store/daftar_akun') ?>">di sini</a><hr>    
 <label>Email :</label>
 <input type="text" id="email_login" placeholder="Email . . ." class="form-control">    
 <label>Password :</label>
@@ -19,9 +20,7 @@ var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this-
 var email     = $("#email_login").val();
 var password  = $("#password_login").val();
 
-
 if(email !='' && password !=''){
-
 
 $.ajax({
 type:"POST",
@@ -35,7 +34,7 @@ text:"Login berhasil",
 type:"success",
 showConfirmButton: true,
 }).then(function() {
-window.location.href = "<?php echo base_url('Store') ?>";
+window.location.href = "<?php echo base_url('Store/keranjang') ?>";
 });
 
 }else{

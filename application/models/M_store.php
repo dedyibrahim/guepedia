@@ -188,6 +188,11 @@ function set_password_baru($data,$email){
  $this->db->update('akun_penulis',$data,array('email'=> base64_decode($email)));   
 }
 
+function aktivasi($data,$email){
+    
+$this->db->update('akun_penulis',$data,array('email'=> base64_decode($email)));    
+    
+}
 
 }
 

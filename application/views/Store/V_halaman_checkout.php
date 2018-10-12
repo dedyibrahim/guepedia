@@ -25,7 +25,7 @@
 <label>Kode pos</label>
 <input type="text" readonly="" class="form-control" id="kode_pos">
 <label>Alamat lengkap </label>
-<textarea  class="form-control" id="alamat_lengkap" placeholder="Mencakup Nama Kelurahan,jalan,RT,RW Desa dan nomor Rumah . . ."></textarea>
+<textarea  class="form-control" id="alamat_lengkap" rows="5" placeholder="Alamat lengkap Termasuk Nama Kelurahan, Nama jalan, RT, RW, dan Nomor Rumah"></textarea>
 <hr>
 <button class="btn btn-success form-control" id="simpan_alamat">Simpan Alamat <span class="fa fa-save"></span></button>
 <?php } else { ?>

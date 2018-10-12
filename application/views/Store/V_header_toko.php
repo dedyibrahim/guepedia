@@ -69,18 +69,8 @@ data-content="
 
 <?php }else{ ?>
 <div class="form-inline my-1 my-lg-0 col">
-<button class="btn btn-secondary form-control" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" 
-data-content="
-<h4 align='center'>Login <span class='fa fa-sign-in fa-color'></span></h4>
-<hr>
-<label>Email : </label>
-<input type='text' id='email_header' class='form-control' placeholder='Email . . .'>
-<label>Password : </label>
-<input type='password' id='password_header' class='form-control' placeholder='Password . . .'>
-<hr>
-<button class='btn btn-success btn-sm col form-control' onclick='login_header();'> Masuk Toko <span class='fa fa-sign-in'></span></button><br><hr>
-<a href='<?php echo base_url('Store/daftar_akun') ?>'><button class='btn btn-success form-control col btn-sm'> Daftar Akun <span class='fa fa-pencil-square'></span></button></a>
-">Login <span class="fa fa-sign-in"></span></button> 
+    <a href="<?php echo base_url('Store/login_akun') ?>"><button class="btn btn-secondary form-control">Login <span class="fa fa-sign-in"></span></button> 
+    </a>
 </div>    
 
 <?php } ?>
