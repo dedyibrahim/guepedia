@@ -801,8 +801,8 @@ $penjualan_toko = array(
 'status'            => 'pending',    
 'total_belanja'     => $this->cart->total(),    
 'total_bayar'       => $this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon') - $this->session->userdata('hasil_promo'),    
-'tanggal_order'     => date('d/m/Y'),
-'expired'           => date('d/m/Y', strtotime("+2 day")),       
+'tanggal_order'     => date('d-m-Y'),
+'expired'           => date('d-m-Y', strtotime("+3 day")),       
 ); 
 $this->M_store->input_data_jumlah_penjualan_toko($penjualan_toko);
 

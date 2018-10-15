@@ -67,13 +67,13 @@
 <div class="col-md-5">
 
 <label>Nama Kecamatan</label>
-<select  name='kecamatan' class='form-control' id='subdistrict_id'>
+<select name='kecamatan' readonly="" class='form-control' id='subdistrict_id'>
 </select>
 
 </div>
 <div class="col-md-2">
 <label>Kurir</label>
-<select class="form-control" id="kurir" onchange="cek_cost();">
+<select class="form-control" disabled="" id="kurir" onchange="cek_cost();">
 <option ></option>    
 <option value="jne">JNE</option>    
 <option value="wahana">WAHANA</option>    
@@ -204,6 +204,8 @@ select:function(event, ui){
 $('#nama_provinsi').val(ui.item.province);
 $('#kode_pos').val(ui.item.postal_code);
 $('#city_id').val(ui.item.city_id);
+$("#subdistrict_id").removeAttr("readonly");
+$("#kurir").removeAttr("disabled");
 
 $.ajax({
 type:"POST",
