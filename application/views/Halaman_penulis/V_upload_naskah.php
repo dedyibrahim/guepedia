@@ -17,13 +17,9 @@
 <input type="text" id="judul" placeholder="Judul . . ." value="" class="form-control"  data-toggle="tooltip" title="Judul Buku yang ditulis">
 <label>Penulis :</label>
 <input type="text" id="penulis" placeholder="Penulis . . ."  value="<?php echo $this->session->userdata('nama_lengkap'); ?>" class="form-control" data-toggle="tooltip" title="Nama Penulis ">
-<label>File Naskah :</label>
-<input type="file" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." class="form-control" data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu">
-<label>File Cover :</label>
-<input type="file" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."class="form-control" data-toggle="tooltip" title="Note : Jika ada" >
 
 <label>Sinopsis :</label>
-<textarea id="sinopsis" placeholder="Sinopsis . . ." value="" class="form-control" data-toggle="tooltip" title="Untuk dibelakang Buku dan untuk Promosi"></textarea>
+<textarea id="sinopsis" rows="5" placeholder="Sinopsis . . ." value="" class="form-control" data-toggle="tooltip" title="Untuk dibelakang Buku dan untuk Promosi"></textarea>
 <label>Kategori :</label>
 <select class="form-control" id="kategori" data-toggle="tooltip" title="Kategori Buku">
 <?php 
@@ -32,6 +28,11 @@ echo "<option value=".$kate['id_kategori_naskah'].">".$kate['nama_kategori']."</
 }
 ?>   
 </select>
+<label>File Naskah :</label><br>
+<input type="file" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu"><br>
+<label>File Cover :</label><br>
+<input type="file" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."  data-toggle="tooltip" title="Note : Jika ada" ><br>
+
 <hr>
 <div class="checkbox">
 <label>
@@ -41,7 +42,7 @@ antara Guepedia dan Penulis.
 </label>
 </div>
 <hr>
-<button class="btn btn-success float-right" id="btn_upload">Upload <span class="fa fa-upload"></span></button>
+<button class="btn btn-success float-right" id="btn_upload" > Upload <span class="fa fa-upload"></span></button>
 </div>
 <script type="text/javascript">
 $("#btn_upload").click(function(){

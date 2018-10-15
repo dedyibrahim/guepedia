@@ -186,10 +186,7 @@ timer: 2000
 </script>
 
 <script type="text/javascript">
-$("#zoom_01").elevateZoom({
-zoomType				: "inner",
-cursor: "crosshair"
-});
+$("#zoom_01").elevateZoom({scrollZoom : true});
 </script>
 
 <script type="text/javascript">

@@ -12,7 +12,7 @@ BUKU TERLARIS
 <a style="text-decoration:none;" href="<?php echo base_url('Store/lihat_buku/'.base64_encode($laris['id_file_naskah'])) ?>">    
 <div class="col-lg-3 col-md-6 mb-4">
 <div class="card">
-<img class="card-img-top cover"  src="<?php echo base_url('uploads/file_cover/'.$laris['file_cover']) ?>" alt="">
+<img class="card-img-top cover lazy"   src="<?php echo base_url('uploads/file_cover/'.$laris['file_cover']) ?>" alt="">
 <div class="card-body">
 <p class="card-text" style="height:50px; text-align: center;"><?php echo $laris['judul'] ?></p>
 </div>
@@ -53,7 +53,7 @@ BARU TERBIT
 <a style="text-decoration:none;" href="<?php echo base_url('Store/lihat_buku/'.base64_encode($new_book['id_file_naskah'])) ?>">    
 <div class="col-lg-3 col-md-6 mb-4">
 <div class="card">
-<img class="card-img-top cover"  src="<?php echo base_url('uploads/file_cover/'.$new_book['file_cover']) ?>" alt="">
+<img class="card-img-top cover lazy"  data-original="<?php echo base_url('uploads/file_cover/'.$new_book['file_cover']) ?>"   src="<?php echo base_url('uploads/file_cover/'.$new_book['file_cover']) ?>" alt="">
 <div class="card-body">
 <p class="card-text" style="height:50px; text-align: center;"><?php echo $new_book['judul'] ?></p>
 </div>

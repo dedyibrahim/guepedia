@@ -94,7 +94,7 @@ $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($this->session->userdata('email'));
 $this->email->subject('Naskah '. $input['judul']);
 
-$html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>Naskah Berhasil di Upload</h3>"; 
+$html = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Naskah Berhasil di Upload</h3>"; 
 
 $html .="<h4 align='center'>Berikut data naskah yang Anda Upload </h4><hr>
     

@@ -87,7 +87,7 @@ echo "
 
 <div class='col-lg-3 col-md-6 mb-4'>
 <div class='card'>
-<img class='card-img-top cover'  src='".base_url('uploads/file_cover/'.$data['file_cover'])."' alt=''>
+<img class='card-img-top cover lazy'  src='".base_url('uploads/file_cover/'.$data['file_cover'])."' alt=''>
 <div class='card-body'>
 <p class='card-text' style='height:50px; text-align: center;'>".$data['judul']."</p>
 </div>
@@ -354,7 +354,7 @@ $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($input['email']);
 $this->email->subject('Aktivasi akun');
 
-$html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>Konfirmasi akun </h3>"; 
+$html = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Konfirmasi akun </h3>"; 
 
 $html .="<h3>Terimakasih anda telah melakukan pendaftaran di Guepedia.com </h3><br>"
 . "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
@@ -712,13 +712,13 @@ $this->email->subject('Konfirmasi pesanan');
 
 $html   = "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
 . "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal ".$tanggal_expir."<br>"
-. "<h3 align='center' style='padding:2%;color:#fff;background-color:rgb(168,207,69)'>Rekening Pembayaran</h3> "
+. "<h3 align='center' style='padding:2%;color:#000; background-color:rgb(168,207,69)'>Rekening Pembayaran</h3> "
 
 . "Nama bank : Bank BCA <hr>"
 . "Nomor Rekenng : 2120077824 <hr>"
 . "Atas nama: Dianata Eka Putra <hr>";
 
-$html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".'INV/ST/'.$invoices_toko."</h3>"; 
+$html .= "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".'INV/ST/'.$invoices_toko."</h3>"; 
 
 $html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
 <tr>
@@ -899,7 +899,7 @@ $d=1 ;
 
 $html  ="Terimakasih anda telah melakukan  konfirmasi pembayaran , selanjutnya pembayaran akan kami periksa dalam waktu 1 X 24 JAM<br>";
 
-$html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".$static['invoices_toko']."</h3>"; 
+$html .= "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".$static['invoices_toko']."</h3>"; 
 
 $html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
 <tr>
@@ -1168,7 +1168,7 @@ $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($this->input->post('email'));
 $this->email->subject('Reset Password Guepedia');
-$html = "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'> Reset Password  Guepedia</h3>"; 
+$html = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'> Reset Password  Guepedia</h3>"; 
 
 $html  .="Untuk melakukan reset password silahkan anda klik link di bawah ini <br>";
 $html  .= base_url('Store/halaman_reset/'. base64_encode($this->input->post('email')));

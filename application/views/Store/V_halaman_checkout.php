@@ -17,7 +17,7 @@
 <input type="hidden" id="city_id" class="form-control" id="city_id">
 
 <label>Nama Kecamatan</label>
-<select  name='kecamatan' class='form-control' id='subdistrict_id'>
+<select  readonly="" name='kecamatan' class='form-control' id='subdistrict_id'>
 </select>
 
 <label>Nama Provinsi</label>
@@ -25,7 +25,7 @@
 <label>Kode pos</label>
 <input type="text" readonly="" class="form-control" id="kode_pos">
 <label>Alamat lengkap </label>
-<textarea  class="form-control" id="alamat_lengkap" rows="5" placeholder="Alamat lengkap Termasuk Nama Kelurahan, Nama jalan, RT, RW, dan Nomor Rumah"></textarea>
+<textarea readonly=""  class="form-control" id="alamat_lengkap" rows="5" placeholder="Alamat lengkap Termasuk Nama Kelurahan, Nama jalan, RT, RW, dan Nomor Rumah"></textarea>
 <hr>
 <button class="btn btn-success form-control" id="simpan_alamat">Simpan Alamat <span class="fa fa-save"></span></button>
 <?php } else { ?>
@@ -115,7 +115,8 @@ select:function(event, ui){
 $('#nama_provinsi').val(ui.item.province);
 $('#kode_pos').val(ui.item.postal_code);
 $('#city_id').val(ui.item.city_id);
-
+$("#subdistrict_id").attr("readonly", false); 
+$("#alamat_lengkap").attr("readonly", false); 
 $.ajax({
 type:"POST",
 url:"<?php echo base_url('Store/data_kecamatan') ?>",

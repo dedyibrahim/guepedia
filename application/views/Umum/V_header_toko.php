@@ -42,7 +42,7 @@ echo $seo['kata_kunci'].",";
 <script src="<?php echo base_url(); ?>assets/daterange/moment.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/daterange/daterangepicker.min.js" type="text/javascript"></script>
 <link href="<?php echo base_url(); ?>assets/daterange/daterangepicker.css" rel="stylesheet" type="text/css"/>
-
+<script src="<?php echo base_url(); ?>assets/jquery.lazy/jquery.lazy.js" type="text/javascript"></script>
 </head>
 
 <script type="text/javascript">
@@ -56,9 +56,19 @@ NProgress.remove();
 });
 
 $(function () {
-$('[data-toggle="tooltip"]').tooltip()
-})
+$('[data-toggle="tooltip"]').tooltip();
+});
 $(function () {
-$('[data-toggle="popover"]').popover()
-})
+$('[data-toggle="popover"]').popover();
+});
 </script>
+
+<script type="text/javascript">
+ $(function() {
+        $('.lazy').lazy({
+          effect: "fadeIn",
+          effectTime: 200000,
+          threshold: 0
+        });
+    });
+    </script>
