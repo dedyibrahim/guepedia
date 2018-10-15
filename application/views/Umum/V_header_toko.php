@@ -19,7 +19,7 @@ foreach ($query->result_array() as $seo){
 echo $seo['kata_kunci'].",";
 }
 ?>">
-<title>Guepedia</title>
+<title> Publisher Online Indonesia - Guepedia </title>
 <link rel="icon" href="<?php echo base_url('assets/img/ico.jpg'); ?>" type="image/ico" />
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/datatable') ?>/dataTables.bootstrap4.min.css">
 <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
