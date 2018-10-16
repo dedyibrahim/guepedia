@@ -64,11 +64,11 @@ $('[data-toggle="popover"]').popover();
 </script>
 
 <script type="text/javascript">
- $(function() {
-        $('.lazy').lazy({
-          effect: "fadeIn",
-          effectTime: 200000,
-          threshold: 0
-        });
-    });
-    </script>
+$(function() {
+$('.lazy').lazy({
+effect: "fadeIn",
+effectTime: 200000,
+threshold: 0
+});
+});
+</script>

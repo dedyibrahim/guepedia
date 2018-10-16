@@ -12,6 +12,9 @@
 <style>
 .dropdown-menu{
 min-width: 45rem;
+max-height: 20rem;
+overflow-y: scroll;
+overflow-x: hidden;
 }    
 
 </style>
