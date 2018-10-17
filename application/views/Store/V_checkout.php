@@ -1,5 +1,10 @@
 <body onload="halaman_checkout()"></body>
 <div id="halaman_checkout"></div>
+<style>
+.swal-wide{
+    width:900px !important;
+}    
+</style>    
 <script type="text/javascript">
 function halaman_checkout(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
@@ -15,6 +20,8 @@ $("#halaman_checkout").html(data);
 
 $(document).ready(function(){
 $("#bayar").click(function(){
+   
+    
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>";   
 var metode_pembayaran = $("#metode_pembayaran").val();    
 $.ajax({
@@ -22,12 +29,12 @@ type:"POST",
 url :"<?php echo base_url('Store/bayar') ?>",
 data:"token="+token+"&metode_pembayaran="+metode_pembayaran,
 success:function(data){
-if(data == "berhasil"){    
+if(data != "error"){    
 swal({
-title:"Proses Berhasil", 
-html:"Untuk tahap selanjutnya silahkan anda melakukan konfirmasi pembayaran melalui Bank transfer, yang telah kami berikan detail rekeningnya via email, jika anda tidak mendapatkan email pembayaran anda bisa menghubungi kami di email: <a href='mailto:guepedia@gmail.com'>guepedia@gmail.com</a> / WA 081287602508",
-type:"success",
+html:data,
 showConfirmButton: true,
+animation: false,
+customClass: 'animated bounceInDown swal-wide'
 }).then(function() {
 window.location.href = "<?php echo base_url('Store/konfirmasi_pembayaran') ?>";
 });
@@ -46,6 +53,8 @@ window.location.href = "<?php echo base_url('Store') ?>";
 }
 
 });
+
+   
 });
 });
 
@@ -111,7 +120,7 @@ window.location.href = "<?php echo base_url('Store') ?>";
 </div>
     
 <div class="modal-footer">
-<button type="button" class="btn btn-primary form-control" id="bayar">Bayar <span class="fa fa-money"></span></button>
+    <button type="button" class="btn btn-primary form-control" id="bayar">Bayar  <i style="display:none;" id="loading_bayar" class="fa fa-spinner fa-pulse"></i></button>
 </div>
 </div>
 </div>

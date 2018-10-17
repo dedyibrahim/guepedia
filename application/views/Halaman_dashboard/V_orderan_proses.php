@@ -2,17 +2,11 @@
 <br>
 <h4 align="center"><span class=" fa-3x fa fa-color fa-print"></span> <br> Orderan Proses </h4><hr>
 <?php  foreach ($orderan_masuk->result_array() as $konfir) { ?>
-<p align="center">
-<button onclick="tolak(<?php echo $konfir['id_penjualan_toko'] ?>);" class="btn btn-danger">Tolak pesanan <span class="fa fa-close"></span></button>
-<button class="btn btn-dark" type="button" data-toggle="collapse" data-target=".<?php echo $konfir['id_penjualan_toko'] ?>" aria-expanded="false" aria-controls="<?php echo $konfir['invoices_toko'] ?>">Order Number <?php echo $konfir['invoices_toko'] ?> <span class="fa fa-arrow-down"></span></button>
-<a href='<?php echo base_url('G_dashboard/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-success" type="button" >Download invoices <span class="fa fa-download"></span></button></a>
-<button onclick="terima(<?php echo $konfir['id_penjualan_toko'] ?>);" class="btn btn-primary">Terima pesanan <span class="fa fa-hand-peace-o"></span></button>
-</p>
+
 <div class="row">
 <div class="col">
-<div class="collapse <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
 <div class="card card-body">
-<h5 align="center">Data orderan</h5><hr>
+<h5 align="center">Data Pesanan <?php echo $konfir['invoices_toko'] ?></h5><hr>
 <table class="table table-bordered table-sm table-condensed table-striped">
 <tr>
 <th>No</th>   
@@ -62,14 +56,21 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 </table>
 </div>
 </div>
-</div>
 
 <div class="col-md-4">
-<div class="collapse <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
-
+<div class="row">
+<div class="col">        
+    <button onclick="tolak(<?php echo $konfir['id_penjualan_toko'] ?>);" class="btn btn-danger form-control">Tolak Pesanan  </i></button>
+</div>
+<div class="col"> 
+<button onclick="terima(<?php echo $konfir['id_penjualan_toko'] ?>);" class="btn btn-primary form-control">Terima Pesanan </i></button>
+</div>
+</div>
+<hr>
+<a href='<?php echo base_url('G_dashboard/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-dark form-control" >Download invoices <span class="fa fa-download"></span></button></a>
+<hr>
 <div class="card card-body">
 <img  class="cover3" id="zoom<?php echo $konfir['id_penjualan_toko'] ?>" data-zoom-image="<?php echo base_url('./uploads/bukti_bayar/'.$konfir['bukti_transfer']) ?>" src="<?php echo base_url('./uploads/bukti_bayar/'.$konfir['bukti_transfer']) ?>">
-</div>
 </div>
 </div>
 

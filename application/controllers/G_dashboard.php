@@ -33,15 +33,15 @@ redirect('G_login');
 
 public function simpan_kategori(){
 if($this->input->post('nama_kategori')){
-$kategori = $this->M_dashboard->data_kategori()->num_rows();
-$angka = 3;
-$jumlah_kategori = $kategori;
-$id_kategori = str_pad($jumlah_kategori, $angka ,"0",STR_PAD_LEFT);
-
+    
+$kategori           = $this->M_dashboard->data_kategori()->num_rows();
+$angka              = 3;
+$jumlah_kategori    = $kategori;
+$id_kategori        = str_pad($jumlah_kategori, $angka ,"0",STR_PAD_LEFT);
 
 $data =array(
-'id_kategori_naskah'=>"N_".$id_kategori,
-'nama_kategori'     =>$this->input->post('nama_kategori'),    
+'id_kategori_naskah'    => "N_".$id_kategori,
+'nama_kategori'         => $this->input->post('nama_kategori'),    
 );
 
 $this->M_dashboard->insert_kategori($data);    

@@ -48,11 +48,13 @@ echo $seo['kata_kunci'].",";
 <script type="text/javascript">
 $(document).ajaxStart(function(){
 NProgress.start();
+$("#loading_bayar").show();
 });
 
 $(document).ajaxComplete(function(){
 NProgress.done();
 NProgress.remove();
+$("#loading_bayar").hide();
 });
 
 $(function () {

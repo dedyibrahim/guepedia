@@ -712,7 +712,7 @@ $this->email->cc("guepedia@gmail.com");
 $this->email->subject('Konfirmasi pesanan');
 
 $html   = "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
-. "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal ".$tanggal_expir."<br>"
+. "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal ".$tanggal_expir."<br><br>"
 . "<h3 align='center' style='padding:2%;color:#000; background-color:rgb(168,207,69)'>Rekening Pembayaran</h3> "
 
 . "Nama bank : Bank BCA <hr>"
@@ -723,11 +723,11 @@ $html .= "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 6
 
 $html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
 <tr>
-<th style="border-bottom: 1px solid rgb(168,207,69);">No</th>   
-<th style="border-bottom: 1px solid rgb(168,207,69);">Nama Buku</th>   
-<th style="border-bottom: 1px solid rgb(168,207,69);">Harga</th>   
-<th style="border-bottom: 1px solid rgb(168,207,69);">Qty</th>   
-<th style="border-bottom: 1px solid rgb(168,207,69);">Jumlah</th>   
+<th  style="border-bottom: 1px solid rgb(168,207,69); text-align:center;">No</th>   
+<th  style="border-bottom: 1px solid rgb(168,207,69); text-align:center;">Nama Buku</th>   
+<th  style="border-bottom: 1px solid rgb(168,207,69); text-align:center;">Harga</th>   
+<th style="border-bottom: 1px solid rgb(168,207,69); text-align:center;">Qty</th>   
+<th  style="border-bottom: 1px solid rgb(168,207,69); text-align:center;">Jumlah</th>   
 </tr>';
 $d = 1 ;
 
@@ -746,7 +746,7 @@ $html .="<tr>
 <td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($this->cart->total())."</td>    
 </tr>
 <tr>
-<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Ongkir </td>    
+<td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='2'>Ongkir ".$this->session->userdata('kurir')." ".$this->session->userdata('service')."</td>    
 <td style='border-bottom: 1px solid rgb(168,207,69);'  align='center' colspan='3'>Rp.".number_format($this->session->userdata('ongkir'))." </td>    
 </tr>";
 
@@ -768,16 +768,19 @@ $html.=
 "<tr>
 <td style='border-bottom: 1px solid rgb(168,207,69);' align='center'  colspan='2'>Total Bayar</td>    
 <td style='border-bottom: 1px solid rgb(168,207,69);' align='center' colspan='3'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon'))."</td>    
-</tr></table>";
+</tr></table> <br>";
 
-$html .= "Nama Pemesan :".$alamat['nama_penerima']."<br>";
-$html .= "Alamat pengiriman : <br>".$alamat['nama_kecamatan']." ".$alamat['nama_kota']." ".$alamat['nama_provinsi']." ".$alamat['alamat_lengkap']." ".$alamat['kode_pos']."<br>"; 
+$html .= "Nama Pemesan : ".$alamat['nama_penerima']."<br>";
+$html .= "Alamat pengiriman : ".$alamat['nama_kecamatan']." ".$alamat['nama_kota']." ".$alamat['nama_provinsi']." ".$alamat['alamat_lengkap']." ".$alamat['kode_pos']."<br>"; 
 $html .= $alamat['nomor_kontak']."<br>"; 
 
 $this->email->message($html);
 
-if (!$this->email->send()){    
+if (!$this->email->send()){
+    
 echo $this->email->print_debugger();
+
+
 }else{
 $penjualan_toko = array(
 'invoices_toko'     => 'INV/ST/'.$invoices_toko,
@@ -808,7 +811,7 @@ $penjualan_toko = array(
 $this->M_store->input_data_jumlah_penjualan_toko($penjualan_toko);
 
 foreach ($this->cart->contents() as $items){
-$data_penjualan =array(
+$data_penjualan = array(
 'invoices_toko'     => 'INV/ST/'.$invoices_toko,
 'nama_buku'         => $items['name'],
 'harga_buku'        => $items['price'],
@@ -824,7 +827,8 @@ $hapus_kupon = array(
 );
 $this->M_store->hapus_kupon($hapus_kupon);
 
-echo "berhasil";
+echo $html;
+
 
 $this->cart->destroy();
 $unset = array(
@@ -840,6 +844,8 @@ $unset = array(
 );
 $this->session->unset_userdata($unset);
 }
+
+
 }else{
 echo "error";    
 }

@@ -2,17 +2,11 @@
 <h4 align="center"><span class=" fa-3x fa fa-check-circle-o"></span> <br> Konfirmasi pembayaran </h4><hr>
 
 <?php foreach ($konfirmasi->result_array() as $konfir) { ?>
-<p align="center">
-<button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target=".<?php echo $konfir['id_penjualan_toko'] ?>" aria-expanded="true" aria-controls="<?php echo $konfir['invoices_toko'] ?>">Konfirmasi pembayaran <?php echo $konfir['invoices_toko'] ?> <span class="fa fa-arrow-down"></span></button>
-<a href='<?php echo base_url('Store/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-success" type="button" >Download invoices <span class="fa fa-download"></span></button></a>
-</p>
-
 <div class="row">
-
-<div class="col">
-<div class="collapse show <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
 <div class="card card-body">
-<h5 align="center">Detail orderan</h5><hr>
+<h4 align="center">Detail Pesanan <?php echo $konfir['invoices_toko'] ?></h4>
+<hr>
+
 <table class="table table-bordered table-sm table-condensed table-striped">
 <tr>
 <th>No</th>   
@@ -24,14 +18,14 @@
 
 <?php 
 $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$konfir['invoices_toko']));
-$d=1 ;foreach ($data_orderan->result_array() as $data){
+$d = 1 ;foreach ($data_orderan->result_array() as $data){
 ?>
 <tr>
 <td><?php  echo $d++?></td>
 <td><?php  echo $data['nama_buku']?></td>
-<td><?php  echo $data['harga_buku']?></td>        
+<td> Rp. <?php  echo number_format($data['harga_buku'])?></td>        
 <td><?php  echo $data['qty']?></td>
-<td><?php  echo $data['subtotal']?></td>
+<td>Rp. <?php  echo number_format($data['subtotal'])?></td>
 </tr>        
 <?php } ?>
 <tr>
@@ -61,11 +55,11 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 <input type="hidden" id="harus_bayar<?php echo $konfir['id_penjualan_toko'] ?>"  value="<?php echo $konfir['total_bayar'] ?>">
 </table>
 </div>
-</div>
-</div>
+    
 
 <div class="col-md-4">
-<div class="collapse show <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
+    <a href='<?php echo base_url('Store/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-dark form-control" type="button" > Download invoices <span class="fa fa-download"></span></button></a>
+    <hr>
 <div class="card card-body">
 <label>Upload bukti bayar</label>
 <div class="input-group mb-3">
@@ -76,8 +70,7 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 <label>Jumlah bayar</label>
 <input type="text" id="jumlah_bayar<?php echo $konfir['id_penjualan_toko'] ?>" placeholder="Jumlah bayar . . . " class="form-control">
 <hr>
-<button class="btn btn-success" onclick="konfirmasi(<?php echo $konfir['id_penjualan_toko'] ?>)">Konfirmasi <span class="fa fa-check-square-o"></span> </button>
-</div>
+<button class="btn btn-success"  onclick="konfirmasi(<?php echo $konfir['id_penjualan_toko'] ?>)">Konfirmasi <span class="fa fa-check-square-o"></span> </button>
 </div>
 </div>
 

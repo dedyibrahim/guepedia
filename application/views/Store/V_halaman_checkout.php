@@ -96,6 +96,7 @@ Total bayar <b  class="float-right">Rp.<?php echo number_format($this->session->
 <h5 align='center'><span style="text-align: center;"><a href="#"  data-toggle="modal" data-target="#exampleModal" style="text-decoration: none;"><span class=" fa fa-percent"></span> Gunakan Kode Kupon Atau Promo</a></span></h5>
 <hr>
 <?php } ?>
+
 </div>
 <hr>
 </div>

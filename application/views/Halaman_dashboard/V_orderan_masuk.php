@@ -1,18 +1,11 @@
 <div class="container" style="background-color: #fff;">
-    <br>
+<br>
 <h4 align="center"><span class=" fa-3x fa fa-color fa-shopping-basket"></span> <br> Orderan masuk </h4><hr>
 <?php foreach ($orderan_masuk->result_array() as $konfir) { ?>
-<p align="center">
-<button class="btn btn-dark" type="button" data-toggle="collapse" data-target=".<?php echo $konfir['id_penjualan_toko'] ?>" aria-expanded="false" aria-controls="<?php echo $konfir['invoices_toko'] ?>">Order Number <?php echo $konfir['invoices_toko'] ?> <span class="fa fa-arrow-down"></span></button>
-<a href='<?php echo base_url('G_dashboard/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-success" type="button" >Download invoices <span class="fa fa-download"></span></button></a>
-</p>
-
 <div class="row">
-
 <div class="col">
-<div class="collapse <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
-<div class="card card-body">
-<h5 align="center">Data orderan</h5><hr>
+<div class="card card-body">        
+<h5 align="center">Detail Pesanan <?php echo $konfir['invoices_toko'] ?></h5><hr>
 <table class="table table-bordered table-sm table-condensed table-striped">
 <tr>
 <th>No</th>   
@@ -29,9 +22,9 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 <tr>
 <td><?php  echo $d++?></td>
 <td><?php  echo $data['nama_buku']?></td>
-<td><?php  echo $data['harga_buku']?></td>        
+<td>Rp. <?php  echo number_format($data['harga_buku']) ?></td>        
 <td><?php  echo $data['qty']?></td>
-<td><?php  echo $data['subtotal']?></td>
+<td>Rp. <?php  echo number_format($data['subtotal']) ?></td>
 </tr>        
 <?php } ?>
 <tr>
@@ -60,16 +53,17 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 </tr>
 <input type="hidden" id="harus_bayar<?php echo $konfir['id_penjualan_toko'] ?>"  value="<?php echo $konfir['total_bayar'] ?>">
 </table>
-</div>
-</div>
-</div>
+</div></div>
+    
 
 <div class="col-md-4">
-<div class="collapse <?php echo $konfir['id_penjualan_toko'] ?>" id="<?php echo $konfir['id_penjualan_toko'] ?>">
-    <div class="card card-body">
-        <h3 style="color: #dc3545;" align="center">Status penjualan <br>
-        Belum melakukan pembayaran</h3>
-    </div>
+<a href='<?php echo base_url('G_dashboard/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-dark form-control" type="button" >Download invoices <span class="fa fa-download"></span></button></a>
+<hr>    
+<div class="card card-body">
+<h3 style="color: #dc3545;" align="center">Status penjualan <br>
+    Belum melakukan pembayaran <br>
+    <span class="fa fa-bax"
+</h3>
 </div>
 </div>
 
