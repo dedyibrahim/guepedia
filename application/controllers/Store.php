@@ -719,7 +719,7 @@ $html   = "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
 . "Nomor Rekenng : 2120077824 <hr>"
 . "Atas nama: Dianata Eka Putra <hr>";
 
-$html .= "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".'INV/ST/'.$invoices_toko."</h3>"; 
+$html .= "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Rincian Pesanan  ".'INV/ST/'.$invoices_toko."</h3>"; 
 
 $html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
 <tr>

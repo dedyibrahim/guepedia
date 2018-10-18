@@ -1,14 +1,14 @@
 <div class="container" style="background-color: #fff; margin-top: 6.5%; margin-bottom:1%; ">
 <h4 align="center"><span class="fa fa-lock fa-3x fa-color"></span><br>Login akun</h4>  
 <div class="offset-3 col-md-6">
-    Jika anda belum pernah bertransaksi  di <a style="text-decoration: none;" href="<?php echo base_url(); ?>"> guepedia.com </a> silahkan anda melakukan proses pendaftaran terlebih dahulu dengan cara  klik belum punnya akun atau klik <a style="text-decoration: none;" href="<?php echo base_url('Store/daftar_akun') ?>">di sini</a><hr>    
+    Jika anda belum pernah bertransaksi  di <a style="text-decoration: none;" href="<?php echo base_url(); ?>"> guepedia.com </a> silahkan anda melakukan proses pendaftaran terlebih dahulu dengan cara  klik belum punya akun atau klik <a style="text-decoration: none;" href="<?php echo base_url('Store/daftar_akun') ?>">di sini</a><hr>    
 <label>Email :</label>
 <input type="text" id="email_login" placeholder="Email . . ." class="form-control">    
 <label>Password :</label>
 <input type="password" id="password_login" placeholder="Password . . ." class="form-control">    
 <hr>
 <a  class="float-right" style="text-decoration:none; " href="<?php echo base_url('Store/lupa_sandi') ?>">Lupa Kata sandi ?</a>
-<a  style="text-decoration:none; " href="<?php echo base_url('Store/daftar_akun') ?>">Belum Punnya akun ?</a>
+<a  style="text-decoration:none; " href="<?php echo base_url('Store/daftar_akun') ?>">Belum Punya akun ?</a>
 <hr>
 <button class="btn btn-success form-control" onclick="login_akun();"> Login <span class="fa fa-sign-in"></span></button>
 </div>
