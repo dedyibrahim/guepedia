@@ -29,9 +29,11 @@ type:"POST",
 url :"<?php echo base_url('Store/bayar') ?>",
 data:"token="+token+"&metode_pembayaran="+metode_pembayaran,
 success:function(data){
-if(data != "error"){    
+if(data != "error"){
+    
+   
 swal({
-html:data,
+html:data, 
 showConfirmButton: true,
 animation: false,
 customClass: 'animated bounceInDown swal-wide'
@@ -56,6 +58,8 @@ window.location.href = "<?php echo base_url('Store') ?>";
 
    
 });
+
+
 });
 
 </script>

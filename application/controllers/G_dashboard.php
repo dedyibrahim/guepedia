@@ -1420,13 +1420,13 @@ $html .="<tr>
 </tr>";
 if($static['nilai_kupon']){ 
 $html .= "<tr>
-<td colspan='2'>Kode kupon ".$static['nama_kupon']."</td>    
+<td colspan='2'>Kode kupon ".$static['nama_kupon']." ".$static['nilai_kupon'] ." %</td>    
 <td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_kupon'])."</td>    
 </tr>";
  }
  if($static['nilai_promo']){ 
 $html .= "<tr>
-<td colspan='2'>Kode promo ".$static['nama_promo']."</td>    
+<td colspan='2'>Kode promo ".$static['nama_promo']." ".$static['nilai_promo'] ." %</td>    
 <td  colspan='3' style='color:#dc3545;'> - Rp".number_format($static['hasil_promo'])."</td>    
 </tr>";
  }
