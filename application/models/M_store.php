@@ -193,6 +193,11 @@ function aktivasi($data,$email){
 $this->db->update('akun_penulis',$data,array('email'=> base64_decode($email)));    
     
 }
+function alamat_kirim($id_account_toko){
+$query = $this->db->get_where('data_alamat',array('id_account_toko'=>$id_account_toko));
+return $query;
+}
+
 
 }
 

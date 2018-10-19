@@ -4,16 +4,16 @@
 <?php foreach ($konfirmasi->result_array() as $konfir) { ?>
 <div class="row">
 <div class="card card-body">
-<h4 align="center">Detail Pesanan <?php echo $konfir['invoices_toko'] ?></h4>
+<h4 align="center">Rincian Pesanan No.invoices <?php echo $konfir['invoices_toko'] ?></h4>
 <hr>
 
 <table class="table table-bordered table-sm table-condensed table-striped">
 <tr>
 <th>No</th>   
-<th>Nama Buku</th>   
+<th>Rincian</th>   
 <th>Harga</th>   
 <th>Qty</th>   
-<th>Jumlah</th>   
+<th>Total</th>   
 </tr>
 
 <?php 
@@ -23,34 +23,36 @@ $d = 1 ;foreach ($data_orderan->result_array() as $data){
 <tr>
 <td><?php  echo $d++?></td>
 <td><?php  echo $data['nama_buku']?></td>
-<td> Rp. <?php  echo number_format($data['harga_buku'])?></td>        
+<td>Rp.<?php  echo number_format($data['harga_buku'])?></td>        
 <td><?php  echo $data['qty']?></td>
-<td>Rp. <?php  echo number_format($data['subtotal'])?></td>
+<td>Rp.<?php  echo number_format($data['subtotal'])?></td>
 </tr>        
 <?php } ?>
+
 <tr>
-<td colspan="2">Total Belanja</td>    
-<td colspan="3">Rp.<?php echo number_format($konfir['total_belanja']) ?> </td>    
+<td colspan="1"><?php echo $d ?></td>    
+<td colspan="1">Ongkir </td>    
+<td colspan="1"> </td>    
+<td colspan="1"><?php echo number_format($konfir['total_berat']) ?> Gram </td>    
+<td  colspan="1">Rp.<?php echo number_format($konfir['ongkir']) ?> </td>    
 </tr>
+
+    <?php if($konfir['nilai_kupon']){ ?>
 <tr>
-<td colspan="2">Ongkir </td>    
-<td  colspan="3">Rp.<?php echo number_format($konfir['ongkir']) ?> </td>    
-</tr>
-<?php if($konfir['nilai_kupon']){ ?>
-<tr>
-<td colspan="2">Kode Kupon <?php echo $konfir['nama_kupon'] ?> </td>    
-<td  colspan="3" style="color:#dc3545;"> - Rp.<?php echo number_format($konfir['hasil_kupon']) ?> </td>    
+<th colspan="4">Kode Kupon <?php echo $konfir['nama_kupon'] ?> <?php echo $konfir['nilai_kupon'] ?> %</th>    
+<th  colspan="1" style="color:#dc3545;"> - Rp.<?php echo number_format($konfir['hasil_kupon']) ?> </th>    
 </tr>
 <?php  } ?>
 <?php if($konfir['nilai_promo']){ ?>
 <tr>
-<td colspan="2">Kode Promo <?php echo $konfir['nama_promo'] ?> </td>    
-<td  colspan="3" style="color:#dc3545;"> - Rp.<?php echo number_format($konfir['hasil_promo']) ?> </td>    
+<th colspan="4">Kode Promo <?php echo $konfir['nama_promo'] ?> <?php echo $konfir['nilai_promo'] ?> % </th>    
+<th  colspan="1" style="color:#dc3545;"> - Rp.<?php echo number_format($konfir['hasil_promo']) ?> </th>    
 </tr>
 <?php  } ?>
+
 <tr>
-<td colspan="2">Total Bayar</td>    
-<td  colspan="3">Rp.<?php echo number_format($konfir['total_bayar']) ?> </td>    
+<th colspan="4">Total Bayar</td>    
+<th  colspan="1">Rp.<?php echo number_format($konfir['total_bayar']) ?> </th>    
 </tr>
 <input type="hidden" id="harus_bayar<?php echo $konfir['id_penjualan_toko'] ?>"  value="<?php echo $konfir['total_bayar'] ?>">
 </table>

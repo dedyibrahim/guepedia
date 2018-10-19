@@ -1,5 +1,7 @@
 <body onload="halaman_checkout()"></body>
 <div id="halaman_checkout"></div>
+
+
 <style>
 .swal-wide{
     width:900px !important;

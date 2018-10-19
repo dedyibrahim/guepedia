@@ -78,12 +78,12 @@ Ongkos kirim  <b  class="float-right">Rp.<?php echo number_format($this->session
 <?php } ?>
 
 <?php if ($this->session->userdata('hasil_kupon')){ ?>
-Kupon <?php echo $this->session->userdata('nama_kupon') ?>  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
+Kupon <?php echo $this->session->userdata('nama_kupon') ?> <?php echo $this->session->userdata('nilai_kupon') ?> %  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
 <hr>
 <?php } ?>
 
 <?php if ($this->session->userdata('hasil_promo')){ ?>
-Promo <?php echo $this->session->userdata('nama_promo') ?>  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_promo')) ?></b>
+Promo <?php echo $this->session->userdata('nama_promo') ?> <?php echo $this->session->userdata('nilai_promo') ?> %<b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_promo')) ?></b>
 <hr>
 <?php } ?>
 

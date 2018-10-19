@@ -157,7 +157,7 @@ if(data == "berhasil"){
 
 swal({
 type:"success",
-text:"Alasan penolakan tersimpan"
+text:"Alasan penolakan terkirim"
 }).then(function(){
 window.location.href = '<?php echo base_url('G_dashboard/orderan_proses')  ?>';
 });
