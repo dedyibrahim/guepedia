@@ -215,7 +215,7 @@ echo "ga ada";
 }
 
 function input_balance(){
-$query  = $this->db->get('data_sisa_balance');
+/*$query  = $this->db->get('data_sisa_balance');
 
 foreach ($query->result_array() as $data){
     
@@ -225,7 +225,7 @@ $array = array(
 
 $this->db->update('akun_penulis',$array,array('email'=>$data['email']));
 }
-
+*/
 }
 
 }
