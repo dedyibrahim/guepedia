@@ -199,5 +199,34 @@ $this->M_cron->set_expired($datax,$expire['invoices_toko'])    ;
 }    
 }
 
+function migrasi(){
+/*    
+$query = $this->db->get('mzt_withdraw');
+
+foreach ($query->result_array() as $data){
+
+if ($data['stat'] > 0){
+ echo "ada";   
+}else{
+echo "ga ada";    
+}
+}*/
+
+}
+
+function input_balance(){
+$query  = $this->db->get('data_sisa_balance');
+
+foreach ($query->result_array() as $data){
+    
+$array = array(
+'royalti_diperoleh' => $data['sisa_balance']    
+);
+
+$this->db->update('akun_penulis',$array,array('email'=>$data['email']));
+}
+
+}
+
 }
 
