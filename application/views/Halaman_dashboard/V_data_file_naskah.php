@@ -47,7 +47,7 @@ columns: [
 {"data": "nama_kategori"},
 {"data": "status"},
 {"data": "harga"},
-{"data": "view"},
+{"data": "view"}
 
 
 ],

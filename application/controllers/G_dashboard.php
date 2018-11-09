@@ -430,7 +430,17 @@ if(!$this->upload->do_upload('file_cover')){
 echo $this->upload->display_errors();
 
 }else{    
+$resize['image_library']  = 'gd2';
+$resize['source_image']   = './uploads/file_cover/'.$this->upload->data('file_name');
+$resize['create_thumb']   =  FALSE;
+$resize['maintain_ratio'] =  TRUE;
+$resize['width']     = 700;
+$resize['height']   = 700;
 
+
+$this->load->library('image_lib', $resize); 
+$this->image_lib->resize();
+        
 $data = array(
 'jumlah_lembar'     =>$input['jumlah_lembar'],  
 'judul'              =>$input['judul'],
@@ -646,7 +656,7 @@ echo "
 }
 echo "<tr>"
 . "<td colspan='5'>Sub Total</td>"
-. "<td colspan='2'>".number_format($this->session->userdata('subtotal'))."</td>"
+. "<td colspan='2'>".number_format($this->session->userdata('subtotal') - $this->session->userdata('nilai_diskon') )."</td>"
 
 . "<td>".number_format($this->session->userdata('nilai_diskon'))."</td>"
 
@@ -688,13 +698,14 @@ echo "<tr>"
 
 echo "<tr>"
 . "<td colspan='5'>Total Bayar</td>"
-. "<td colspan='2'>".number_format($this->session->userdata('total'))."</td>"
+. "<td colspan='2'>".number_format($this->session->userdata('total') - $this->session->userdata('nilai_diskon'))."</td>"
 . "<td colspan='2'>Total Bersih</td>"
 . "<td colspan='2'>".number_format($this->session->userdata('total_bersih'))."</td>"
 . "</tr>";
 
 echo "</table>";    
-echo "<input type='hidden' id='total_bayar' class='form-control' value=".$this->session->userdata('total').">";
+$k = $this->session->userdata('total')-$this->session->userdata('nilai_diskon') ;
+echo "<input type='hidden' id='total_bayar' class='form-control' value=".$k.">";
 }
 
 function hapus_datakasir(){
@@ -941,10 +952,10 @@ $data1 = array(
 'nilai_ppn'             => $this->session->userdata('nilai_ppn'), 
 'diskon_total'          => $this->session->userdata('diskon_total'),
 'jumlah_diskon_total'   => $this->session->userdata('jumlah_diskon_total'),
-'total'                 => $this->session->userdata('total'),
+'total'                 => $this->session->userdata('total') - $this->session->userdata('nilai_diskon'),
 'total_bersih'          => $this->session->userdata('total_bersih'),
 'tanggal_transaksi'     => date('d/m/Y'),
-'subtotal'              => $this->session->userdata('subtotal'),
+'subtotal'              => $this->session->userdata('subtotal')-$this->session->userdata('nilai_diskon'),
 'jumlah_diskon'         => $this->session->userdata('nilai_diskon'),
 'total_royalti'         => $this->session->userdata('royalti'),
 'bersih'                => $this->session->userdata('bersih'),
@@ -1043,8 +1054,8 @@ $html .= '<tr>
 <td>' . $penjualan['nama_penulis'] . '</td>
 <td>Rp.' . number_format($penjualan['harga']) . '</td>
 <td>' . $penjualan['qty'].'</td>
-<td>Rp.' . number_format($penjualan['jumlah']) . '</td>
-<td>' . $penjualan['diskon'] . ' %</td>
+<td>Rp.' . number_format($penjualan['jumlah']) . ' </td>
+<td>' . $penjualan['diskon'] . ' % </td>
 <td>Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
 <td>Rp.' . number_format($penjualan['royalti']) . '</td>
 <td>Rp.' . number_format($penjualan['bersih']) . '</td>
@@ -1193,7 +1204,7 @@ $html  ="<h1 align='center'><img src='".base_url('assets/img/logo-toko.png')."'>
 
 $html .="<h4 >KEPADA :<br>Nama Penerima : ".$data_static['nama_customer']."<br>";
 $html .="Nomor kontak  : ".$data_static['nomor_kontak']."<br>";
-$html .="Alamat lengkap : ".$data_static['alamat_lengkap']."</h4>";
+$html .="Alamat lengkap : ".$data_static['alamat_lengkap']."<br> ".$data_static['nama_biaya_lain']."</h4>";
 
 
 $html .="<h4 >PENGIRIM : <br> GUEPEDIA<br> Bukit Golf Arcadia Blok AR 118 , Bojong Nangka, Gunung Putri Bogor <br> Telp : 081287602508</h4>";
@@ -1210,7 +1221,7 @@ $html .= '' . $penjualan['judul_buku'] . ' (' . $penjualan['qty'].')<br>';
 
 $dompdf = new Dompdf(array('enable_remote'=>true));
 $dompdf->loadHtml($html);
-$dompdf->setPaper('A5','landscape');
+$dompdf->setPaper('A4');
 $dompdf->render();
 $dompdf->stream('INV.pdf',array('Attachment'=>0));
 
@@ -1506,6 +1517,7 @@ $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'
 $d=1 ;
 
 $html  ="Halo orderan anda telah kami kirim menggunakan ". $static['kurir']." dengan Service ".$static['service']." Nomor Resi ".$input['resi']."<br>";
+
 $html .= "<h3 style='padding: 2%; color: #FFF; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".$static['invoices_toko']."</h3>"; 
 
 $html .= "<div style='text-align:left;'>Pemesan / No.kontak : ".$static['nama_penerima']." / ".  $static['nomor_kontak'] ."<br>";
@@ -1968,8 +1980,79 @@ $dompdf = new Dompdf(array('enable_remote'=>true));
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4');
 $dompdf->render();
-$dompdf->stream('INV.pdf',array('Attachment'=>0));
-
-   
+$dompdf->stream('INV.pdf',array('Attachment'=>0)); 
 }
+public function infokan(){
+if($this->input->post('id_file_naskah')){
+
+$data_info = $this->M_dashboard->data_info($this->input->post('id_file_naskah'))->row_array();
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($data_info['email']);
+$this->email->subject('Informasi Status Naskah');
+$html = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Informasi Status Naskah</h3>"; 
+$html.= "Hai Kak ".$data_info['nama_lengkap']." Kami Dari Guepedia.com ingin memberitahukan status naskah kaka "
+        ."yang diupload pada tanggal ".$data_info['tanggal_upload']."<br>"
+        ."<hr>Judul : ".$data_info['judul']."<hr>"
+        ."Status : ".$data_info['status']."<br><hr>";
+
+$html .= $this->input->post('informasi');
+
+
+$html .="<br><br>Atas perhatian dan kerjasamanya kami ucapkan terimakasih Salam Guepedia :-)";
+
+
+$this->email->message($html);
+if (!$this->email->send()){    
+echo $this->email->print_debugger();
+}else{
+echo "berhasil";    
+}
+}else{
+redirect(404);    
+}    
+    
+}
+
+public function banner(){
+
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_menu_toko');
+$this->load->view('Halaman_dashboard/V_banner');
+$this->load->view('Umum/V_footer');
+
+}
+
+public function hapus_naskah(){
+if($this->uri->segment(3) != ''){
+
+$this->M_dashboard->hapus_naskah($this->uri->segment(3));
+redirect(base_url('G_dashboard/data_file_naskah'));    
+}else{
+redirect(404);    
+}
+
+    
+}
+
+public function halaman_email(){
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_dashboard/V_menu');
+$this->load->view('Halaman_dashboard/V_halaman_email');
+$this->load->view('Umum/V_footer');   
+}
+
+
 }

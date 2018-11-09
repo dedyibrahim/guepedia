@@ -33,6 +33,7 @@ $data = array(
 'nama_lengkap'  =>$input['nama_lengkap'],
 'nomor_kontak'  =>$input['nomor_kontak'],
 'alamat_lengkap'=>$input['alamat_lengkap'],
+'email'         =>$input['email'],
 );
 $this->M_halaman_penulis->update_penulis($data,$this->session->userdata('id_account'));
 echo "berhasil";
@@ -80,7 +81,65 @@ $this->load->view('Umum/V_footer');
 
 public function proses_upload(){
 $input = $this->input->post();
+    
+$config2['upload_path']          = './uploads/dokumen_naskah/';
+$config2['allowed_types']        = 'docx|doc';
+$config2['file_size']            = "2004800";
+$config2['encrypt_name']         = TRUE;
 
+$config3['upload_path']          = './uploads/file_cover/';
+$config3['allowed_types']        = 'psd';
+$config3['file_size']            = "2004800";
+$config3['encrypt_name']         = TRUE;
+
+
+$this->upload->initialize($config2);
+if (!$this->upload->do_upload('file_naskah')){
+echo $this->upload->display_errors();
+
+}else{     
+$file_naskah = $this->upload->data('file_name');
+$this->upload->initialize($config3);
+
+if($this->upload->do_upload('file_cover') != NULL){
+    
+$data = array(
+'id_account'        => $this->session->userdata('id_account'),
+'judul'             => $input['judul'],
+'penulis'           => $input['penulis'],
+'sinopsis'          => $input['sinopsis'],
+'id_kategori_naskah'=> $input['id_kategori_naskah'],
+'file_naskah'       => $file_naskah,
+'file_cover'        => $this->upload->data('file_name'),
+'tanggal_upload'    => date('d/m/Y'),
+'status'           => 'Pending',
+ );
+
+$this->M_halaman_penulis->simpan_naskah($data);
+$this->email_upload_naskah($input);
+
+}else{ 
+$data = array(
+'id_account'        => $this->session->userdata('id_account'),
+'judul'             => $input['judul'],
+'penulis'           => $input['penulis'],
+'sinopsis'          => $input['sinopsis'],
+'id_kategori_naskah'=> $input['id_kategori_naskah'],
+'file_naskah'       => $file_naskah,
+'tanggal_upload'    =>date('d/m/Y'),
+'status'           => 'Pending',
+);
+
+$this->M_halaman_penulis->simpan_naskah($data);
+$this->email_upload_naskah($input);
+}
+
+}
+
+}
+
+public function email_upload_naskah($input){
+ 
 $config['protocol'] = 'sendmail';
 $config['mailpath'] = '/usr/sbin/sendmail';
 $config['charset']  = 'utf-8';
@@ -92,7 +151,7 @@ $this->email->set_newline("\r\n");
 $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($this->session->userdata('email'));
-$this->email->subject('Naskah '. $input['judul']);
+$this->email->subject('Naskah '.$input['judul']);
 
 $html = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Naskah Berhasil di Upload</h3>"; 
 
@@ -112,71 +171,11 @@ Anda bisa melakukan pemesanan melewati buku online guepedia.com</p></h3><br>
 $this->email->message($html);
 
 if (!$this->email->send()){    
-
 echo $this->email->print_debugger();
-
-
 }else{    
+echo "berhasil";    
+}  
     
-$config2['upload_path']          = './uploads/dokumen_naskah/';
-$config2['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
-$config2['file_size']            = "2004800";
-$config2['encrypt_name']         = TRUE;
-
-$this->upload->initialize($config2);
-
-if (!$this->upload->do_upload('file_naskah')){
-
-echo $this->upload->display_errors();
-echo "dokumen naskah";
-}else{  
-
-    
-$file_naskah = $this->upload->data('file_name');
-
-$config3['upload_path']          = './uploads/file_cover/';
-$config3['allowed_types']        = 'docx|doc|pdf|ods|pptx|ppt|jpeg|jpg|png|psd|cdr|';
-$config3['file_size']            = "2004800";
-$config3['encrypt_name']         = TRUE;
-$this->upload->initialize($config3);
-
-if($this->upload->do_upload('file_cover') != NULL){
-
-$data = array(
-'id_account'        => $this->session->userdata('id_account'),
-'judul'             => $input['judul'],
-'penulis'           => $input['penulis'],
-'sinopsis'          => $input['sinopsis'],
-'id_kategori_naskah'=> $input['id_kategori_naskah'],
-'file_naskah'       => $file_naskah,
-'file_cover'        => $this->upload->data('file_name'),
-'tanggal_upload'    => date('d/m/Y'),
-'status'           => 'Pending',
- );
-
-$this->M_halaman_penulis->simpan_naskah($data);
-
-echo "berhasil";
-}else{
-    
-$data = array(
-'id_account'        => $this->session->userdata('id_account'),
-'judul'             => $input['judul'],
-'penulis'           => $input['penulis'],
-'sinopsis'          => $input['sinopsis'],
-'id_kategori_naskah'=> $input['id_kategori_naskah'],
-'file_naskah'       => $file_naskah,
-'tanggal_upload'    =>date('d/m/Y'),
-'status'           => 'Pending',
-);
-
-$this->M_halaman_penulis->simpan_naskah($data);
-
-echo "berhasil";
-}
-
-}
-}
 }
 
 public function json_file_naskah(){

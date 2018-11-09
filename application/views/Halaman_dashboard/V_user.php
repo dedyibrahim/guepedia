@@ -15,6 +15,8 @@ return {
 };
 
 var t = $("#data_user").dataTable({
+    
+    
 initComplete: function() {
 var api = this.api();
 $('#data_user')
@@ -162,15 +164,15 @@ showConfirmButton: true,
 <div class="clearfix"></div>
 
 </div>
-    <div class="col">
+    <div class="col-md-6">
  <h4 align="center" class="fa-color">Data User <span class="fa fa-user"></span> </h4><hr>
         <table id="data_user" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
-<th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Nama User</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Email</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Level</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
+<th  align="center"    aria-controls="datatable-fixed-header" >No</th>
+<th  align="center"     aria-controls="datatable-fixed-header" >Nama User</th>
+<th  align="center"     aria-controls="datatable-fixed-header" >Email</th>
+<th  align="center"     aria-controls="datatable-fixed-header" >Level</th>
+<th  align="center"     aria-controls="datatable-fixed-header" >Aksi</th>
 </thead>
 <tbody align="center">
 </table>

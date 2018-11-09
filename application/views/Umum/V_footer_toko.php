@@ -25,8 +25,6 @@ text-decoration: none;
 <ul class="list-inline">
 <li><a href="<?php echo base_url('Store/konfirmasi_pembayaran'); ?>">Konfirmasi Pembayaran</a></li>   
 <li><a href="<?php echo base_url('Penulis'); ?>">Menjadi Penulis</a></li>   
-<!---<li><a href="<?php// echo base_url('Store/layanan'); ?>">Layanan</a></li>   
-<li><a href="<?php// echo base_url('Store/faq'); ?>">Faq</a></li> ---> 
 <li><a href="<?php echo base_url('Store/hubungi_kami'); ?>">Hubungi Kami</a></li>   
 </ul>
 </div>
@@ -83,10 +81,11 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<script>/*
+
+<script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 
-gtag('config', 'UA-71848071-1');*/
+gtag('config', 'UA-71848071-1');
 </script>

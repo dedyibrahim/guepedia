@@ -53,6 +53,10 @@ echo $query->num_rows();
 <a style="text-decoration: none; color: #fff;" href="<?php echo base_url('G_dashboard/input_seo') ?>">
     <button class="btn btn-light">Input SEO <span class="fa fa-plus-circle"></span></button>    
 </a>
-    
+
+
+<a style="text-decoration: none; color: #fff;" href="<?php echo base_url('G_dashboard/banner') ?>">
+    <button class="btn btn-light">Banner <span class="fa fa-paperclip"></span></button>    
+</a>    
 </div>
 

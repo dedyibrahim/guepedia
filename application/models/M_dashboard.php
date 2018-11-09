@@ -63,7 +63,7 @@ $this->datatables->select('id_file_naskah,'
 
 $this->datatables->from('file_naskah_penulis');
 $this->datatables->join('kategori_naskah','kategori_naskah.id_kategori_naskah = file_naskah_penulis.id_kategori_naskah');
-$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/lihat_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/lihat_naskah/$1"></a> || <a class="btn btn-sm btn-danger fa fa-trash " href="'.base_url().'G_dashboard/hapus_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
 return $this->datatables->generate();
 
 
@@ -98,7 +98,7 @@ $this->datatables->select('id_account,'
 );
 
 $this->datatables->from('akun_penulis');
-$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/data_penulis/$1"></a> || <a class="btn btn-sm btn-warning fa fa-edit " href="'.base_url().'G_dashboard/edit_penulis/$1"></a> || <a class="btn btn-sm btn-danger fa fa-trash " href="'.base_url().'G_dashboard/hapus_penulis/$1"></a>', 'base64_encode(id_account)');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-dark fa fa-send " href="'.base_url().'G_dashboard/halaman_email/$1"></a> || <a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/data_penulis/$1"></a> || <a class="btn btn-sm btn-warning fa fa-edit " href="'.base_url().'G_dashboard/edit_penulis/$1"></a> || <a class="btn btn-sm btn-danger fa fa-trash " href="'.base_url().'G_dashboard/hapus_penulis/$1"></a>', 'base64_encode(id_account)');
 return $this->datatables->generate();
 }
 
@@ -157,6 +157,7 @@ $this->datatables->select('id_data_penjualan,'
 .'data_penjualan.status_penjualan as status_penjualan,'
 .'data_penjualan.resi_pengiriman as resi_pengiriman,'
 .'data_penjualan.penjualan as penjualan,'
+.'data_penjualan.jumlah_biaya_lain as ongkir,'        
 );
 
 $this->datatables->from('data_penjualan');
@@ -502,5 +503,21 @@ $query = $this->db->get_where('akun_penulis',array('royalti_diperoleh >'=>50000)
 return $query;
     
 }
+function data_info($id_file){
+    
+$this->db->select('*');
+$this->db->where('file_naskah_penulis.id_file_naskah', base64_decode($id_file));
+$this->db->from('file_naskah_penulis');
+$this->db->join('akun_penulis', 'akun_penulis.id_account = file_naskah_penulis.id_account');
+$query = $this->db->get();
 
+return $query;
+}
+
+
+function hapus_naskah($id){
+
+$this->db->delete('file_naskah_penulis',array('id_file_naskah'=> base64_decode($id)));
+    
+}
 }

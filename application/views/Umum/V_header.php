@@ -26,6 +26,7 @@
 <script src="<?php echo base_url();?>assets/chart/dist/Chart.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/daterange/moment.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/daterange/daterangepicker.min.js" type="text/javascript"></script>
+<script src="<?php echo base_url(); ?>assets/ckeditor/ckeditor.js" type="text/javascript"></script>
 <link href="<?php echo base_url(); ?>assets/daterange/daterangepicker.css" rel="stylesheet" type="text/css"/>
 
 </head>

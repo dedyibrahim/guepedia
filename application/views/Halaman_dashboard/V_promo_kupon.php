@@ -16,7 +16,7 @@
 
 </div>
 
-<div class="col">
+<div class="col-md-6">
 <h4 align="center">Data kode promo</h4><hr>
 <table class="table table-striped table-condensed table-bordered">
 <tr><th>No</th><th>Kode</th><th>Nilai</th><th>Aksi</th></tr>
@@ -70,7 +70,7 @@ foreach ($data_promo->result_array() as $promo){
 
 </div>
 
-<div class="col">
+<div class="col-md-9">
 <h4 align="center">Data Kode Kupon</h4><hr>
     
 <script type="text/javascript">

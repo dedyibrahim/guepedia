@@ -4,6 +4,9 @@
 <?php foreach ($orderan_terima->result_array() as $konfir) { ?>
 <div class="row">
 <div class="col">
+    <p><b>Nama Pemesan / No.Kontak :</b> <?php echo  $konfir['nama_penerima']." / ".$konfir['nomor_kontak'] ?>
+    <br><b>Alamat pengiriman :</b> <?php echo $konfir['nama_kecamatan']." ".$konfir['nama_kota']." ".$konfir['nama_provinsi']." ".$konfir['alamat_lengkap']." ".$konfir['kode_pos'] ?>
+</p>
 <div class="card card-body">
 <h5 align="center">Detail pesanan  <?php echo $konfir['invoices_toko'] ?></h5><hr>
 <table class="table table-bordered table-sm table-condensed table-striped">
@@ -70,9 +73,9 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 </div><hr>
 <script type="text/javascript">
 $("#zoom<?php echo $konfir['id_penjualan_toko'] ?>").elevateZoom({
-zoomType: "inner",
-cursor: "crosshair"
-});
+  scrollZoom : true,
+    zoomType				: "inner"
+  });
 
 
 </script> 

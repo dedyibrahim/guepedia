@@ -29,9 +29,9 @@ echo "<option value=".$kate['id_kategori_naskah'].">".$kate['nama_kategori']."</
 ?>   
 </select>
 <label>File Naskah :</label><br>
-<input type="file" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu"><br>
+<input type="file" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu Dan hannya Menerima Dalam bentuk Microsoft Word (.docx)"><br>
 <label>File Cover :</label><br>
-<input type="file" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."  data-toggle="tooltip" title="Note : Jika ada" ><br>
+<input type="file" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."  data-toggle="tooltip" title="Note : Jika ada Dan hannya Menerima Dalam bentuk Photoshop (.PSD)" ><br>
 
 <hr>
 <div class="checkbox">

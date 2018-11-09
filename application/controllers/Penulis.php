@@ -50,7 +50,7 @@ $html .= "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
 . "atas perhatian dan kerjasamanya kami ucapkan terimaksih <br>"
 . "<i>Note: Jika anda tidak merasa melakukan pendaftaran mohon abaikan email ini </i>";
 
-$this->email->message($data_kirim);
+$this->email->message($html);
 
 if (!$this->email->send()){    
 

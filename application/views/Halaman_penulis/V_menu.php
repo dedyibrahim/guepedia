@@ -30,29 +30,20 @@
 
 <div class="row">
 <div class="col " style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff;   ">
-<span class="fa fa-shopping-cart fa-4x " style="position:absolute; "> </span>
-<h3 class="text-right">Item</h3><br>
+<span class="fa fa-shopping-cart fa-2x " style="position:absolute; "> </span>
+<h5 class="text-right">Buku yang laku</h5><br>
 <div class="text-center"><?php echo $this->db->get_where('data_jumlah_penjualan',array('id_account_penulis'=>$this->session->userdata('id_account')))->num_rows() ?></div>
 </div>
-<div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff; ">
-<span class="fa fa-money fa-4x " style="position:absolute; "> </span>
-<h3 class="text-right">Keuntungan</h3><br>
-<div class="text-center">Rp. <?php $query =  $this->db->get_where('data_jumlah_penjualan',array('id_account_penulis'=>$this->session->userdata('id_account')));
-$total_profit = 0;
-foreach ($query->result_array() as $bersih ){
- $total_profit +=$bersih['royalti'];   
-}
-echo number_format($total_profit); ?></div>
-</div> 
+ 
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff;  ">
-<span class="fa fa-magic fa-4x " style="position:absolute; "> </span>
-<h3 class="text-right">Bagi Hasil</h3><br>
+<span class="fa fa-magic fa-2x " style="position:absolute; "> </span>
+<h5 class="text-right">Bagi Hasil yang belum ditarik</h5><br>
 <div class="text-center">Rp. <?php $rol = $this->db->get_where('akun_penulis',array('id_account'=>$this->session->userdata('id_account')))->row_array();  echo number_format($rol['royalti_diperoleh']);?></div>
 </div> 
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff; ">
-<span class="fa fa-book fa-4x " style="position:absolute; "> </span>
-<h3 class="text-right">Naskah</h3><br>
-<div class="text-center"><?php echo $this->db->get_where('file_naskah_penulis',array('id_account'=>$this->session->userdata('id_account')))->num_rows(); ?></div>
+<span class="fa fa-book fa-2x " style="position:absolute; "> </span>
+<h5 class="text-right">Naskah saya</h5><br>
+<div class="text-center sticky-bottom"><?php echo $this->db->get_where('file_naskah_penulis',array('id_account'=>$this->session->userdata('id_account')))->num_rows(); ?></div>
 </div>
 </div>
 

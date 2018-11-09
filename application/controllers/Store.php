@@ -39,7 +39,7 @@ $config['last_link']        = false;
 $config['first_tag_open']   = '<li class="page-item">';
 $config['first_tag_close']  = '</li>';
 $config['prev_link']        = '&laquo';
-$config['num_links']        = 10;
+$config['num_links']        = 3;
 $config['prev_tag_open']    = '<li class="page-item">';
 $config['prev_tag_close']   = '</li>';
 $config['next_link']        = '&raquo';
@@ -814,7 +814,7 @@ $penjualan_toko = array(
 'total_bayar'       => $this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon') - $this->session->userdata('hasil_promo'),    
 'tanggal_order'     => date('d-m-Y'),
 'total_berat'       => $this->session->userdata('total_berat'),   
-'expired'           => date('d-m-Y', strtotime("+3 day")),       
+'expired'           => date('d-m-Y', strtotime("+4 day")),       
 ); 
 $this->M_store->input_data_jumlah_penjualan_toko($penjualan_toko);
 

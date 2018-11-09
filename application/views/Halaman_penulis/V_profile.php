@@ -51,6 +51,7 @@ $("#nama_lengkap").attr("readonly", false);
 $("#nomor_kontak").attr("readonly", false);
 $("#alamat_lengkap").attr("readonly", false);
 $("#nama_pena").attr("readonly", false);
+$("#email").attr("readonly", false);
 
 $("#btn_edit").hide(); 
 $("#btn_update").show(); 
@@ -63,10 +64,12 @@ var nama_lengkap  = $("#nama_lengkap").val();
 var nama_pena     = $("#nama_pena").val();
 var nomor_kontak  = $("#nomor_kontak").val();
 var alamat_lengkap= $("#alamat_lengkap").val();
+var email         = $("#email").val();
+
 $.ajax({
 type:"POST",
 url:"<?php echo base_url('Halaman_penulis/update_penulis') ?>",
-data:"token="+token+"&nama_pena="+nama_pena+"&nama_lengkap="+nama_lengkap+"&nomor_kontak="+nomor_kontak+"&alamat_lengkap="+alamat_lengkap,
+data:"token="+token+"&nama_pena="+nama_pena+"&nama_lengkap="+nama_lengkap+"&nomor_kontak="+nomor_kontak+"&alamat_lengkap="+alamat_lengkap+"&email="+email,
 success:function(data){
 if(data == 'berhasil'){
 swal({

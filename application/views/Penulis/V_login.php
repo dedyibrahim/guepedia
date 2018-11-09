@@ -176,8 +176,8 @@ success:function(data){
 if(data == 'tidak'){
     
 swal({
-title:"Sedang dalam perbaikan", 
-text:"Mohon maaf kami sedang melakukan perbaikan system agar dapat masuk silahkan perbaharui password anda terlebih dahulu dengan cara klik lupa kata sandi",
+title:"Akun Anda Belum Aktif", 
+text:"Mohon maaf akun anda belum aktif silahkan aktivasi terlebih dahulu melalui email yang anda daftarkan atau perbaharui password anda dengan cara klik lupa kata sandi",
 type:"warning",
 showConfirmButton: true,
 }).then(function() {

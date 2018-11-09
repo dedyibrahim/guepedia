@@ -52,7 +52,7 @@
 </select>
 
 <label>Sinopsis :</label>
-<textarea   id="sinopsis" readonly="" value="" rows="7" class="form-control"><?php echo $data['sinopsis'] ?></textarea>
+<textarea   id="sinopsis"  value="" rows="7" class="form-control"><?php echo $data['sinopsis'] ?></textarea>
 <div class="clearfix"></div>
 
 <hr>
@@ -87,6 +87,8 @@
 <hr>
 <button style="display:none;" class="btn btn-success float-right" id="btn_publish">Publish Buku <span class="fa fa-save"></span></button>
 <button  class="btn btn-warning float-right" id="edit_naskah">Edit Naskah <span class="fa fa-edit"></span></button>
+
+<button  class="btn btn-success" id="infokan" >Infokan Status Naskah <span class="fa fa-send-o"></span></button>
 <div class="clearfix"></div><hr>
 </div>
 <script type="text/javascript">
@@ -122,6 +124,7 @@ window.location="<?php echo base_url('G_dashboard/download_cover/'. base64_encod
 });
 
 $("#edit_naskah").click(function(data){
+CKEDITOR.instances.sinopsis.setReadOnly(false);   
 $("#btn_publish").show();
 $("#edit_naskah").hide();
 $("#penulis").prop("readonly", false);
@@ -148,7 +151,7 @@ var cover_lama     = $("#cover_lama").val();
 var penulis        = $("#penulis").val();
 var status         = $("#status").val();
 var kategori       = $("#kategori").val();
-var sinopsis       = $("#sinopsis").val();
+var data_sinopsis  = CKEDITOR.instances.sinopsis.getData();
 var judul          = $("#judul").val();
 var harga          = $("#harga").val();
 var berat          = $("#berat").val();
@@ -156,7 +159,7 @@ var jumlah_lembar  = $("#jumlah_lembar").val();
 var id_account     = $("#id_account").val();
 
 var formData = new FormData();
-if(id_file_naskah !='' && id_account !='' && penulis !=''&& status !='' && kategori !='' && sinopsis !='' && judul !='' && harga !='' && berat !='' && jumlah_lembar !=''){
+if(id_file_naskah !='' && id_account !='' && penulis !=''&& status !='' && kategori !='' && data_sinopsis  !='' && judul !='' && harga !='' && berat !='' && jumlah_lembar !=''){
 
 $.each(file_cover.files, function(k,file){   
 formData.append('file_cover',file);
@@ -167,7 +170,7 @@ formData.append('id_file_naskah',id_file_naskah);
 formData.append('penulis',penulis);
 formData.append('status',status);
 formData.append('kategori',kategori);
-formData.append('sinopsis',sinopsis);
+formData.append('sinopsis',data_sinopsis);
 formData.append('judul',judul);
 formData.append('harga',harga);
 formData.append('berat',berat);
@@ -220,5 +223,67 @@ showConfirmButton: true,
 
 }
 });
+});
+$(document).ready(function(){
+
+$("#infokan").on("click",function(){
+  
+swal({
+  title: "Masukan Informasi Pesan",
+  input:"textarea",
+  showLoaderOnConfirm: true,
+  animation: "slide-from-top",
+  showCancelButton:true,
+  inputPlaceholder: "Informasi Pesan"
+}).then(function(value){
+
+var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>";       
+var id_file_naskah                                        = "<?php echo $this->uri->segment(3) ?>";
+
+$.ajax({
+type:"POST",
+data:"token="+token+"&id_file_naskah="+id_file_naskah+"&informasi="+value,
+url:"<?php echo base_url('G_dashboard/infokan') ?>",
+success:function(data){
+if(data == "berhasil"){
+swal({
+title:"", 
+text:"Naskah telah berhasil di informasikan ke penulis",
+type:"success",
+showConfirmButton: true,
+});   
+    
+}else{
+swal({
+title:"", 
+text:data,
+type:"error",
+showConfirmButton: true,
+});
+
+}
+    
+        
+}
+ 
+ 
+}); 
+ 
+});   
+    
+
+
+        
+});
+
+});
+
+</script>
+<script>
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+CKEDITOR.replace('sinopsis', {readOnly:true});    
+ 
 });
 </script>

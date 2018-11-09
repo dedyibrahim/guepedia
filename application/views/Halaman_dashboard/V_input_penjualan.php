@@ -645,11 +645,12 @@ columns: [
 {"data": "status_penjualan"},
 {"data": "resi_pengiriman"},
 {"data": "penjualan"},
-{"data": "view"},
+{"data": "ongkir"},
+{"data": "view"}
 
 
 ],
-order: [[1, 'desc']],
+order: [[0, 'desc']],
 rowCallback: function(row, data, iDisplayIndex) {
 var info = this.fnPagingInfo();
 var page = info.iPage;
@@ -682,6 +683,7 @@ $('td:eq(0)', row).html(index);
 <th  align="center"     aria-controls="datatable-fixed-header"  >Status penjualan</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Resi</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Penjualan</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Ongkir</th>
 <th style="width: 25%;" align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
 </thead>
 <tbody align="center">

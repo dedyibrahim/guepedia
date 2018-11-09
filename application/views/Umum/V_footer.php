@@ -1,4 +1,10 @@
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
+gtag('config', 'UA-71848071-1');
+</script>
 <div class="container-fluid" style="background-color:#2c3e50; color:#fff; border-top:4px solid #fff;  ">
 <div class="container">
 <div class="navbar-header">

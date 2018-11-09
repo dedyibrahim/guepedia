@@ -15,7 +15,7 @@ return $query;
 }
 
 function orderan_expired(){
-$query =  $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'pending','expired <=' => date('d-m-Y') ));    
+$query =  $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'pending','expired' => date('d-m-Y') ));    
 
 return $query;
 }

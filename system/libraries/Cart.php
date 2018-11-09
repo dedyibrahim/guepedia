@@ -56,7 +56,6 @@ class CI_Cart {
 	 * @var string
 	 */
 	public $product_id_rules = '\.a-z0-9_-';
-
 	/**
 	 * These are the regular expression rules that we use to validate the product ID and product name
 	 * alpha-numeric, dashes, underscores, colons or periods

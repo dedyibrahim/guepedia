@@ -3,7 +3,7 @@
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-71848071-1"></script>
 
-
+<meta name="google-site-verification" content="gBU3MkXDsnk78GEqIJPO4zyPzSSw7IPQVKMSSr7olC4" />
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="title" content="Publisher Online Indonesia - Guepedia">

@@ -68,6 +68,10 @@ $('#email_penulis').val(ui.item.email_penulis);
 );
 });
 
+
+</script>
+<script>
+CKEDITOR.replace( 'sinopsis' );
 </script>
 <script type="text/javascript">
 $("#btn_publish").click(function(){
@@ -79,10 +83,11 @@ var harga         = $("#harga").val();
 var berat         = $("#berat").val();
 var status        = $("#status").val();
 var kategori      = $("#kategori").val();
-var sinopsis      = $("#sinopsis").val();
+var data_sinopsis = CKEDITOR.instances.sinopsis.getData();
+
 var id_account    = $("#id_account").val();
 var jumlah_lembar = $("#jumlah_lembar").val();
-if(file_cover !='' && judul !='' && penulis !='' && harga !='' && berat !='' && status !='' && kategori !='' && sinopsis !='' && id_account !='' && jumlah_lembar !=''){
+if(file_cover !='' && judul !='' && penulis !='' && harga !='' && berat !='' && status !='' && kategori !='' && data_sinopsis !='' && id_account !='' && jumlah_lembar !=''){
 
 var fileCover = $('#file_cover')[0];
 var formData = new FormData();
@@ -98,7 +103,7 @@ formData.append('berat',berat);
 formData.append('status',status);
 formData.append('kategori',kategori);
 formData.append('penulis',penulis);
-formData.append('sinopsis',sinopsis);
+formData.append('sinopsis',data_sinopsis);
 formData.append('jumlah_lembar',jumlah_lembar);
 formData.append('id_account',id_account);
 

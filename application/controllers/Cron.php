@@ -36,8 +36,6 @@ $this->email->subject('Harap melakukan pembayaran Store Guepedia');
 
 $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'=>$static['invoices_toko']));
 
-
-
 $date1= date_create($static['expired']);
 $tanggal_expir = date_format($date1,"d F o");
 
@@ -104,7 +102,11 @@ echo "reminder orderan ".$static['nama_penerima']." Berhasil";
 
 function orderan_expired(){
 
-$query = $this->M_cron->orderan_expired('status');
+$query = $this->M_cron->orderan_expired();
+
+echo print_r($query->result());
+
+echo date('d-m-Y');
 
 foreach ($query->result_array() as $static){
 
@@ -122,7 +124,7 @@ $this->email->set_newline("\r\n");
 $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($email['email']);
-$this->email->subject('Harap melakukan pembayaran Store Guepedia');
+$this->email->subject('Konfirmasi Status Pesanan');
 
 
 
@@ -189,14 +191,10 @@ $datax = array(
 'status' => 'expired',
 );
 
-$this->M_cron->set_expired($datax,$expire['invoices_toko'])    ;
-
-
+$this->M_cron->set_expired($datax,$expire['invoices_toko']);
 }
-
-
 }
-}    
+}   
 }
 
 function migrasi(){
