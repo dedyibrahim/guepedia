@@ -183,34 +183,54 @@ if($this->cart->total() == 0){
 
 echo "<h1 align='center'>Keranjang anda masih kosong <br> <hr><a href='".base_url('Store')."'><button class='btn btn-success btn-lg'>Mulai Belanja !!!</button></a></h1><hr>"; 
 
-}else{    
-echo '<table style="text-align:  center;" class="table table-md table-striped table-condensed">
-<tr>
-<th>No</th>  
-<th>Nama Buku</th>  
-<th>Harga</th>  
-<th style="width: 8%;">Qty</th>  
-<th>Jumlah</th>  
-<th>Aksi</th>  
-</tr>';
-$no=1; foreach ($this->cart->contents() as $items){ 
-echo '<tr>
-<td>'.$no ++.'</td>   
-<td><a style="text-decoration:none;" href="'.base_url('Store/lihat_buku/'. base64_encode($items['id'])).'" > '.$items['name'] .'</a></td>
-<td>Rp.'.number_format($items['price']) .'</td>
-<td><input type="text" id="qty'.$items['id'].'" maxlength="3" onchange="update_qty_keranjang('.$items['id'].')" class="form-control" value="'.$items['qty'].'"></td>
-<td>Rp. '.number_format($items['subtotal']).'</td>
-<td><button onclick="hapus_cart('.$items['id'].');" class="btn btn-danger"><span class="fa fa-close"></span></button></td>
-</tr>';
+}else{
+echo "<div class='row mb-1'>"
+. "<div class='col-md-8  p-3'>";
 
+$no=1; foreach ($this->cart->contents() as $items){
+    
+echo "<div class='row'>";    
+echo "<div class='col' style='text-align:center;'><a style='text-decoration:none;' href='".base_url("Store/lihat_buku/". base64_encode($items['id']))."' >".$items['name']."</a></div> ";
+echo "<div class='col-md-1' style='text-align:center;'>Rp.".number_format($items['price'])." </div>";
+echo "<div class='col-md-1' style='text-align:center;'> X </div>";
+echo '<div class="col-md-2" style="text-align:center;"><input type="text" id="qty'.$items['id'].'" maxlength="3" onchange="update_qty_keranjang('.$items['id'].')" class="form-control" value="'.$items['qty'].'"></div>';
+echo "<div class='col-md-2' style='text-align:center;'><b>Rp.".number_format($items['subtotal'])."</b></div>";
+echo '<div class="col-md-1" Style="text-align:center;"><button onclick="hapus_cart('.$items['id'].');" class="btn btn-danger"><span class="fa fa-close"></span></button></div>';
+echo "</div><hr>";
+
+}        
+echo "</div>";
+
+
+echo "<div class='col'>"
+. "<div class='card p-3'><h4 align='center'> Ringkasan Belanja </h4><hr> ";
+  
+if($this->session->userdata('nilai_kupon')){
+  echo  "<div class='row'>"
+        ."<div class='col-md-5'>Kupon ".$this->session->userdata('nilai_kupon')." % </div>"
+        . "<div class='col' style='color:#dc3545;'><b>-Rp. ".number_format($this->session->userdata('hasil_kupon'))."</b></div>"
+        . "</div><hr>";
+         
 }
-echo "<tr style='backround-color:#f60;'>"
-. "<td colspan='2'><b>Total</b></td>"
-. "<td colspan='2'> <b>Rp. ".number_format($this->cart->total())."</b></td>"
-. "<td colspan='2' ><a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku <span class='fa fa fa-money'></span></button></a></td>"
-. "</tr>";
 
-echo '</table>'; 
+if($this->session->userdata('nilai_promo')){
+  echo  "<div class='row'>"
+        ."<div class='col-md-5'>Promo ".$this->session->userdata('nilai_promo')." % </div>"
+        . "<div class='col' style='color:#dc3545;'><b>-Rp. ".number_format($this->session->userdata('hasil_promo'))."</b></div>"
+        . "</div><hr>";
+         
+}
+
+  echo  "<div class='row'>"
+        ."<div class='col-md-5'>Total</div>"
+        . "<div class='col'><b>Rp. ".number_format($this->cart->total()-$this->session->userdata('hasil_promo'))."</b></div>"
+        . "</div>";
+     
+        echo "<hr><a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku </button></a>"
+        . "</div><hr><buttton data-toggle='modal' data-target='#exampleModal' class='btn btn-dark form-control'>Masukan Kode Promo atau Kupon </button></div>"
+. "</div>";   
+    
+    
 
 }
 }
@@ -248,7 +268,21 @@ $data = array(
 'qty'   => 0,
 );
 
-$this->cart->update($data);    
+$this->cart->update($data); 
+
+$unset = array(
+'nilai_kupon', 
+'hasil_kupon',
+'nama_kupon',
+'ongkir',
+'kurir',
+'service',        
+'nilai_promo', 
+'hasil_promo',
+'nama_promo',
+'total_berat'    
+);
+$this->session->unset_userdata($unset);
 }else{
 redirect(404);    
 }    
@@ -699,7 +733,7 @@ $angka            = 6;
 $jumlah_penjualan = $penjualan;
 $invoices_toko    = str_pad($jumlah_penjualan, $angka ,"0",STR_PAD_LEFT);
 
-$expir = date('d-m-Y', strtotime("+3 day"));
+$expir = date('d-m-Y', strtotime("+4 day"));
 $date1= date_create($expir);
 $tanggal_expir = date_format($date1,"d F o");
 
@@ -763,21 +797,21 @@ $html .="
 if($this->session->userdata('nilai_kupon')){ 
 $html .= "<tr>
 <th style='border: 1px solid rgb(168,207,69);' colspan='4' >Kode kupon " .$this->session->userdata('nama_kupon')." ".$this->session->userdata('nilai_kupon')." %</th>    
-<th style='border: 1px solid rgb(168,207,69);' colspan='1'  style='color:#dc3545;'> - Rp".number_format($this->session->userdata('hasil_kupon'))."</th>    
+<th style='border: 1px solid rgb(168,207,69);' colspan='1'  style='color:#dc3545;'> - Rp. ".number_format($this->session->userdata('hasil_kupon'))."</th>    
 </tr>";
 }
 
 if($this->session->userdata('nilai_promo')){ 
 $html .= "<tr>
 <th style='border: 1px solid rgb(168,207,69);' colspan='4' >Kode promo " .$this->session->userdata('nama_promo')." ". $this->session->userdata('nilai_promo')." %</th>    
-<th style='border: 1px solid rgb(168,207,69);' colspan='1'  style='color:#dc3545;'> - Rp".number_format($this->session->userdata('hasil_promo'))."</th>    
+<th style='border: 1px solid rgb(168,207,69);' colspan='1'  style='color:#dc3545;'> - Rp. ".number_format($this->session->userdata('hasil_promo'))."</th>    
 </tr>";
 }
 
 $html.= 
 "<tr>
 <th style='border: 1px solid rgb(168,207,69);'   colspan='4'>Total Bayar</th>    
-<th style='border: 1px solid rgb(168,207,69);'  colspan='1'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon'))."</th>    
+<th style='border: 1px solid rgb(168,207,69);'  colspan='1'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon')-$this->session->userdata('hasil_promo'))."</th>    
 </tr></table> <br>";
 
 
@@ -1115,14 +1149,20 @@ redirect(404);
 }
 
 function set_kupon(){
+if(!$this->session->userdata('id_account_toko')){
+echo "login";    
+}else{
 if($this->input->post('kupon')){
+    
+
 $input = $this->input->post();
 
 $query = $this->M_store->data_kupon($input['kupon']);
 $cek = $query->row_array();
 
 if($query->num_rows() > 0){
-if( $cek['syarat_kupon'] < $this->cart->total()){
+    
+if($cek['syarat_kupon'] < $this->cart->total() ){
 
 $data = array(
 'nilai_kupon' => $cek['nilai_kupon'],
@@ -1148,7 +1188,8 @@ echo "gaada";
 }else{
 
 redirect(404);    
-}    
+}
+}
 }
 function layanan(){
 $this->load->view('Umum/V_header_toko');

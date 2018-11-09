@@ -3,7 +3,7 @@
 <div class="row">    
 <div class="col" style="background-color: #eee; padding:1%; ">
 <h4 align="center"> Upload Naskah <?php echo $this->session->userdata('nama_lengkap') ?></h4><hr>
-<p>Jika Anda mengalami kesulitan saat upload file naskah Anda. Anda bisa mengirimkan naskah Anda melalaui email ke <strong> info@guepedia.com</strong></p>
+<p>Jika Anda mengalami kesulitan saat upload file naskah Anda. Anda bisa mengirimkan naskah Anda melalaui email ke <strong> guepedia@gmail.com</strong></p>
 <p>Pastikan naskah yang Anda kirim sudah sesuai dengan template guepedia.<br></p>
 <p align="center"><button id="download_tamplate" class="btn btn-success">Download Tamplate <span class="fa fa-download"></span></button></p>
 
