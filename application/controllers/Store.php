@@ -757,7 +757,7 @@ $html   = "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
 . "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal ".$tanggal_expir."<br><br>"
 . "<h3 align='center' style='padding:2%;color:#000; background-color:rgb(168,207,69)'>Silahkan transfer ke rekening dibawah ini</h3> "
 
-. "Bank BCA / No.Rekening : <span class='js-text'> 212 007 7824 </span> <hr> "
+. "Bank BCA / No.Rekening : <span class='js-text'> 740 1486 074 </span> <hr> "
 . "Atas nama: Dianata Eka Putra <hr>";
 
 $html .= "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Rincian Pesanan  No.invoices : ".'INV/ST/'.$invoices_toko."</h3>"; 

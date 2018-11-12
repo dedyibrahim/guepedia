@@ -17,14 +17,15 @@
 </div>
 </nav>
 <div class="container" style="background-color:#eee; border-radius:0px 0px  10px 10px; border-bottom:4px solid  #2c3e50;">
-<ul class="menu_penulis">
-<li class="text-center"><a href="<?php echo base_url('Halaman_penulis'); ?>">My Profile <span class="fa fa-user fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('Halaman_penulis/upload_naskah'); ?>">Upload Naskah <span class="fa fa-upload fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('Halaman_penulis/my_project'); ?>">Naskah saya <span class="fa fa-folder-open fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('Halaman_penulis/laporan_penjualan') ?>">Laporan Penjualan <span class="fa fa-bar-chart-o fa-3x"></span></a></li>   
-<li class="text-center"><a href="<?php echo base_url('Halaman_penulis/tarik_royalti'); ?>">Bagi hasil <span class="fa fa-money fa-3x"></span></a></li>   
-</ul> 
+<div class="row" style="text-align: center;">
+    <div class="col"  ><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('Halaman_penulis'); ?>"><span class="fa fa-user fa-3x"></span> <br> My Profile</a></div>        
+    <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('Halaman_penulis/upload_naskah'); ?>">  <span class="fa fa-upload fa-3x"></span> <br>Upload Naskah</a></div>  
+    <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('Halaman_penulis/my_project'); ?>"><span class="fa fa-folder-open fa-3x"></span><br>Naskah saya </div>   
+            <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('Halaman_penulis/laporan_penjualan') ?>"> <span class="fa fa-bar-chart-o fa-3x"></span> <br> Laporan Penjualan</a></div>    
+                        <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('Halaman_penulis/tarik_royalti'); ?>"><span class="fa fa-money fa-3x"></span> <br>Bagi hasil  </a></div>   
 </div>
+</div>
+
 
 <div class="container" style="background-color:#eee; border-radius:5px;  margin-top:1%;  ">
 

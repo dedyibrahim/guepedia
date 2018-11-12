@@ -14,7 +14,6 @@
 <link href="<?php echo base_url(); ?>assets/swal/animate.css" rel="stylesheet" type="text/css"/>
 <script src="<?php echo base_url(); ?>assets/nprogress/nprogress.js" type="text/javascript"></script>
 <link href="<?php echo base_url(); ?>assets/nprogress/nprogress.css" rel="stylesheet" type="text/css"/>
-
 <script src="<?php echo base_url(); ?>assets/swal/dist/sweetalert2.all.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/jquery-ui/jquery-ui.js" type="text/javascript"></script>
@@ -28,6 +27,9 @@
 <script src="<?php echo base_url(); ?>assets/daterange/daterangepicker.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/ckeditor/ckeditor.js" type="text/javascript"></script>
 <link href="<?php echo base_url(); ?>assets/daterange/daterangepicker.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo base_url(); ?>assets/select2/css/select2.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo base_url(); ?>assets/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
+<script src="<?php echo base_url(); ?>assets/select2/js/select2.min.js" type="text/javascript"></script>
 
 </head>
 <script type="text/javascript">
