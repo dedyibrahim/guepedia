@@ -2054,5 +2054,9 @@ $this->load->view('Halaman_dashboard/V_halaman_email');
 $this->load->view('Umum/V_footer');   
 }
 
+public function json_data_pengajuan_royalti(){
+echo $this->M_dashboard->json_data_pengajuan_royalti();       
+}
+
 
 }

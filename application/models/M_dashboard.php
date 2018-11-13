@@ -520,4 +520,24 @@ function hapus_naskah($id){
 $this->db->delete('file_naskah_penulis',array('id_file_naskah'=> base64_decode($id)));
     
 }
+function json_data_pengajuan_royalti(){
+$this->datatables->select('data_pengajuan_royalti.id_account,'
+.'data_pengajuan_royalti.id_data_pengajuan as id_data_pengajuan,'
+.'data_pengajuan_royalti.nomor_penarikan as nomor_penarikan,'
+.'data_pengajuan_royalti.biaya_admin as biaya_admin,'
+.'data_pengajuan_royalti.royalti_ditarik as royalti_ditarik,'
+.'data_pengajuan_royalti.status as status,'
+.'data_pengajuan_royalti.jumlah_penarikan as jumlah_penarikan,'
+.'akun_penulis.nama_lengkap as nama_lengkap,'
+.'akun_penulis.nomor_kontak as nomor_kontak,'
+.'akun_penulis.email as email,'
+        
+);
+$this->datatables->where('data_pengajuan_royalti.id_account',$this->session->userdata('id_account'));
+$this->datatables->from('data_pengajuan_royalti');
+$this->datatables->join('akun_penulis','akun_penulis.id_account = data_pengajuan_royalti.id_account');
+$this->datatables->add_column('view','<a href='.base_url('G_dashboard/buat_transfer/$1/$2').'  class="btn btn-sm btn-success fa fa-exchange "> Buat Transferan </a>', 'base64_encode(id_account),base64_encode(id_data_pengajuan)');
+return $this->datatables->generate();
+      
+}
 }

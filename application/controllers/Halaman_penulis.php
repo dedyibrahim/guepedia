@@ -57,6 +57,7 @@ $data= array(
 'nama_pemilik_rekening' =>$input['pemilik_rekening'],
 'nomor_rekening'        =>$input['nomor_rekening'],
 'nama_bank'             =>$input['nama_bank'],   
+'id_bank'               =>$input['id_bank'],   
 );
 $this->M_halaman_penulis->simpan_rekening_penulis($data,$this->session->userdata('id_account'));
 echo "berhasil";
@@ -190,10 +191,11 @@ $this->load->view('Umum/V_footer');
 }
 
 public function tarik_royalti(){
-    
+$data_rekening = $this->M_halaman_penulis->data_penulis();
+
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_penulis/V_menu');
-$this->load->view('Halaman_penulis/V_tarik_royalti');
+$this->load->view('Halaman_penulis/V_tarik_royalti',['data_rekening'=>$data_rekening]);
 $this->load->view('Umum/V_footer');
         
 }
@@ -318,15 +320,112 @@ $dompdf->setPaper('A4', 'landscape');
 $dompdf->render();
 $dompdf->stream('INV.pdf',array('Attachment'=>0));
 }
-public function json_transfer_royalti(){
-echo $this->M_halaman_penulis->json_transfer_royalti();       
+public function json_data_pengajuan_royalti(){
+echo $this->M_halaman_penulis->json_data_pengajuan_royalti();       
 }
 public function download_bukti(){
+$bukti_transfer = $this->M_halaman_penulis->data_bukti($this->uri->segment(3))->row_array();
 
-$id_data_transfer = base64_decode($this->uri->segment(3));
-$bukti_transfer = $this->db->get_where('data_transfer_royalti',array('id_data_transfer_royalti'=>$id_data_transfer))->row_array();
+$html  ="<img src='".base_url('assets/img/logo-toko.png')."'>";
+$html .="<h2 style='position:fixed;' align='right'><br>Data Penarikan Bagi Hasil</h2><hr>";
+$html .="<p >Nomor Penarikan : ".$bukti_transfer['nomor_penarikan']."<br>"
+        . "Akun Penulis : ".$bukti_transfer['nama_lengkap']."<br>"
+        . "Nomor Kontak : ".$bukti_transfer['nomor_kontak']."<br>"
+        . "Tanggal Pengajuan : ".$bukti_transfer['tanggal_pengajuan']."<br>"
+        . "Nama Rekening : ".$bukti_transfer['nama_pemilik_rekening']."<br>"
+        . "Nomor Rekening : ".$bukti_transfer['nomor_rekening']."<br>"
+        . "Nama Bank : ".$bukti_transfer['nama_bank']."<br>"
+        . "</p>";
 
+$html .="<h2 align='center'>Detail Penarikan <br> Status Penarikan ".$bukti_transfer['status']."</h2>";
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
+        . '<tr>'
+        . '<th>Bagi Hasil</th>'
+        . '<th>Biaya Admin</th>'
+        . '<th>Di Tarik</th>'
+        . '<th>Jumlah Penarikan</th>'
+        . '<th>Sisa Bagi Hasil</th>'
+        . '</tr>';
+$html  .="<tr>"
+        . "<td>Rp.".number_format($bukti_transfer['royalti_sebelumnya'])."</td>"
+        . "<td>Rp.".number_format($bukti_transfer['biaya_admin'])."</td>"
+        . "<td>Rp.".number_format($bukti_transfer['royalti_ditarik'])."</td>"
+        . "<td>Rp.".number_format($bukti_transfer['jumlah_penarikan'])."</td>"
+        . "<td>Rp.".number_format($bukti_transfer['royalti_diperoleh'])."</td>"
+        . "</tr>"
+        . "</table>"
+        . "<hr>"
+        . "<i>Note:</i> Proses Penarikan hannya akan di proses pada tanggal 5-10 di setiap Bulannya";
 
-force_download('./uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer'], NULL);
+if($bukti_transfer['bukti_transfer'] != NULL){
+  $html.="<hr> Note : Bukti Transfer<br>"
+          . "<img src=". base_url('uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer']).">";  
 }
+
+
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+}
+public function edit_rekening(){
+$data= array(
+'id_account'            =>$this->session->userdata('id_account'),    
+'nama_pemilik_rekening' =>'',
+'nomor_rekening'        =>'',
+'nama_bank'             =>'',   
+'id_bank'               =>'',   
+);
+$this->M_halaman_penulis->simpan_rekening_penulis($data,$this->session->userdata('id_account'));    
+ 
+
+redirect(base_url('Halaman_penulis'));
+}
+
+public function ajukan_penarikan(){
+if($this->input->post('jumlah_penarikan')){
+
+$data = $data_rekening = $this->M_halaman_penulis->data_penulis()->row_array();
+
+if($data['id_bank'] != 1){
+$biaya_admin = 6500;    
+//ada admin
+$jumlah_ditarik = 6500+$this->input->post('jumlah_penarikan');    
+}else{
+// ga ada admin
+$biaya_admin =0;
+$jumlah_ditarik = 0+$this->input->post('jumlah_penarikan');        
+}
+
+if($jumlah_ditarik > $data['royalti_diperoleh']){
+
+echo "Saldo Bagi Hasil Tidak Mencukupi";    
+
+}else{
+    
+$data_penarikan = $this->M_halaman_penulis->hitung_jumlah_penarikan();
+$angka = 6;
+$nomor_penarikan = "GP/PNRKN/".$this->session->userdata('id_account')."/".str_pad($data_penarikan, $angka ,"0",STR_PAD_LEFT);
+
+$input = array(
+'nomor_penarikan'    => $nomor_penarikan,
+'jumlah_penarikan'   => $jumlah_ditarik,
+'id_account'         => $this->session->userdata('id_account'),
+'biaya_admin'        => $biaya_admin,
+'royalti_sebelumnya' => $data['royalti_diperoleh'],
+'royalti_ditarik'    => $this->input->post('jumlah_penarikan'),     
+'status'             => "Pending",
+'tanggal_pengajuan'  =>date('d F o H:i:s'),  
+);
+$this->M_halaman_penulis->input_pengajuan($input);    
+echo "berhasil";
+    
+}
+
+}else{
+redirect(404);    
+}    
+}
+
 }

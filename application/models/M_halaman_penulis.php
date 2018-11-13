@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class M_halaman_penulis extends CI_Model {
 function __construct() {
-    parent::__construct();
+parent::__construct();
    $this->load->library('datatables'); 
 }
 
@@ -76,22 +76,45 @@ $this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-pri
 return $this->datatables->generate();
 }
 
-function json_transfer_royalti(){
-$this->datatables->select('data_transfer_royalti.id_account,'
-.'data_transfer_royalti.id_data_transfer_royalti as id_data_transfer_royalti,'
-.'data_transfer_royalti.royalti as royalti,'
-.'data_transfer_royalti.biaya_admin as biaya_admin,'
-.'data_transfer_royalti.royalti_bersih as royalti_bersih,'
+function json_data_pengajuan_royalti(){
+$this->datatables->select('data_pengajuan_royalti.id_account,'
+.'data_pengajuan_royalti.id_data_pengajuan as id_data_pengajuan,'
+.'data_pengajuan_royalti.nomor_penarikan as nomor_penarikan,'
+.'data_pengajuan_royalti.biaya_admin as biaya_admin,'
+.'data_pengajuan_royalti.royalti_ditarik as royalti_ditarik,'
+.'data_pengajuan_royalti.status as status,'
+.'data_pengajuan_royalti.jumlah_penarikan as jumlah_penarikan,'
 .'akun_penulis.nama_lengkap as nama_lengkap,'
 .'akun_penulis.nomor_kontak as nomor_kontak,'
-.'akun_penulis.email as email,'
-        
+.'akun_penulis.email as email,'       
 );
-$this->datatables->where('data_transfer_royalti.id_account',$this->session->userdata('id_account'));
-$this->datatables->from('data_transfer_royalti');
-$this->datatables->join('akun_penulis','akun_penulis.id_account = data_transfer_royalti.id_account');
-$this->datatables->add_column('view','<button class="btn btn-sm btn-success fa fa-download " onclick=download_bukti("$1") > Download </a>', 'base64_encode(id_data_transfer_royalti)');
+$this->datatables->where('data_pengajuan_royalti.id_account',$this->session->userdata('id_account'));
+$this->datatables->from('data_pengajuan_royalti');
+$this->datatables->join('akun_penulis','akun_penulis.id_account = data_pengajuan_royalti.id_account');
+$this->datatables->add_column('view','<button class="btn btn-sm btn-success fa fa-download " onclick=download_bukti("$1") > Download </a>', 'base64_encode(id_data_pengajuan)');
 return $this->datatables->generate();
       
 }
+
+public function hitung_jumlah_penarikan(){
+$query = $this->db->get('data_pengajuan_royalti')->num_rows();
+return $query;
+}
+public function input_pengajuan($data){
+$this->db->insert('data_pengajuan_royalti',$data);
+
+    
+}
+public function data_bukti($id_data_transfer){
+ 
+$this->db->select('*');
+$this->db->from('data_pengajuan_royalti');
+$this->db->join('akun_penulis', 'akun_penulis.id_account = data_pengajuan_royalti.id_account');
+$this->db->where('id_data_pengajuan',base64_decode($id_data_transfer));
+$query = $this->db->get();
+return $query;
+}
+
+
+
 }
