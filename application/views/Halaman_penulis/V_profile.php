@@ -118,6 +118,8 @@
 <option value="88">Bank Riau Kepri Syariah</option>    
 <option value="89">Bank Sumsel Babel Syariah</option>    
 <option value="90">Bank Syariah Mandiri</option>    
+<option value="91">Bank Rakyat Indonesia Simpedes</option>    
+<option value="92">Bank Negara Indonesia (BNI) Syariah</option>    
 </select>
 
 <label>Nama Pemilik Rekening :</label>

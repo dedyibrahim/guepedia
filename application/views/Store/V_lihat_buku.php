@@ -1,37 +1,52 @@
 <?php $lihat = $data->row_array(); ?>
 <div class="container" style="margin-top:7% ; margin-bottom:1%;  ">
 <div class="row">
-<div class="col-md-4 img-thumbnail" style="text-align: center;">    
+<div class="col " >    
 <img id="zoom_01" class="cover2" src="<?php echo base_url('uploads/file_cover/'.$lihat['file_cover']) ?>"  data-zoom-image="<?php echo base_url('uploads/file_cover/'.$lihat['file_cover']) ?>">
 </div>
-<div class="col">
-<h4><?php echo $lihat['judul'] ?></h4>   
+ 
+<div class="col ">
+<h4 ><?php echo $lihat['judul'] ?></h4>   
 <hr>
-<h5>Harga : Rp.<?php echo number_format($lihat['harga']) ?></h5>
+
+<h6>Harga : Rp.<?php echo number_format($lihat['harga']) ?></h6>
 <hr>
-<h5>Berat : <span id="berat"><?php echo $lihat['berat_buku'] ?></span> Gram</h5>
+<h6>Berat : <span id="berat"><?php echo $lihat['berat_buku'] ?></span> Gram</h6>
 <hr>
-<h5>Halaman : <span ><?php echo $lihat['jumlah_lembar'] ?></span></h5>
+<h6>Halaman : <span ><?php echo $lihat['jumlah_lembar'] ?></span></h6>
 <hr>
-<h5>Penulis : <?php echo $lihat['penulis'] ?></h5>
+<h6>Penulis : <?php echo $lihat['penulis'] ?></h6>
 <hr>
-<div class="row">
-<div class="col-md-2">
-<input id="qty" value="1"  maxlength="3" placeholder="Jumlah . . ." type="text" class="form-control">   
+
+<div class="row" id="field1">
+    <div class="col-md-5" ><h6>Jumlah Pembelian</h6></div>
+    <div class="col-md-2 sub " ><button type="button" id="sub" class="btn btn-danger form-control mb-1">-</button></div>
+    <div class="col" ><input id="qty" class="form-control" type="number" id="1" value="1" min="1" max="1000"  maxlength="4" /></div>
+   <div class="col-md-2 add" ><button type="button"  id="add" class=" btn btn-success form-control mt-1">+</button></div>
 </div>
-<div class="col">
+
+<hr>
 <button onclick="tambah_keranjang_lihat('<?php echo base64_encode($lihat['id_file_naskah']) ?>')" class="btn btn-dark form-control">Tambahkan ke keranjang <span class=" fa fa-plus-circle"></span></button> 
-</div>
-
-<div class="col">
+<hr>
 <button onclick="langsung_beli('<?php echo base64_encode($lihat['id_file_naskah']) ?>')" class="btn btn-success form-control">Beli Buku</button> 
-</div>
+<hr>
+
+</div>    
 
 </div>
+    <hr>    
 </div>
-</div>
-</div>
-
+<script type="text/javascript">
+$('.add').click(function () {
+		if ($("#qty").val() < 1000) {
+    	$("#qty").val(+$("#qty").val() + 1);
+		}
+});
+$('.sub').click(function () {
+		if ($("#qty").val() > 1) {
+    	if ($("#qty").val() > 1) $("#qty").val(+$("#qty").val() - 1);
+		}
+});</script>
 
 <div class="container" style=" margin-bottom:1%;">
 
@@ -75,8 +90,7 @@
 <label>Kurir</label>
 <select class="form-control" disabled="" id="kurir" onchange="cek_cost();">
 <option ></option>    
-<option value="jne">JNE</option>    
-<option value="wahana">WAHANA</option>    
+<option value="jne">JNE</option>  
 </select>
 </div>            
 
@@ -93,11 +107,6 @@
 
 </div>
 </div>
-
-
-
-
-
 
 
 <div class="col" id="data_kost">
@@ -228,7 +237,7 @@ var total_berat     = berat * qty;
 var subdistrict_id = $("#subdistrict_id  option:selected").val();
 var kurir          = $("#kurir  option:selected").val();
 
-if(total_berat > 10000){
+if(total_berat >1000000){
 swal({
 title:"", 
 text:"Maksimal berat adalah 1 TON",

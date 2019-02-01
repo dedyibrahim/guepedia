@@ -33,7 +33,18 @@
 <div class="col " style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff;   ">
 <span class="fa fa-shopping-cart fa-2x " style="position:absolute; "> </span>
 <h5 class="text-right">Buku yang laku</h5><br>
-<div class="text-center"><?php echo $this->db->get_where('data_jumlah_penjualan',array('id_account_penulis'=>$this->session->userdata('id_account')))->num_rows() ?></div>
+<div class="text-center">
+<?php             $this->db->select('data_jumlah_penjualan.qty');  
+$data_buku_laku = $this->db->get_where('data_jumlah_penjualan',array('id_account_penulis'=>$this->session->userdata('id_account'))); 
+$nol = 0;
+foreach ($data_buku_laku->result_array() as $jumlah){
+$nol +=$jumlah['qty'];
+}
+echo $nol;
+?>
+
+
+</div>
 </div>
  
 <div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff;  ">

@@ -18,13 +18,17 @@ return $query;
 }
 
 function terlaris(){
-$this->db->select('*');
-$this->db->from('buku_terlaris');
-$this->db->join('file_naskah_penulis', 'file_naskah_penulis.id_file_naskah = buku_terlaris.id_file_naskah');
-$this->db->where('status','Publish');
+$this->db->select('data_penjualan_toko.id_file_naskah,file_naskah_penulis.file_cover,file_naskah_penulis.judul');
+$this->db->select_sum('data_penjualan_toko.qty');
+$this->db->group_by('nama_buku');
+$this->db->order_by('qty','DESC');
+$this->db->limit(4);
+$this->db->from('data_penjualan_toko');
+$this->db->join('file_naskah_penulis', 'file_naskah_penulis.id_file_naskah = data_penjualan_toko.id_file_naskah');
 $query = $this->db->get();
-     
-return $query;
+    
+
+  return $query;
 
 }
 
@@ -62,6 +66,12 @@ $query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=> bas
 return $query;    
 }
 
+function data_buku_diskon($id_file_naskah){
+$query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=> base64_decode($id_file_naskah),'status'=>'Produk Diskon'));  
+
+return $query;    
+}
+
 function tambah_keranjang($id_file_naskah){
 $query = $this->db->get_where('file_naskah_penulis',array('id_file_naskah'=> base64_decode($id_file_naskah)));    
 
@@ -83,12 +93,11 @@ return $query->result();
 }
 function cek_email_daftar($email){
 
-$hasil_cek = $this->db->get_where('akun_penulis',array('email'=>$email))->num_rows();
+$hasil_cek = $this->db->get_where('akun_penulis',array('email'=>$email));
 
-if($hasil_cek > 0){
 return $hasil_cek;    
     
-}
+
 
 }
 function hitung_penulis(){
@@ -170,7 +179,7 @@ return $this->datatables->generate();
 }
 
 function data_kupon($kupon){
-$query = $this->db->get_where('data_kode_kupon',array('nama_kupon'=>$kupon,'id_account'=>$this->session->userdata('id_account_toko')));
+$query = $this->db->get_where('data_kode_kupon',array('id_data_kupon'=> base64_decode($kupon),'id_account'=>$this->session->userdata('id_account_toko')));
 return $query;    
 }
 
@@ -198,7 +207,22 @@ $query = $this->db->get_where('data_alamat',array('id_account_toko'=>$id_account
 return $query;
 }
 
+function ambil_kupon($id_account_toko){
+$query = $this->db->get_where('data_kode_kupon',array('id_account'=>$id_account_toko));
 
+return $query;
+    
+}
+public function total_buku(){
+$query = $this->db->get_where('file_naskah_penulis',array('status'=>"Publish"));
+return $query;
+}
+
+public function buku_diskon(){
+$query = $this->db->get_where('file_naskah_penulis',array('status'=>'Produk Diskon'));
+
+return $query;
+}
 }
 
 

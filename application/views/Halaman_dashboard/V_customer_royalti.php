@@ -123,7 +123,7 @@ d.token = '<?php echo $this->security->get_csrf_hash(); ?>';
 },
 columns: [
 {
-"data": "id_account",
+"data": "id_data_pengajuan",
 "orderable": false
 },
 {"data": "nomor_penarikan"},
@@ -149,10 +149,80 @@ $('td:eq(0)', row).html(index);
 });
 
 
-</script> 
-<div class="container card p-2 mt-2 mb-2" >
-<h4 align="center"> Data Pengajuan Bagi Hasil</h4><hr>
+</script>
 
+<script type="text/javascript">
+$(document).ready(function() {
+$.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+{
+return {
+"iStart": oSettings._iDisplayStart,
+"iEnd": oSettings.fnDisplayEnd(),
+"iLength": oSettings._iDisplayLength,
+"iTotal": oSettings.fnRecordsTotal(),
+"iFilteredTotal": oSettings.fnRecordsDisplay(),
+"iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+"iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+};
+};
+
+var t = $("#bagi_hasil_selesai").dataTable({
+
+initComplete: function() {
+var api = this.api();
+$('#bagi_hasil_selesai')
+.off('.DT')
+.on('keyup.DT', function(e) {
+if (e.keyCode == 13) {
+api.search(this.value).draw();
+}
+});
+},
+oLanguage: {
+sProcessing: "loading..."
+},
+processing: true,
+serverSide: true,
+responsive: true, 
+ajax: {"url": "<?php echo base_url('G_dashboard/json_data_pengajuan_bagi_hasil_selesai') ?> ", 
+"type": "POST",
+data: function ( d ) {
+d.token = '<?php echo $this->security->get_csrf_hash(); ?>';
+}
+},
+columns: [
+{
+"data": "id_data_pengajuan",
+"orderable": false
+},
+{"data": "nomor_penarikan"},
+{"data": "nama_lengkap"},
+{"data": "nomor_kontak"},
+{"data": "royalti_ditarik"},
+{"data": "biaya_admin"},
+{"data": "jumlah_penarikan"},
+{"data": "status"},
+{"data": "view"},
+
+
+],
+order: [[1, 'desc']],
+rowCallback: function(row, data, iDisplayIndex) {
+var info = this.fnPagingInfo();
+var page = info.iPage;
+var length = info.iLength;
+var index = page * length + (iDisplayIndex + 1);
+$('td:eq(0)', row).html(index);
+}
+});
+});
+
+
+</script>
+
+
+<div class="container card p-2 mt-2 mb-2" >
+<h4 align="center">Permintaan Pengajuan Bagi Hasil</h4><hr>
 <table id="data_transfer" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
 <th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
@@ -167,8 +237,28 @@ $('td:eq(0)', row).html(index);
 </thead>
 <tbody  align="center">
 </table>
-
 </div>
+
+
+<div class="container card p-2 mt-2 mb-2" >
+<h4 align="center">Permintaan Bagi Hasil Selesai</h4><hr>
+<table id="bagi_hasil_selesai" class="table table-striped table-condensed  table-hover table-sm"><thead>
+<tr role="row">
+<th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
+<th  align="center"     aria-controls="datatable-fixed-header" >Nomor Penarikan</th>
+<th  align="center"     aria-controls="datatable-fixed-header" >Nama Lengkap</th>
+<th  align="center"     aria-controls="datatable-fixed-header" >Nomor Kontak</th>
+<th  align="center"     aria-controls="datatable-fixed-header" >Di Tarik</th>
+<th   align="center"     aria-controls="datatable-fixed-header">Admin</th>
+<th   align="center"     aria-controls="datatable-fixed-header">Total</th>
+<th   align="center"     aria-controls="datatable-fixed-header">Status</th>
+<th style="width: 15%; text-decoration: none;" align="center" aria-controls="datatable-fixed-header"  >Aksi</th>
+</thead>
+<tbody  align="center">
+</table>
+</div>
+
+
 
 <script type="text/javascript">
  function download_bukti(data){

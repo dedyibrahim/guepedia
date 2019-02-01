@@ -182,8 +182,10 @@ $config2['file_size']            = "2004800";
 $config2['encrypt_name']         = TRUE;
 $this->upload->initialize($config2);
 
-if(!$this->upload->do_upload('file_cover')){
+if(!$this->upload->do_upload('file_cover')){   
+
 echo $this->upload->display_errors();
+
 }else{
 
 $data =array(
@@ -203,9 +205,7 @@ $this->M_dashboard->update_naskah($data,$param);
 if($input['cover_lama'] !='' || $input['cover_lama'] !=NULL){ 
 unlink('./uploads/file_cover/'.$input['cover_lama']);  
 }
-
 echo "berhasil";
-
 } 
 
 
@@ -226,6 +226,31 @@ $data =array(
 $this->M_dashboard->update_naskah($data,$param);
 
 echo "berhasil";
+
+if($this->input->post('status') == "Publish"){
+$kupon_penulis = explode(' ',$input['penulis']);
+
+$cek_kupon         = $this->M_dashboard->cek_data_kode_kupon($input['id_account'])->num_rows();
+$data_penulis      = $this->M_dashboard->data_penulis(base64_encode($input['id_account']))->row_array();
+
+if($cek_kupon == 0){
+
+$data2=array(
+"nama_kupon"            => $kupon_penulis[0]."15",
+'id_account'            => $input['id_account'],
+'email_penulis'         => $data_penulis['email'],
+'nama_penulis'          => $data_penulis['nama_lengkap'] ,
+'nilai_kupon'           => '15',
+'syarat_kupon'          => 0,
+'status_kupon'          => 'Permanen'    
+);
+
+$this->M_dashboard->input_kode_kupon($data2);
+
+}
+
+}
+
 }   
 
 }else{
@@ -459,6 +484,32 @@ $data = array(
 $this->M_dashboard->proses_publish($data);
 
 echo "berhasil";
+
+
+if($this->input->post('status') == "Publish"){
+$kupon_penulis = explode(' ',$input['penulis']);
+
+$cek_kupon         = $this->M_dashboard->cek_data_kode_kupon($input['id_account'])->num_rows();
+$data_penulis      = $this->M_dashboard->data_penulis(base64_encode($input['id_account']))->row_array();
+
+if($cek_kupon == 0){
+
+$data2=array(
+"nama_kupon"            => $kupon_penulis[0]."15",
+'id_account'            => $input['id_account'],
+'email_penulis'         => $data_penulis['email'],
+'nama_penulis'               => $data_penulis['nama_lengkap'] ,
+'nilai_kupon'           => '15',
+'syarat_kupon'          => 0,
+'status_kupon'          => 'Permanen'    
+);
+
+$this->M_dashboard->input_kode_kupon($data2);
+
+}
+
+}
+
 }
 }else{
 
@@ -474,25 +525,31 @@ $this->M_dashboard->hapus_penulis($id_account);
 redirect('G_dashboard/penulis');
 }
 
-function produk_laris(){
 
-$produk_laris = $this->M_dashboard->data_produk_laris();
+function produk_diskon(){
+
+$produk_diskon = $this->M_dashboard->data_produk_diskon();
 
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
 $this->load->view('Halaman_dashboard/V_menu_toko');
-$this->load->view('Halaman_dashboard/V_set_produk_laris',['produk_laris'=>$produk_laris]);
+$this->load->view('Halaman_dashboard/V_set_produk_diskon',['produk_diskon'=>$produk_diskon]);
 $this->load->view('Umum/V_footer');
 
 
 }
 
-function set_laris(){
+
+function set_diskon_produk(){
 if($this->input->post('id_file_naskah')){
 
-$data = array('id_file_naskah'=>$this->input->post('id_file_naskah'));
+$data = array(
+'status'      =>'Produk Diskon',
+'nilai_diskon'=>$this->input->post('nilai_diskon'),
+'hasil_diskon'=>$this->input->post('hasil_diskon'),
+);
 
-$this->M_dashboard->set_laris($data);
+$this->M_dashboard->set_diskon_produk($data,$this->input->post('id_file_naskah'));
 
 echo "berhasil";
 
@@ -502,13 +559,21 @@ redirect(404);
 }    
 
 }
-function hapus_terlaris(){
+
+
+function hapus_produk_diskon(){
 if($this->uri->segment(3) !=''){
-$param = $this->uri->segment(3);
 
-$this->M_dashboard->hapus_terlaris($param);
+$data = array(
+'status'      =>'Publish',
+'nilai_diskon'=>'',
+'hasil_diskon'=>'',
+);
 
-redirect(base_url('G_dashboard/produk_laris'));
+$this->M_dashboard->set_diskon_produk($data, base64_decode($this->uri->segment(3)));
+
+
+redirect(base_url('G_dashboard/produk_diskon'));
 
 }else{
 
@@ -516,7 +581,6 @@ redirect(404);
 }    
 
 }
-
 function laporan_penjualan(){
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
@@ -700,7 +764,7 @@ echo "<tr>"
 . "<td colspan='5'>Total Bayar</td>"
 . "<td colspan='2'>".number_format($this->session->userdata('total') - $this->session->userdata('nilai_diskon'))."</td>"
 . "<td colspan='2'>Total Bersih</td>"
-. "<td colspan='2'>".number_format($this->session->userdata('total_bersih'))."</td>"
+. "<td colspan='2'>".number_format($this->session->userdata('total_bersih')- $this->session->userdata('jumlah_diskon_total'))."</td>"
 . "</tr>";
 
 echo "</table>";    
@@ -767,7 +831,7 @@ function set_diskon(){
 if($this->input->post('nilai_diskon') !=''){
 $input = $this->input->post();
 
-if($input['nilai_diskon'] < 40){
+if($input['nilai_diskon']< 40){
 
 $id_qty    = $this->input->post('id_qty');
 $detailsdata = $this->session->userdata('data_kasir');
@@ -940,7 +1004,7 @@ $no_invoices = str_pad($hitung_invoices, $angka ,"0",STR_PAD_LEFT);
 
 
 $data1 = array(
-'no_invoices'           => 'INV/'.date('d/m/Y')."/".$no_invoices,   
+'no_invoices'           => 'INV/'.date('Ymd')."/".$no_invoices,   
 'nama_customer'         => $input['nama_customer'],
 'nomor_kontak'          => $input['nomor_kontak'],
 'alamat_lengkap'        => $input['alamat_lengkap'],
@@ -953,8 +1017,8 @@ $data1 = array(
 'diskon_total'          => $this->session->userdata('diskon_total'),
 'jumlah_diskon_total'   => $this->session->userdata('jumlah_diskon_total'),
 'total'                 => $this->session->userdata('total') - $this->session->userdata('nilai_diskon'),
-'total_bersih'          => $this->session->userdata('total_bersih'),
-'tanggal_transaksi'     => date('d/m/Y'),
+'total_bersih'          => $this->session->userdata('total_bersih') - $this->session->userdata('jumlah_diskon_total'),
+'tanggal_transaksi'     => date('Y-m-d'),
 'subtotal'              => $this->session->userdata('subtotal')-$this->session->userdata('nilai_diskon'),
 'jumlah_diskon'         => $this->session->userdata('nilai_diskon'),
 'total_royalti'         => $this->session->userdata('royalti'),
@@ -971,7 +1035,7 @@ $ht   = count($data);
 foreach($data as $i=>$ht){
 
 $data2 = array (
-'no_invoices'           => 'INV/'.date('d/m/Y')."/".$no_invoices,   
+'no_invoices'           => 'INV/'.date('Ymd')."/".$no_invoices,   
 'judul_buku'            => $data[$i]['judul'],
 'id_account_penulis'    => $data[$i]['id_account'],
 'nama_penulis'          => $data[$i]['penulis'],
@@ -982,7 +1046,7 @@ $data2 = array (
 'nilai_diskon'          => $data[$i]['nilai_diskon'],
 'royalti'               => $data[$i]['royalti'],
 'bersih'                => $data[$i]['bersih'],
-'tanggal_transaksi'     => date('d/m/Y'),
+'tanggal_transaksi'     => date('Ymd'),
 
 );    
 
@@ -1034,7 +1098,7 @@ $html .="Nomor kontak  :".$data_static['nomor_kontak']."<br>";
 $html .="Alamat lengkap :".$data_static['alamat_lengkap']."<br><br>";
 
 
-$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="-1" cellpadding="0"  >'
 . '<tr>'
 . '<th>Judul Buku</th>'
 . '<th>Penulis</th>'
@@ -1054,11 +1118,11 @@ $html .= '<tr>
 <td>' . $penjualan['nama_penulis'] . '</td>
 <td>Rp.' . number_format($penjualan['harga']) . '</td>
 <td>' . $penjualan['qty'].'</td>
-<td>Rp.' . number_format($penjualan['jumlah']) . ' </td>
+<td>Rp.' . number_format($penjualan['jumlah']) . '</td>
 <td>' . $penjualan['diskon'] . ' % </td>
-<td>Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
-<td>Rp.' . number_format($penjualan['royalti']) . '</td>
-<td>Rp.' . number_format($penjualan['bersih']) . '</td>
+<td>Rp.'.number_format($penjualan['nilai_diskon']) .'</td>
+<td>Rp.'.number_format($penjualan['royalti']).'</td>
+<td>Rp.'.number_format($penjualan['bersih']).'</td>
 </tr>';
 }
 
@@ -1128,56 +1192,71 @@ $dompdf->stream('INV.pdf',array('Attachment'=>0));
 
 public function buat_laporan(){
 if ($this->input->post('dates')){
-
+ ini_set('memory_limit', '500M');
 $tanggal = $this->input->post('dates');
 $range = explode(' ', $tanggal);
 
+
+$dari   = date("d F o", strtotime($range[0]));
+$sampai = date("d F o", strtotime($range[2]));
+
 $this->db->select('*');
-$this->db->where(array('data_jumlah_penjualan.tanggal_transaksi >='=>$range[0],'data_jumlah_penjualan.tanggal_transaksi <='=>$range[2]));
+$this->db->where('data_penjualan.tanggal_transaksi >=',$range[0]);
+$this->db->where('data_penjualan.tanggal_transaksi <=',$range[2]);
 $this->db->from('data_penjualan');
 $this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
 $query = $this->db->get();
-$html  = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Laporan Penjualan ".$tanggal."</h3>"; 
 
-$html .= '<table style="width:100%; style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:0px 0;padding:0"  >'
+
+$html  = "<h2 align='center'>Laporan Penjualan ".$dari." Sampai ".$sampai."</h2>"; 
+
+$html .= '<table style="width:100%; font-size:10px;" border="1" cellspacing="0" e cellspading="2"  >'
 . '<tr>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">No invoices</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Customer</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Tanggal</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Judul Buku</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Penulis</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Harga</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Qty</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Jumlah</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Diskon</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Nilai Diskon</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Bagi Hasil</th>'
-. '<th style="border-bottom: 1px solid rgb(168,207,69);">Bersih</th>'
+. '<th align="center" style="">No invoices</th>'
+. '<th align="center" style="">Customer</th>'
+. '<th align="center" style="">Dari</th>'
+. '<th align="center" style="">Judul Buku</th>'
+. '<th align="center" style="">Harga</th>'
+. '<th align="center" style="">Qty</th>'
+. '<th align="center" style="">Jumlah</th>'
+. '<th align="center" style="">Diskon</th>'
+. '<th align="center" style="">Nilai Diskon</th>'
+. '<th align="center" style="">Bagi Hasil</th>'
+. '<th align="center" style="">Bersih</th>'
 . '</tr>';
 
-
+$bagi_hasil =0 ;
+$bersih     =0 ;
 foreach ($query->result_array() as $penjualan){
 $html .= '<tr>
-<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['no_invoices'] . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['nama_customer'] . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['tanggal_transaksi'] . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['judul_buku'] . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['nama_penulis'] . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['harga']) . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['qty'].'</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['jumlah']) . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">' . $penjualan['diskon'] . ' %</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['royalti']) . '</td>
-<td style="border-bottom: 1px solid rgb(168,207,69);">Rp.' . number_format($penjualan['bersih']) . '</td>
+<td align="center" style="">' . $penjualan['no_invoices'] . '</td>
+<td align="center" style="">' . $penjualan['nama_customer'] . '</td>
+<td align="center" style="">' . $penjualan['penjualan'] . '</td>
+<td align="center" style="">' . $penjualan['judul_buku'] . '</td>
+<td align="center" style="">Rp.' . number_format($penjualan['harga']) . '</td>
+<td align="center" style="">' . $penjualan['qty'].'</td>
+<td align="center" style="">Rp.' . number_format($penjualan['jumlah']) . '</td>
+<td align="center" style="">' . $penjualan['diskon'] . ' %</td>
+<td align="center" style="">Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
+<td align="center" style="">Rp.' . number_format($penjualan['royalti']) . '</td>
+<td align="center" style="">Rp.' . number_format($penjualan['bersih']) . '</td>
 </tr>';
+
+$bagi_hasil += $penjualan['royalti'];
+$bersih     += $penjualan['bersih'];
 }
+$html .="<tr>"
+      ."<td colspan='9'>Total</td>"
+      ."<td colspan='1'>Rp. ". number_format($bagi_hasil)."</td>"
+      ."<td colspan='1'>Rp. ". number_format($bersih)."</td>"
+      ."</tr>";
+
 
 $html .="</table>";
 
 $dompdf = new Dompdf(array('enable_remote'=>true));
 $dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'landscape');
+$dompdf->setPaper('F4', 'landscape');
 $dompdf->render();
 $dompdf->stream('INV.pdf',array('Attachment'=>0));
 
@@ -1198,24 +1277,36 @@ $this->db->where('data_penjualan.id_data_penjualan',$id_data_penjualan);
 $data = $this->db->get();
 $data_static = $data->row_array(); 
 
-$html  ="<h1 align='center'><img src='".base_url('assets/img/logo-toko.png')."'></h1><hr>";
+$html = "
+<style>    
+@page {
+  size: 21cm 29.7cm;
+ margin: 0.2cm 1.5cm ;
+}
+</style>
+";
+$html  .="<h1 align='center'><img style=' width:auto; height:35px; ' src='".base_url('assets/img/logo-toko.png')."'></h1><hr>";
 
 
 
-$html .="<h4 >KEPADA :<br>Nama Penerima : ".$data_static['nama_customer']."<br>";
-$html .="Nomor kontak  : ".$data_static['nomor_kontak']."<br>";
-$html .="Alamat lengkap : ".$data_static['alamat_lengkap']."<br> ".$data_static['nama_biaya_lain']."</h4>";
+$html .="<h4 >KEPADA : ".$data_static['nama_customer']. " / Nomor HP  : ".$data_static['nomor_kontak']."<br>";
+$html .=$data_static['alamat_lengkap']."<br> ".$data_static['nama_biaya_lain']."</h4>";
 
+$html .="<h4 >PENGIRIM :  GUEPEDIA<br> Bukit Golf Arcadia Blok AR 118 , Bojong Nangka, Gunung Putri Bogor / 081287602508</h4>";
 
-$html .="<h4 >PENGIRIM : <br> GUEPEDIA<br> Bukit Golf Arcadia Blok AR 118 , Bojong Nangka, Gunung Putri Bogor <br> Telp : 081287602508</h4>";
+$date1            = date_create($data_static['tanggal_transaksi']);
+$tanggal_beli    = date_format($date1,"d F o");
 
 $html .="<hr>";
-$html .=$data_static['nama_biaya_lain']." ";
-$html .="Rp.".number_format($data_static['jumlah_biaya_lain'])."<br>";
-
+$html .="<table border ='1' style='width:100%; font-size:15px;    padding:0; margin:0;   border-collapse: collapse;'>";
+$html .="<tr><td width='80%'> ".$data_static['nama_biaya_lain']."";
+$html .=" Rp. ".number_format($data_static['jumlah_biaya_lain'])." / Tanggal : ".$tanggal_beli." / ".$data_static['penjualan']."</td>"
+        . "<td align='center'>Qty</td><td align='center'>Cover</td><td align='center'>Isi</td></tr> ";
 foreach ($data->result_array() as $penjualan){
-$html .= '' . $penjualan['judul_buku'] . ' (' . $penjualan['qty'].')<br>';
-}
+$html .= '<tr><td>' . $penjualan['judul_buku'] . ' <td align="center">' . $penjualan['qty'].'</td></td><td></td><td></td></tr>';
+} 
+$html .="<table>";
+
 
 
 
@@ -1323,18 +1414,22 @@ $id_account    = $this->uri->segment(3);
 $data_penulis  = $this->M_dashboard->data_penulis($id_account);    
 $total_royalti = $this->M_dashboard->total_royalti_penulis($id_account);
 $total_naskah  = $this->M_dashboard->total_naskah_penulis($id_account);
+$data_bukti    = $this->M_dashboard->data_bukti($this->uri->segment(4));
 
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
-$this->load->view('Halaman_dashboard/V_buat_transfer',['data_penulis'=>$data_penulis,'total_royalti'=>$total_royalti,'total_naskah'=>$total_naskah]);
+$this->load->view('Halaman_dashboard/V_buat_transfer',['data_bukti'=>$data_bukti,'data_penulis'=>$data_penulis,'total_royalti'=>$total_royalti,'total_naskah'=>$total_naskah]);
 $this->load->view('Umum/V_footer');
 
 
 }
 
 public function simpan_transfer_royalti(){
-if($this->input->post('royalti')){
-$input = $this->input->post();
+if($this->input->post('id_data_pengajuan')){
+
+$id_account      = $this->db->get_where('data_pengajuan_royalti',array('id_data_pengajuan'=> base64_decode($this->input->post('id_data_pengajuan'))))->row_array();    
+$penerima        = $this->db->get_where('akun_penulis',array('id_account'=>$id_account['id_account']))->row_array();
+
 
 $config2['upload_path']          = './uploads/bukti_transfer/';
 $config2['allowed_types']        = 'jpeg|jpg|png|gif';
@@ -1346,14 +1441,49 @@ if(!$this->upload->do_upload('bukti_transfer')){
 echo $this->upload->display_errors();
 }else{
 $data = array(
-'royalti'           => $input['royalti'],
-'id_account'        => base64_decode($input['id_account']),
-'biaya_admin'       => $input['biaya_admin'],
-'royalti_bersih'    => $input['royalti_bersih'],   
-'bukti_transfer'    => $this->upload->data('file_name'),    
+'bukti_transfer'        =>$this->upload->data('file_name'),    
+'status'                =>"Selesai",
+'tanggal_konfirmasi'    =>date('d F o H:i:s')   
 );
-$this->M_dashboard->simpan_transfer($data);
+$this->M_dashboard->simpan_transfer($data,$this->input->post('id_data_pengajuan'));
+
 echo "berhasil";
+
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($penerima['email']);
+$this->email->subject('Penarikan Bagi Hasil Guepedia');
+$this->email->attach('./uploads/bukti_transfer/'.$this->upload->data('file_name'));
+
+$html = "Kepada Yth : ".$penerima['nama_lengkap']."<br>"
+       ."Mengenai penarikan bagi hasil yang diajukan pada ".$id_account['tanggal_pengajuan']."<br>"
+       ."Dengan Nomor pnarikan : ".$id_account['nomor_penarikan']."<br><br>"
+       ."Kami ingin memberitahukan bahwa pengajuan tersebut telah selesai kami proses dan di transfer ke nomor rekening sebagai berikut <br><br>"
+       ."Nomor Rekening : ".$penerima['nomor_rekening']."<br>"
+       ."Nama Bank :".$penerima['nama_bank']."<br>"
+       ."Nama Pemilik Rekening : ".$penerima['nama_pemilik_rekening']." <br>"
+       ."Sejumlah :<b> Rp.".number_format($id_account['royalti_ditarik'])."</b><br><br>"
+       ."berikut kami lampirkan bukti transfernya <br>"
+       ."Atas perhatian dan kerjasamanya kami ucapkan terimakasih  <br><br>"
+       ."Hormat kami <br><br>"
+       ."Admin Guepedia";
+
+$this->email->message($html);
+
+if (!$this->email->send()){    
+echo $this->email->print_debugger();
+}
 }
 
 }else{
@@ -1362,9 +1492,54 @@ redirect(404);
 }
 
 public function download_bukti(){
-$id_data_transfer = base64_decode($this->uri->segment(3));
-$bukti_transfer   = $this->db->get_where('data_transfer_royalti',array('id_data_transfer_royalti'=>$id_data_transfer))->row_array();
-force_download('./uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer'], NULL);
+$bukti_transfer = $this->M_dashboard->data_bukti($this->uri->segment(3))->row_array();
+
+$html  ="<img src='".base_url('assets/img/logo-toko.png')."'>";
+$html .="<h2 style='position:fixed;' align='right'><br>Data Penarikan Bagi Hasil</h2><hr>";
+$html .="<table>"
+        . "<tr><td>Nomor Penarikan</td><td>: ".$bukti_transfer['nomor_penarikan']."</td></tr>"
+        . "<tr><td>Akun Penulis</td><td>: ".$bukti_transfer['nama_lengkap']."</td></tr>"
+        . "<tr><td>Nomor Kontak</td><td>: ".$bukti_transfer['nomor_kontak']."</td></tr>"
+        . "<tr><td>Tanggal Pengajuan</td><td>: ".$bukti_transfer['tanggal_pengajuan']."</td></tr>"
+        . "<tr><td>Nama Rekening</td><td>: ".$bukti_transfer['nama_pemilik_rekening']."</td></tr>"
+        . "<tr><td>Nomor Rekening</td><td>: ".$bukti_transfer['nomor_rekening']."</td></tr>"
+        . "<tr><td>Nama Bank</td><td>: ".$bukti_transfer['nama_bank']."</td></tr>"
+        . "</table>";
+
+
+$html .="<h2 align='center'>Detail Penarikan <br> Status Penarikan ".$bukti_transfer['status']."</h2>";
+$html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
+        . '<tr>'
+        . '<th>Bagi Hasil</th>'
+        . '<th>Biaya Admin</th>'
+        . '<th>Di Tarik</th>'
+        . '<th>Jumlah Penarikan</th>'
+        . '<th>Sisa Bagi Hasil</th>'
+        . '</tr>';
+$html  .="<tr>"
+        . "<td>Rp.".number_format($bukti_transfer['royalti_sebelumnya'])."</td>"
+        . "<td>Rp.".number_format($bukti_transfer['biaya_admin'])."</td>"
+        . "<td>Rp.".number_format($bukti_transfer['royalti_ditarik'])."</td>"
+        . "<td>Rp.".number_format($bukti_transfer['jumlah_penarikan'])."</td>"
+        . "<td>Rp.".number_format($bukti_transfer['royalti_diperoleh'])."</td>"
+        . "</tr>"
+        . "</table>"
+        . "<hr>"
+        . "<i>Note:</i> Proses Penarikan hannya akan di proses pada tanggal 5-10 di setiap Bulannya";
+
+if($bukti_transfer['bukti_transfer'] != NULL){
+  $html.="<hr> <i>Note</i> : Bukti Transfer<br>"
+          . "<img style='width:300px; heght:auto;' src=". base_url('uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer']).">";  
+}
+
+
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+    
+    
 }
 
 public function orderan_masuk(){
@@ -1641,7 +1816,7 @@ $this->email->set_newline("\r\n");
 $this->email->set_mailtype("html");
 $this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
 $this->email->to($pembeli['email']);
-$this->email->subject('Konfirmasi pesanan di tolak');
+$this->email->subject('Konfirmasi pesanan di batalkan');
 
 $this->db->where(array('id_penjualan_toko'=>$input['id_penjualan_toko']));    
 $query = $this->db->get('data_jumlah_penjualan_toko');
@@ -1775,12 +1950,14 @@ if($this->input->post('nilai_kupon')){
 $input = $this->input->post();
 
 $data = array(
-'nama_kupon'    => $input['nama_kupon'],
-'id_account'    => $input['id_account'],
-'email_penulis' => $input['email_penulis'],
-'nama_penulis'  => $input['nama_penulis'],
-'nilai_kupon'   => $input['nilai_kupon'],
-'syarat_kupon'  => $input['syarat_kupon'],
+'nama_kupon'      => $input['nama_kupon'],
+'id_account'      => $input['id_account'],
+'email_penulis'   => $input['email_penulis'],
+'nama_penulis'    => $input['nama_penulis'],
+'nilai_kupon'     => $input['nilai_kupon'],
+'syarat_kupon'    => $input['syarat_kupon'],
+'status_kupon'    => "Expired",
+'tanggal_expired' => date('d-m-Y', strtotime("+3 day"))
 );
 
 $this->M_dashboard->input_kupon($data);
@@ -1897,7 +2074,8 @@ echo $this->email->print_debugger();
    
 $input = $this->input->post();
 $data = array(
- 'status' =>'terima'   
+ 'status'         =>'terima',
+ 'tanggal_terima' => date('Y-m-d H:i:s'),
 );
 $this->M_dashboard->terima_pesanan($data,$input['id_penjualan_toko']);
 echo "berhasil";
@@ -2026,20 +2204,22 @@ redirect(404);
 }
 
 public function banner(){
-
+$query = $this->M_dashboard->data_banner();
+    
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
 $this->load->view('Halaman_dashboard/V_menu_toko');
-$this->load->view('Halaman_dashboard/V_banner');
+$this->load->view('Halaman_dashboard/V_banner',['query'=>$query]);
 $this->load->view('Umum/V_footer');
 
 }
 
 public function hapus_naskah(){
-if($this->uri->segment(3) != ''){
+if($this->input->post('id_file_naskah')){
 
-$this->M_dashboard->hapus_naskah($this->uri->segment(3));
-redirect(base_url('G_dashboard/data_file_naskah'));    
+$this->M_dashboard->hapus_naskah($this->input->post('id_file_naskah'));
+
+echo "berhasil";
 }else{
 redirect(404);    
 }
@@ -2056,6 +2236,208 @@ $this->load->view('Umum/V_footer');
 
 public function json_data_pengajuan_royalti(){
 echo $this->M_dashboard->json_data_pengajuan_royalti();       
+}
+public function json_data_pengajuan_bagi_hasil_selesai(){
+echo $this->M_dashboard->json_data_pengajuan_bagi_hasil_selesai();       
+}
+
+public function get_penjualan(){
+if($this->input->post('id_data_penjualan')){
+$query = $this->M_dashboard->get_penjualan($this->input->post('id_data_penjualan'));
+$data_static = $query->row_array();
+
+echo "Nama customer :".$data_static['nama_customer']."<br>";
+echo "Nomor kontak  :".$data_static['nomor_kontak']."<br>";
+echo "Alamat lengkap :".$data_static['alamat_lengkap']."<br><hr>";
+
+echo  '<table style="width:100%;"  class="table table-striped  table-responsive" >'
+. '<tr>'
+. '<th>Judul Buku</th>'
+. '<th>Penulis</th>'
+. '<th>Harga</th>'
+. '<th>Qty</th>'
+. '<th>Jumlah</th>'
+. '<th>Diskon</th>'
+. '<th>Nilai Diskon</th>'
+. '<th>Bagi Hasil</th>'
+. '<th>Bersih</th>'
+. '</tr>';
+
+
+foreach ($query->result_array() as $penjualan){
+echo '<tr>
+<td>' . $penjualan['judul_buku'] . '</td>
+<td>' . $penjualan['nama_penulis'] . '</td>
+<td>Rp.' . number_format($penjualan['harga']) . '</td>
+<td>' . $penjualan['qty'].'</td>
+<td>Rp.' . number_format($penjualan['jumlah']) . ' </td>
+<td>' . $penjualan['diskon'] . ' % </td>
+<td>Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
+<td>Rp.' . number_format($penjualan['royalti']) . '</td>
+<td>Rp.' . number_format($penjualan['bersih']) . '</td>
+</tr>';
+}
+
+echo "<tr>"
+. "<td colspan='4'>Sub Total</td>"
+. "<td colspan='2'>Rp. ".number_format($data_static['subtotal'])."</td>"
+. "<td>Rp. ".number_format($data_static['jumlah_diskon'])."</td>"
+. "<td>Rp. ".number_format($data_static['total_royalti'])."</td>"
+. "<td colspan='2'>Rp. ".number_format($data_static['total_bersih'])."</td>"
+. "</tr>";
+
+if($data_static['nama_biaya_lain'] !=''){
+echo  "<tr>"
+. "<td colspan='4'>".$data_static['nama_biaya_lain']."</td>"
+. "<td colspan='2'>Rp. ".number_format($data_static['jumlah_biaya_lain'])."</td>"
+. "<td colspan='2'></td>"
+. "<td colspan='2'></td>"
+. "</tr>";
+}
+
+if ($data_static['nilai_ppn'] !=''){
+echo "<tr>"
+. "<td colspan='4'>PPN 10 %</td>"
+. "<td colspan='2'>Rp.".number_format($data_static['nilai_ppn'])."</td>"
+. "<td colspan='2'></td>"
+. "<td colspan='2'></td>"
+. "</tr>";
+}
+
+if($data_static['diskon_total'] !=''){
+echo "<tr>"
+. "<td colspan='4'>Diskon ".$data_static['diskon_total']." %</td>"
+. "<td colspan='2'>Rp. ".number_format($data_static['jumlah_diskon_total'])."</td>"
+. "<td colspan='2'></td>"
+. "<td colspan='2'></td>"
+. "</tr>";
+}
+
+echo "<tr>"
+. "<td colspan='4'>Total Bayar</td>"
+. "<td colspan='2'>Rp. ".number_format($data_static['total'])."</td>"
+. "<td colspan='2'>Total Bersih</td>"
+. "<td colspan='2'>Rp. ".number_format($data_static['total_bersih'])."</td>"
+. "</tr>";
+echo "<tr>"
+. "<td colspan='4'>Jumlah uang</td>"
+. "<td colspan='2'>Rp. ".number_format($data_static['jumlah_uang'])."</td>"
+. "<td colspan='2'>Kembalian</td>"
+. "<td colspan='2'>Rp. ".number_format($data_static['kembalian'])."</td>"
+. "</tr>";
+
+
+
+echo '</table>';
+
+
+
+}else{
+redirect(404);    
+}
+
+}
+
+public function simpan_banner(){
+if($_FILES['banner']){
+$config2['upload_path']          = './uploads/banner/';
+$config2['allowed_types']        = 'jpeg|jpg|png|gif|webp';
+$config2['file_size']            = "2004800";
+$config2['encrypt_name']         = TRUE;
+$this->upload->initialize($config2);
+
+if(!$this->upload->do_upload('banner')){   
+
+echo $this->upload->display_errors();
+}else{
+    
+$data =array(
+'nama_banner'      => $this->upload->data('file_name'),
+);  
+
+$this->M_dashboard->simpan_banner($data);
+
+redirect(base_url('G_dashboard/banner'));
+}
+
+}else{
+    redirect(404);    
+}
+}
+
+public function hapus_banner(){
+if($this->uri->segment(3)){ 
+unlink('./uploads/banner/'.$this->uri->segment(4));   
+
+$this->M_dashboard->hapus_banner($this->uri->segment(3));
+redirect(base_url('G_dashboard/banner'));
+}else{
+redirect(404);    
+}
+}
+public function data_chart(){
+$tanggal = $this->input->post('tanggal');
+$range   = explode(' ',$tanggal);
+
+$this->db->group_by('data_penjualan.tanggal_transaksi');
+$this->db->where('data_penjualan.tanggal_transaksi >=',$range[0]);
+$this->db->where('data_penjualan.tanggal_transaksi <=',$range[2]);
+$query = $this->db->get('data_penjualan');
+
+if($query->num_rows() >0){
+
+    
+$tanggal_transaksi  = array();    
+$jumlah_pendapatan  = array();   
+$jumlah_royalti     = array();    
+$jumlah_bersih      = array();
+
+
+foreach ($query->result()  as $hari) {
+$tanggal_transaksi['tanggal_transaksi'][] = $hari->tanggal_transaksi;
+} 
+
+foreach ($query->result_array()  as $pendapatan) {
+$query2 = $this->db->get_where('data_penjualan',array('tanggal_transaksi'=>$pendapatan['tanggal_transaksi']));
+$total_pendapatan = 0;
+
+foreach($query2->result_array() as  $hasil_pendapatan){
+$total_pendapatan += $hasil_pendapatan['subtotal'];
+}
+
+$jumlah_pendapatan['jumlah_pendapatan'][] = $total_pendapatan;
+}
+
+
+foreach ($query->result_array()  as $pendapatan) {
+$query3 = $this->db->get_where('data_penjualan',array('tanggal_transaksi'=>$pendapatan['tanggal_transaksi']));
+$total_bersih = 0;
+foreach($query3->result_array() as  $hasil_bersih){
+$total_bersih += $hasil_bersih['total_bersih'];
+}
+$jumlah_bersih['jumlah_bersih'][] = $total_bersih;
+}
+
+foreach ($query->result_array()  as $pendapatan) {
+$query4 = $this->db->get_where('data_penjualan',array('tanggal_transaksi'=>$pendapatan['tanggal_transaksi']));
+$total_royalti = 0;
+foreach($query4->result_array() as  $hasil_royalti){
+$total_royalti += $hasil_royalti['total_royalti'];
+}
+$jumlah_royalti['jumlah_royalti'][] = $total_royalti;
+}
+
+$data = array(
+$tanggal_transaksi,    
+$jumlah_pendapatan , 
+$jumlah_royalti,    
+$jumlah_bersih,
+);
+echo json_encode($data);
+
+}else{
+echo "kosong";    
+}
 }
 
 

@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH.'libraries/dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
-
 class Store extends CI_Controller {
+    
 public function __construct() {
 parent::__construct();
 $this->load->library('pagination');
@@ -10,17 +10,22 @@ $this->load->model('M_store');
 $this->load->library('cart');
 $this->load->library('Datatables');
 $this->load->library('upload');
+$this->load->library('Google');
 }
 
 public function index(){
-$baru_terbit = $this->M_store->baru_terbit();    
-$terlaris    = $this->M_store->terlaris();    
+$baru_terbit    = $this->M_store->baru_terbit();    
+$terlaris       = $this->M_store->terlaris();    
+$total_buku     = $this->M_store->total_buku();    
+$buku_diskon    = $this->M_store->buku_diskon();    
 
 $this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_banner');
-$this->load->view('Store/V_home',['baru_terbit'=>$baru_terbit,'terlaris'=>$terlaris]);
+
+$this->load->view('Store/V_home',['buku_diskon'=>$buku_diskon,'baru_terbit'=>$baru_terbit,'terlaris'=>$terlaris,'total_buku'=>$total_buku]);
 $this->load->view('Umum/V_footer_toko');
+
 }
 
 public function kategori(){
@@ -74,37 +79,22 @@ $this->load->view('Umum/V_footer_toko');
 redirect(404);    
 }
 }
+
 public function cari_buku(){
-
+if($this->input->post('kata_kunci')){   
 $kata_kunci = $this->input->post('kata_kunci');
+$hasil_cari = $this->M_store->cari_buku($kata_kunci);
 
-$hasil_cari = $this->M_store->cari_buku($kata_kunci);    
-if($hasil_cari->num_rows() > 0){
-echo "<div class='row'>";
-foreach ($hasil_cari->result_array() as $data){
-
-echo "
-<a style='text-decoration:none;' href='".base_url('Store/lihat_buku/'.base64_encode($data['id_file_naskah']))."'>    
-
-<div class='col-lg-3 col-md-6 mb-4'>
-<div class='card'>
-<img class='card-img-top cover lazy'  src='".base_url('uploads/file_cover/'.$data['file_cover'])."' alt=''>
-<div class='card-body'>
-<p class='card-text' style='height:50px; text-align: center;'>".$data['judul']."</p>
-</div>
-</a>
-<div class='card-footer'>";
-echo '<button onclick="tambah_keranjang('."'".base64_encode($data['id_file_naskah'])."'".')" class="btn btn-success form-control"><b>Rp.'.number_format($data['harga'])."</b> <span class='fa fa-shopping-basket '></span></button>    
-
-
-
-</div>
-</div>
-</div>";
-}
-echo "</div>";
+$this->load->view('Umum/V_header_toko');
+$this->load->view('Store/V_header_toko');
+if($hasil_cari->num_rows()>0){
+$this->load->view('Store/V_cari_buku',['data'=>$hasil_cari]);
 }else{
- $this->load->view('not_found.php');     
+$this->load->view('not_found');    
+}
+$this->load->view('Umum/V_footer_toko');
+}else{
+redirect(404);
 }
 
 }
@@ -125,11 +115,43 @@ $this->load->view('Umum/V_footer_toko');
 redirect('Store');    
 }
 }
+
+function lihat_buku_diskon(){
+
+$id_file_naskah = $this->uri->segment(3);
+$query = $this->M_store->data_buku_diskon($id_file_naskah);
+if($query->num_rows() > 0 ){
+
+$this->load->view('Umum/V_header_toko');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_lihat_buku_diskon',['data'=>$query]);
+$this->load->view('Umum/V_footer_toko');
+
+
+}else{
+redirect('Store');    
+}
+}
 function tambah_keranjang(){
 if($this->input->post('id_file_naskah')){
 $id_file_naskah = $this->input->post('id_file_naskah'); 
 $query = $this->M_store->tambah_keranjang($id_file_naskah)->row_array();    
 
+if($query['status'] == "Produk Diskon"){
+$data = array(
+'id'            => $query['id_file_naskah'],
+'qty'           => $this->input->post('qty'),
+'price'         => $query['hasil_diskon'],
+'name'          => $query['judul'],
+'berat'         => $query['berat_buku'],
+'id_account'    => $query['id_account'],
+'id_file_naskah'=> $query['id_file_naskah'],   
+'status'        => $query['status'],   
+'id_account'    => $query['id_account'],
+
+);
+    
+}else{
 $data = array(
 'id'            => $query['id_file_naskah'],
 'qty'           => $this->input->post('qty'),
@@ -137,8 +159,11 @@ $data = array(
 'name'          => $query['judul'],
 'berat'         => $query['berat_buku'],
 'id_account'    => $query['id_account'],
-
-);
+'id_file_naskah'=> $query['id_file_naskah'],
+'status'        => $query['status'],
+'id_account'    => $query['id_account'],    
+);   
+}
 
 $this->cart->insert($data);
 echo $query['judul'];
@@ -173,10 +198,13 @@ echo "<hr><span style='color:#28a745; font-size:18px; text-align: center;'>Total
 
 }
 function keranjang(){
+$kupon = $this->M_store->ambil_kupon($this->session->userdata('id_account_toko'));    
+    
 $this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
-$this->load->view('Store/V_keranjang');
-$this->load->view('Umum/V_footer_toko');    
+$this->load->view('Store/V_keranjang',['kupon'=>$kupon]);
+$this->load->view('Umum/V_footer_toko');
+
 }
 function keranjang_total(){
 if($this->cart->total() == 0){
@@ -188,7 +216,7 @@ echo "<div class='row mb-1'>"
 . "<div class='col-md-8  p-3'>";
 
 $no=1; foreach ($this->cart->contents() as $items){
-    
+
 echo "<div class='row'>";    
 echo "<div class='col' style='text-align:center;'><a style='text-decoration:none;' href='".base_url("Store/lihat_buku/". base64_encode($items['id']))."' >".$items['name']."</a></div> ";
 echo "<div class='col-md-1' style='text-align:center;'>Rp.".number_format($items['price'])." </div>";
@@ -204,36 +232,38 @@ echo "</div>";
 
 echo "<div class='col'>"
 . "<div class='card p-3'><h4 align='center'> Ringkasan Belanja </h4><hr> ";
-  
+
 if($this->session->userdata('nilai_kupon')){
-  echo  "<div class='row'>"
-        ."<div class='col-md-5'>Kupon ".$this->session->userdata('nilai_kupon')." % </div>"
-        . "<div class='col' style='color:#dc3545;'><b>-Rp. ".number_format($this->session->userdata('hasil_kupon'))."</b></div>"
-        . "</div><hr>";
-         
+echo  "<div class='row'>"
+."<div class='col-md-5'>Kupon ".$this->session->userdata('nilai_kupon')." % </div>"
+. "<div class='col text-right' style='color:#dc3545;'><b>-Rp. ".number_format($this->session->userdata('hasil_kupon'))."</b></div>"
+. "</div><hr>";
+
 }
 
 if($this->session->userdata('nilai_promo')){
-  echo  "<div class='row'>"
-        ."<div class='col-md-5'>Promo ".$this->session->userdata('nilai_promo')." % </div>"
-        . "<div class='col' style='color:#dc3545;'><b>-Rp. ".number_format($this->session->userdata('hasil_promo'))."</b></div>"
-        . "</div><hr>";
-         
-}
-
-  echo  "<div class='row'>"
-        ."<div class='col-md-5'>Total</div>"
-        . "<div class='col'><b>Rp. ".number_format($this->cart->total()-$this->session->userdata('hasil_promo'))."</b></div>"
-        . "</div>";
-     
-        echo "<hr><a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku </button></a>"
-        . "</div><hr><buttton data-toggle='modal' data-target='#exampleModal' class='btn btn-dark form-control'>Masukan Kode Promo atau Kupon </button></div>"
-. "</div>";   
-    
-    
+echo  "<div class='row'>"
+."<div class='col-md-5'>Promo ".$this->session->userdata('nilai_promo')." % </div>"
+. "<div class='col text-right' style='color:#dc3545;'><b>-Rp. ".number_format($this->session->userdata('hasil_promo'))."</b></div>"
+. "</div><hr>";
 
 }
+
+echo  "<div class='row'>"
+."<div class='col-md-5'>Total Belanja</div>"
+. "<div class='col text-right'><b>Rp. ".number_format($this->cart->total()-$this->session->userdata('hasil_promo')-$this->session->userdata('hasil_kupon'))."</b></div>"
+. "</div>";
+
+
+echo "<hr><a href='". base_url('Store/checkout')."'><buttton class='btn btn-success form-control'>Bayar Buku </button></a>";   
+
+if(!$this->session->userdata('nilai_kupon') && !$this->session->userdata('nilai_promo') ){
+echo "</div><hr><buttton data-toggle='modal' data-target='#exampleModal' class='btn btn-dark form-control'>Masukan Kode Promo atau Kupon </button></div>"
+."</div>";
 }
+}
+}
+
 function update_qty_keranjang(){
 if($this->input->post('qty')){
 $input = $this->input->post();
@@ -349,10 +379,16 @@ $this->load->view('Umum/V_footer_toko');
 }
 
 public function login_akun(){
+if(!$this->session->userdata('id_account_toko')){    
+$data['google_login_url']=$this->google->get_login_url();    
+    
 $this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
-$this->load->view('Store/V_login_akun');
-$this->load->view('Umum/V_footer_toko');        
+$this->load->view('Store/V_login_akun',$data);
+$this->load->view('Umum/V_footer_toko');
+}else{
+    redirect(404);    
+}
 }
 
 public function lupa_sandi(){
@@ -364,11 +400,11 @@ $this->load->view('Umum/V_footer_toko');
 
 public function daftar(){
 
-if($this->input->post('nama_lengkap')){
+if($this->input->post('email')){
 
 $hasil_cek = $this->M_store->cek_email_daftar($this->input->post('email'));   
 
-if($hasil_cek > 0 ){
+if($hasil_cek->num_rows() > 0 ){
 
 echo "sudah_digunakan";
 
@@ -395,7 +431,6 @@ $html = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69
 $html .="<h3>Terimakasih anda telah melakukan pendaftaran di Guepedia.com </h3><br>"
 . "untuk mengkonfirmasi akun silahkan klik link di bawah ini <br><br>"
 . "<a href='".base_url('Store/aktivasi/'.base64_encode($input['email']))."'>Konfirmasi akun anda disini</a><br><br>"
-        
 . "<i>Note: Jika anda tidak merasa melakukan pendaftaran mohon abaikan email ini </i>";
 
 
@@ -417,8 +452,7 @@ $id_account = str_pad($pendaftar, $angka ,"0",STR_PAD_LEFT);
 
 
 $data = array(
-'id_account'     => $id_account,   
-'nama_lengkap'   => $input['nama_lengkap'],    
+'id_account'     => $id_account,     
 'email'          => $input['email'],    
 'password'       => md5($input['password']),    
 'status_akun'    =>'tidak',
@@ -523,7 +557,8 @@ redirect(404);
 }
 
 function  keluar(){
-$this->session->sess_destroy();    
+$this->session->sess_destroy(); 
+redirect(base_url());
 }
 
 function halaman_checkout(){        
@@ -537,10 +572,13 @@ $this->load->view('Store/V_halaman_checkout',['data_alamat'=>$query]);
 
 function checkout(){
 if($this->session->userdata('id_account_toko') !=NULL){
-if($this->cart->total()){    
+if($this->cart->total()){  
+$kupon = $this->M_store->ambil_kupon($this->session->userdata('id_account_toko'));    
+    
+    
 $this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
-$this->load->view('Store/V_checkout');
+$this->load->view('Store/V_checkout',['kupon'=>$kupon]);
 $this->load->view('Umum/V_footer_toko');    
 }else{
 redirect('Store');    
@@ -558,7 +596,7 @@ $total_berat = 0;
 foreach ($this->cart->contents() as $items){ 
 $total_berat += $items['berat'] * $items['qty'];    
 }
- 
+
 $id_account = $this->session->userdata('id_account_toko');
 $alamat     = $this->M_store->cek_alamat($id_account)->row_array();
 
@@ -701,6 +739,15 @@ if($this->input->post('promo')){
 $kupon = $this->input->post('promo');
 $query = $this->M_store->cek_kupon($kupon);    
 
+foreach ($this->cart->contents() as $items){
+$data_cart[] = $items['status'];   
+}
+
+
+if(in_array("Produk Diskon", $data_cart)){
+echo "Promo Tidak berlaku untuk produk diskon";    
+}else{
+
 if($query->num_rows() > 0){
 $data_promo = $query->row_array();
 
@@ -715,6 +762,9 @@ echo "berhasil";
 }else{
 echo "tidak tersedia";    
 }    
+    
+}
+   
 }else{
 redirect(404);    
 }    
@@ -731,11 +781,12 @@ $alamat           = $this->M_store->cek_alamat($id_account)->row_array();
 $penjualan        = $this->M_store->data_penjualan_toko()->num_rows();
 $angka            = 6;
 $jumlah_penjualan = $penjualan;
-$invoices_toko    = str_pad($jumlah_penjualan, $angka ,"0",STR_PAD_LEFT);
 
-$expir = date('d-m-Y', strtotime("+4 day"));
-$date1= date_create($expir);
-$tanggal_expir = date_format($date1,"d F o");
+$invoices_toko    = str_pad($jumlah_penjualan, $angka ,"0",STR_PAD_LEFT);
+$tgl_invoices     = date('dmY');
+$expir            = date('d-m-Y', strtotime("+2 day"));
+$date1            = date_create($expir);
+$tanggal_expir    = date_format($date1,"d F o");
 
 
 $config['protocol'] = 'sendmail';
@@ -753,78 +804,87 @@ $this->email->to($this->session->userdata('email_toko'));
 $this->email->cc("guepedia@gmail.com");
 $this->email->subject('Konfirmasi pesanan');
 
-$html   = "Terimakasih anda telah melakukan pembelian di store guepedia <br>"
-. "untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal ".$tanggal_expir."<br><br>"
-. "<h3 align='center' style='padding:2%;color:#000; background-color:rgb(168,207,69)'>Silahkan transfer ke rekening dibawah ini</h3> "
+$html   = "Terimakasih anda telah melakukan pembelian di Toko Guepedia <br>"
+."untuk proses selanjutnya silahkan anda melakukan pembayaran via bank transfer dan melakukan konfirmasi sebelum tanggal ".$tanggal_expir."<br><br>" ;
 
-. "Bank BCA / No.Rekening : <span class='js-text'> 740 1486 074 </span> <hr> "
-. "Atas nama: Dianata Eka Putra <hr>";
-
-$html .= "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Rincian Pesanan  No.invoices : ".'INV/ST/'.$invoices_toko."</h3>"; 
+$html .="<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Rincian Pesanan  No.invoices : ".'INV/'.$tgl_invoices.'/'.$invoices_toko."</h3>"; 
 
 $html .= "<div style='text-align:left;'>Pemesan / No.kontak : ".$alamat['nama_penerima']." / ".  $alamat['nomor_kontak'] ."<br>";
 $html .= "Alamat pengiriman : ".$alamat['nama_kecamatan']." ".$alamat['nama_kota']." ".$alamat['nama_provinsi']." ".$alamat['alamat_lengkap']." ".$alamat['kode_pos']."<br> </div>"; 
 
-$html .= '<table style="width:100%; max-width:100%; border-collapse:collapse; border-spacing:0; background-color:transparent; margin:5px 0;padding:0" >
+$html .= '<br><br>
+<table style="width:100%; text-align:center;"  border="2" cellspacing="0" cellpading="0"> 
 <tr>
-<th  style="border: 1px solid rgb(168,207,69); text-align:center;">No</th>   
-<th  style="border: 1px solid rgb(168,207,69); text-align:center;">Rincian</th>   
-<th  style="border: 1px solid rgb(168,207,69); text-align:center;">Harga</th>   
-<th style="border: 1px solid rgb(168,207,69); text-align:center;">Qty</th>   
-<th  style="border: 1px solid rgb(168,207,69); text-align:center;">Total</th>   
+<th align="center">No</th>   
+<th align="center">Rincian</th>   
+<th align="center">Harga</th>   
+<th align="center">Qty</th>   
+<th align="center">Total</th>   
 </tr>';
 $d = 1 ;
 
 foreach ($this->cart->contents() as $items){
 $html .='<tr>';    
-$html .='<td style="border: 1px solid rgb(168,207,69);" align="center"  >'.$d++.'</td>';
-$html .='<td style="border: 1px solid rgb(168,207,69);" >'.$items['name'].'</td>';
-$html .='<td style="border: 1px solid rgb(168,207,69);"  > Rp.'.number_format($items['price']).'</td>';       
-$html .='<td style="border: 1px solid rgb(168,207,69);"  >'.$items['qty'].'</td>';
-$html .='<td style="border: 1px solid rgb(168,207,69);" >Rp. '.number_format($items['subtotal']).'</td>';       
+$html .='<td  align="center"  >'.$d++.'</td>';
+$html .='<td >'.$items['name'].'</td>';
+$html .='<td style=""  >Rp.'.number_format($items['price']).'</td>';       
+$html .='<td style=""  >'.$items['qty'].'</td>';
+$html .='<td style="" >Rp.'.number_format($items['subtotal']).'</td>';       
 $html .='</tr>';
 }
 
-$html .="
-<tr>
-<td style='border: 1px solid rgb(168,207,69);' align='center'  colspan='1'>".$d."</td>
-<td style='border: 1px solid rgb(168,207,69);'  colspan='1'>Ongkir ".$this->session->userdata('kurir')." ".$this->session->userdata('service')."</td>    
-<td style='border: 1px solid rgb(168,207,69);'  colspan='1'></td>
-<td style='border: 1px solid rgb(168,207,69);'  colspan='1'>".$this->session->userdata('total_berat')." Gram</td>
-<td style='border: 1px solid rgb(168,207,69);'colspan='1'>Rp.".number_format($this->session->userdata('ongkir'))." </td>    
-</tr>";
-
 if($this->session->userdata('nilai_kupon')){ 
 $html .= "<tr>
-<th style='border: 1px solid rgb(168,207,69);' colspan='4' >Kode kupon " .$this->session->userdata('nama_kupon')." ".$this->session->userdata('nilai_kupon')." %</th>    
-<th style='border: 1px solid rgb(168,207,69);' colspan='1'  style='color:#dc3545;'> - Rp. ".number_format($this->session->userdata('hasil_kupon'))."</th>    
+<td style='' colspan='4' >Potongan kupon ".$this->session->userdata('nilai_kupon')." %</td>    
+<td colspan='1'  style='color:#dc3545;'> - Rp. ".number_format($this->session->userdata('hasil_kupon'))."</td>    
 </tr>";
 }
 
 if($this->session->userdata('nilai_promo')){ 
 $html .= "<tr>
-<th style='border: 1px solid rgb(168,207,69);' colspan='4' >Kode promo " .$this->session->userdata('nama_promo')." ". $this->session->userdata('nilai_promo')." %</th>    
-<th style='border: 1px solid rgb(168,207,69);' colspan='1'  style='color:#dc3545;'> - Rp. ".number_format($this->session->userdata('hasil_promo'))."</th>    
+<td style='' colspan='4' >Potongan promo ". $this->session->userdata('nilai_promo')." %</td>    
+<td style=''  colspan='1'  style='color:#dc3545;'> - Rp. ".number_format($this->session->userdata('hasil_promo'))."</td>    
 </tr>";
 }
 
+if($this->session->userdata('nilai_promo') || $this->session->userdata('nilai_kupon')){ 
+$html .= "<tr>
+<td style='' colspan='4' >Harga Setelah diskon </td>    
+<td style=''  colspan='1'  >Rp. ".number_format($this->cart->total()- $this->session->userdata('hasil_kupon')- $this->session->userdata('hasil_promo'))."</td>    
+</tr>";
+}
+
+
+$html .="
+<tr>
+<td style=''  colspan='4'>Ongkos kirim ".$this->session->userdata('kurir')." ".$this->session->userdata('service')."</td>    
+<td style=''   colspan='1'>Rp.".number_format($this->session->userdata('ongkir'))." </td>    
+</tr>";
+
+
 $html.= 
 "<tr>
-<th style='border: 1px solid rgb(168,207,69);'   colspan='4'>Total Bayar</th>    
-<th style='border: 1px solid rgb(168,207,69);'  colspan='1'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon')-$this->session->userdata('hasil_promo'))."</th>    
-</tr></table> <br>";
+<th style=''   colspan='4'><b>Total yang harus di bayar</b></th>    
+<th style=''  colspan='1'>Rp.".number_format($this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon')-$this->session->userdata('hasil_promo'))."</th>    
+</tr>
+</table> 
+<br>";
+
+$html .="<h3 align='center' style='padding:2%;color:#000; background-color:rgb(168,207,69)'>Silahkan transfer ke rekening dibawah ini</h3> "
+. "Bank BCA / No.Rekening : <span class='js-text'> 740 1486 074 </span> <hr> "
+. "Atas nama: Dianata Eka Putra <hr>";
 
 
 $this->email->message($html);
 
 if (!$this->email->send()){
-    
+
 echo $this->email->print_debugger();
 
-
 }else{
+    
 $penjualan_toko = array(
-'invoices_toko'     => 'INV/ST/'.$invoices_toko,
+'invoices_toko'     => 'INV/'.$tgl_invoices.'/'.$invoices_toko,
 'id_account'        => $this->session->userdata('id_account_toko'),
 'nama_penerima'     => $alamat['nama_penerima'],
 'nama_kota'         => $alamat['nama_kota'],
@@ -846,28 +906,34 @@ $penjualan_toko = array(
 'status'            => 'pending',    
 'total_belanja'     => $this->cart->total(),    
 'total_bayar'       => $this->cart->total() + $this->session->userdata('ongkir') - $this->session->userdata('hasil_kupon') - $this->session->userdata('hasil_promo'),    
-'tanggal_order'     => date('d-m-Y'),
+'tanggal_order'     => date('Y-m-d'),
 'total_berat'       => $this->session->userdata('total_berat'),   
-'expired'           => date('d-m-Y', strtotime("+4 day")),       
+'expired'           => date('Y-m-d', strtotime("+2 day")),       
 ); 
 $this->M_store->input_data_jumlah_penjualan_toko($penjualan_toko);
 
 foreach ($this->cart->contents() as $items){
+    
 $data_penjualan = array(
-'invoices_toko'     => 'INV/ST/'.$invoices_toko,
+'invoices_toko'     => 'INV/'.$tgl_invoices.'/'.$invoices_toko,
 'nama_buku'         => $items['name'],
 'harga_buku'        => $items['price'],
 'qty'               => $items['qty'],
 'subtotal'          => $items['subtotal'],
+'id_file_naskah'    => $items['id_file_naskah'],    
 );
+
 $this->M_store->input_data_penjualan_toko($data_penjualan);
 }
 
+if($this->session->userdata('status_kupon') == "Expired"){
 $hapus_kupon = array(
 'nama_kupon' => $this->session->userdata('nama_kupon'),
 'id_account' => $this->session->userdata('id_account_toko'),   
 );
 $this->M_store->hapus_kupon($hapus_kupon);
+}
+
 
 echo $html;
 
@@ -888,7 +954,7 @@ $unset = array(
 $this->session->unset_userdata($unset);
 
 }
- 
+
 
 
 }else{
@@ -1004,16 +1070,14 @@ $html.=
 <th style='border: 1px solid rgb(168,207,69);'  colspan='1'>Rp.".number_format($static['total_bayar'])."</th>    
 </tr></table> <br>";
 
-
 $this->email->message($html);
 if (!$this->email->send()){    
 echo $this->email->print_debugger();
+
 }else{
+
 if (!$this->upload->do_upload('bukti_bayar')){
-
 echo $this->upload->display_errors();
-
-
 }else{  
 $data = array(
 'nilai_transfer' => $input['jumlah_bayar'],
@@ -1044,25 +1108,25 @@ $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'
 $d=1 ;
 if($static['status'] == 'pending'){
 $html  ="<div  style='position:fixed ;  left:0px;  width:19.5 cm; height:10cm; '>
-            <br></br><br></br><br></br><br></br><br></br>
-            <img src='".base_url('assets/img/watermark/belum_bayar.png')."' height='100%' width='100%' />
-        </div>";    
-    
+<br></br><br></br><br></br><br></br><br></br>
+<img src='".base_url('assets/img/watermark/belum_bayar.png')."' height='100%' width='100%' />
+</div>";    
+
 }else if($static['status'] == 'proses'){
 $html  ="<div  style='position:fixed ;  left:0px;  width:19.5 cm; height:10cm; '>
-            <br></br><br></br><br></br><br></br><br></br>
-            <img src='".base_url('assets/img/watermark/tertunda.png')."' height='100%' width='100%' />
-        </div>";
+<br></br><br></br><br></br><br></br><br></br>
+<img src='".base_url('assets/img/watermark/tertunda.png')."' height='100%' width='100%' />
+</div>";
 }else if($static['status'] == 'terima' || $static['status'] == 'selesai'){
 $html  ="<div  style='position:fixed ;  left:0px;  width:19.5 cm; height:10cm; '>
-            <br></br><br></br><br></br><br></br><br></br>
-            <img src='".base_url('assets/img/watermark/lunas.png')."' height='100%' width='100%' />
-        </div>";    
+<br></br><br></br><br></br><br></br><br></br>
+<img src='".base_url('assets/img/watermark/lunas.png')."' height='100%' width='100%' />
+</div>";    
 }else if($static['status'] == 'tolak'){
 $html  ="<div  style='position:fixed ;  left:0px;  width:19.5 cm; height:10cm; '>
-            <br></br><br></br><br></br><br></br><br></br>
-            <img src='".base_url('assets/img/watermark/tolak.png')."' height='100%' width='100%' />
-        </div>";        
+<br></br><br></br><br></br><br></br><br></br>
+<img src='".base_url('assets/img/watermark/tolak.png')."' height='100%' width='100%' />
+</div>";        
 }
 
 $html .="<img style='position:absolute;' src='".base_url('assets/img/logo-toko.png')."'>";
@@ -1149,48 +1213,66 @@ redirect(404);
 }
 
 function set_kupon(){
-if(!$this->session->userdata('id_account_toko')){
-echo "login";    
-}else{
-if($this->input->post('kupon')){
-    
+if($this->input->post('id_data_kupon')){
 
 $input = $this->input->post();
-
-$query = $this->M_store->data_kupon($input['kupon']);
+$query = $this->M_store->data_kupon($input['id_data_kupon']);
 $cek = $query->row_array();
-
-if($query->num_rows() > 0){
     
-if($cek['syarat_kupon'] < $this->cart->total() ){
-
-$data = array(
-'nilai_kupon' => $cek['nilai_kupon'],
-'hasil_kupon' => $this->cart->total() * $cek['nilai_kupon'] / 100,
-'nama_kupon'  => $cek['nama_kupon'],   
-);
-$this->session->set_userdata($data);
-
-
-echo "berhasil";    
-
-
-}else{
-
-echo "tidak_lolos";    
+foreach ($this->cart->contents() as $items){
+$data_cart[] = $items['status'];   
+$id_account[] = $items['id_account'];   
 }
 
-
+if(in_array("Produk Diskon", $data_cart)){    
+echo "Kupon Tidak berlaku untuk produk diskon"; 
 }else{
-echo "gaada";    
-} 
+    
+if($cek['syarat_kupon'] <= $this->cart->total() ){
 
+if ($cek['nilai_kupon'] <40){
+$data = array(
+
+'nilai_kupon' => $cek['nilai_kupon'],
+'hasil_kupon' => $this->cart->total() * $cek['nilai_kupon'] / 100,
+'nama_kupon'  => $cek['nama_kupon'],
+'status_kupon'=> $cek['status_kupon'],   
+);
+
+$this->session->set_userdata($data);
+echo "berhasil";    
+    
 }else{
 
+$id_account_toko = $this->session->userdata('id_account_toko');  
+
+$result = array_unique($id_account);
+
+if (in_array($id_account_toko, $result) && count($result) > 1){
+echo "Kupon Hanya berlaku untuk pembelian buku sendiri";
+}else{
+$data = array(
+
+'nilai_kupon' => $cek['nilai_kupon'],
+'hasil_kupon' => $this->cart->total() * $cek['nilai_kupon'] / 100,
+'nama_kupon'  => $cek['nama_kupon'],
+'status_kupon'=> $cek['status_kupon'],   
+);
+
+$this->session->set_userdata($data);
+echo "berhasil";    
+}
+
+}    
+}else{
+echo "tidak_lolos";    
+}
+}
+}else{
 redirect(404);    
 }
 }
-}
+
 function layanan(){
 $this->load->view('Umum/V_header_toko');
 $this->load->view('Store/V_header_toko');
@@ -1232,6 +1314,14 @@ $this->load->view('Store/V_header_toko');
 $this->load->view('Store/V_syarat');
 $this->load->view('Umum/V_footer_toko');     
 }
+
+function terbit_gratis(){
+$this->load->view('Umum/V_header_toko');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_terbit_gratis');
+$this->load->view('Umum/V_footer_toko');     
+}
+
 function reset_password(){
 if($this->input->post('email')){
 $cek_email = $this->M_store->cek_email($this->input->post('email'));
@@ -1287,7 +1377,7 @@ $this->load->view('Store/V_halaman_reset');
 $this->load->view('Umum/V_footer_toko');  
 
 }else{
-    redirect(404);    
+redirect(404);    
 }
 }
 function set_password_baru(){
@@ -1305,7 +1395,7 @@ echo "berhasil";
 }else{
 redirect(404);    
 }
-    
+
 }
 public function aktivasi(){
 if($this->uri->segment(3) != ''){
@@ -1320,8 +1410,77 @@ redirect(base_url('Store'));
 }else{
 redirect(404);    
 }    
+
+}
+public function cara_beli_buku(){
+$this->load->view('Umum/V_header_toko');
+$this->load->view('Store/V_header_toko');
+$this->load->view('Store/V_cara_beli_buku');
+$this->load->view('Umum/V_footer_toko');
     
 }
+
+public function login_with_google(){
+$google_data= $this->google->validate();
+
+if(!$this->session->userdata('id_account_toko')){
+
+$hasil_cek = $this->M_store->cek_email_daftar($google_data['email']);   
+$c = $hasil_cek->row_array();
+if($hasil_cek->num_rows() > 0 ){
+
+$data = array(
+'id_account_toko'    =>$c['id_account'],
+'email_toko'         =>$c['email'],
+'nama_lengkap'       =>$c['nama_lengkap'],
+'nomor_kontak'       =>$c['nomor_kontak'],  
+);
+
+$this->session->set_userdata($data);
+redirect(base_url());       
+}else{
+
+$hasil_pendaftar = $this->M_store->hitung_penulis();
+
+$angka = 6;
+$pendaftar = $hasil_pendaftar;
+
+$id_account = str_pad($pendaftar, $angka ,"0",STR_PAD_LEFT);
+
+
+$data = array(
+'id_account'     => $id_account,     
+'email'          => $google_data['email'],    
+'password'       => $id_account,
+'nama_lengkap'   => $google_data['name'],    
+'status_akun'    =>'aktif',
+);
+
+$input_total =array(
+'id_account'           =>$id_account,
+);
+
+$data2 = array(
+'id_account_toko'     => $id_account,     
+'email_toko'               => $google_data['email'],    
+'password'            => $id_account,
+'nama_lengkap'        => $google_data['name'],    
+);
+$this->session->set_userdata($data2);
+
+
+
+$this->M_store->daftar_penulis($data,$input_total);
+redirect(base_url());
+}
+}else{
+redirect(404);
+}   
+
+}
+
+
+
 
 }
 

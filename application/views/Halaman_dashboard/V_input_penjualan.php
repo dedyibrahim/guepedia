@@ -1,5 +1,6 @@
-<body onload="canvas_kasir();"></body>
-<div class="container " style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   " >
+<body onload="canvas_kasir();" ></body>
+
+<div class="container card mt-2 mb-2 p-2 "  >
 <div class="row">  
 <div class="col-md-12" >
 <h4 align="center">Input Penjualan <span class=" fa fa-pencil"></span></h4><hr>
@@ -38,11 +39,12 @@
 <input type="text" id="kembalian" readonly="" class="form-control">
 <label>Penjualan</label>
 <select class="form-control" id="penjualan">
-    <option value="Store Guepedia">Store Guepedia</option>    
-    <option value="Bukalapak">Bukalapak</option>    
-    <option value="Lazada">Lazada</option>    
-    <option value="Tokopedia">Tokopedia</option>    
-    <option value="Other">Other</option>    
+<option value="Store Guepedia">Store Guepedia</option>    
+<option value="Bukalapak">Bukalapak</option>    
+<option value="Lazada">Lazada</option>    
+<option value="Tokopedia">Tokopedia</option>    
+<option value="Shopee">Shopee</option>    
+<option value="Other">Other</option>    
 </select>
 <hr>
 <button class="btn btn-success form-control" id="simpan_penjualan"> Simpan Penjualan <span class="fa fa-save"></span></button>
@@ -53,8 +55,6 @@
 </div>
 
 
-
-<!-- Diskon -->
 <div class="modal fade" id="tambah_customer" tabindex="-1" role="dialog" aria-labelledby="tambah_customer" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -118,7 +118,7 @@
 <label>Biaya Lain : </label>
 <input type="text" id="nama_biaya_lain" value="" class="form-control">
 <label>Jumlah : </label>
-<input type="text" id="jumlah_biaya_lain"value="" class="form-control">
+<input type="text" id="jumlah_biaya_lain" value="" class="form-control">
 </div>
 <div class="modal-footer">
 <button type="button" id="simpan_biaya_lain" value="" class="btn btn-primary">Simpan Biaya Lain</button>
@@ -126,32 +126,43 @@
 </div>
 </div>
 </div>
-<?php if($this->session->userdata('level') == 'Super Admin'){ ?>
-<?php
-$this->db->group_by('data_penjualan.tanggal_transaksi');
-$tanggal = $this->db->get('data_penjualan');
-?>
 
-<div class="container" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-<h4 align="center">Grafik Penjualan <span class=" fa fa-pencil"></span></h4><hr>
-<div style="width:100%;">
-<canvas id="myChart" width="300" height="100"></canvas>
-</div>
+
+<!-------------------start grafik-------------->
+<?php if($this->session->userdata('level') == 'Super Admin'){ ?>
 <script>
+
+
+
+
+function tampil_grafik(){
+
+var tanggal = $("#data_chart").val();   
+var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       
+
 var ctx = document.getElementById("myChart").getContext('2d');
 var options = {
-animation: true,
-
+animation: true
 };
+
+$.ajax({
+type:"POST",
+url:"<?php echo base_url('G_dashboard/data_chart') ?>",
+data:"token="+token+"&tanggal="+tanggal,
+success:function(data){
+if(data != "kosong"){
+var z = JSON.parse(data);
+
+tanggal_transaksi = z[0].tanggal_transaksi;
+jumlah_pendapatan = z[1].jumlah_pendapatan;
+jumlah_royalti = z[2].jumlah_royalti;
+jumlah_bersih = z[3].jumlah_bersih;
+
+
 var myChart = new Chart(ctx,{
 type: 'bar',
 data: {
-labels: [<?php foreach ($tanggal->result_array()  as $hari) {
-
-echo json_encode($hari['tanggal_transaksi']),',';
-
-
-} ?>],
+labels:tanggal_transaksi,
 datasets: [{
 label: 'Total Penjualan',
 backgroundColor:"#36CAAB",
@@ -161,19 +172,7 @@ pointBackgroundColor:"rgba(38, 185, 154, 0.7)",
 pointHoverBackgroundColor:"#fff",
 pointHoverBorderColor:"rgba(220,220,220,1)",
 pointBorderWidth:1,
-data: [<?php 
-foreach ($tanggal->result_array()  as $pendapatan) {
-$query = $this->db->get_where('data_penjualan',array('tanggal_transaksi'=>$pendapatan['tanggal_transaksi']));
-
-$total_pendapatan = 0;
-foreach($query->result_array() as  $hasil_pendapatan){
-$total_pendapatan += $hasil_pendapatan['subtotal'];
-}
-
-echo $total_pendapatan,',';
-}
-
-?>],
+data: jumlah_pendapatan
 },{
 label: 'Total Bersih',
 backgroundColor:"#2c3e50",
@@ -181,19 +180,7 @@ pointBackgroundColor:"rgba(38, 185, 154, 0.7)",
 pointHoverBackgroundColor:"#fff",
 pointHoverBorderColor:"rgba(220,220,220,1)",
 pointBorderWidth:1,
-data: [<?php 
-foreach ($tanggal->result_array()  as $pendapatan) {
-$query = $this->db->get_where('data_penjualan',array('tanggal_transaksi'=>$pendapatan['tanggal_transaksi']));
-
-$total_pendapatan = 0;
-foreach($query->result_array() as  $hasil_pendapatan){
-$total_pendapatan += $hasil_pendapatan['total_bersih'];
-}
-
-echo $total_pendapatan,',';
-}
-
-?>],
+data:jumlah_bersih
 },{
 label: 'Royalti',
 backgroundColor:"#ffc107",
@@ -201,22 +188,9 @@ pointBackgroundColor:"rgba(38, 185, 154, 0.7)",
 pointHoverBackgroundColor:"#fff",
 pointHoverBorderColor:"rgba(220,220,220,1)",
 pointBorderWidth:1,
-data: [<?php 
-foreach ($tanggal->result_array()  as $pendapatan) {
-$query = $this->db->get_where('data_penjualan',array('tanggal_transaksi'=>$pendapatan['tanggal_transaksi']));
-
-$total_pendapatan = 0;
-foreach($query->result_array() as  $hasil_pendapatan){
-$total_pendapatan += $hasil_pendapatan['total_royalti'];
+data:jumlah_royalti
 }
-
-echo $total_pendapatan,',';
-}
-
-?>],
-}
-],
-
+]
 },
 options: {
 scales: {
@@ -238,8 +212,13 @@ return datasetLabel + ':Rp. ' + number_format(tooltipItem.yLabel, 2);
 }
 }
 }
+});
 
-}),options;
+function update_chart(){
+alert("halo");    
+}
+
+
 function number_format(number, decimals, dec_point, thousands_sep) {
 number = (number + '').replace(',', '').replace(' ', '');
 var n = !isFinite(+number) ? 0 : +number,
@@ -260,12 +239,59 @@ s[1] = s[1] || '';
 s[1] += new Array(prec - s[1].length + 1).join('0');
 }
 return s.join(dec);
-}
-</script>
+}  
 
+
+}else{
+swal({
+type:"warning",
+text:"tidak ada data di rentang waktu tersebut"
+});  
+}
+}
+
+});
+
+}
+
+
+</script>
+<script type="text/javascript">
+    
+    
+$(function() {
+$('input[name="datetimes"]').daterangepicker({
+timePicker: false,
+startDate: moment().startOf('day').add(-30,'day'),
+endDate: moment().startOf('day'),
+locale: {
+format:'YYYY-MM-DD'
+}
+});
+});
+
+</script>    
+<div class="container card" >
+<div class="row p-3">
+<div class="col-md-3">
+    <input type="text" id="data_chart" class="form-control" onchange="tampil_grafik();" name="datetimes"   value="" >
+</div>
+    
+<div class="col">
+    <h4 class="text-right"> Grafik Penjualan <span class=" fa fa-pencil"></span></h4>
+</div>
+</div>    
+<hr>
+
+<div style="width:100%;">
+<canvas id="myChart" width="300" height="100"></canvas>
+</div>
 
 </div>
 <?php } ?>
+
+<!-------------------end grafik-------------->
+
 <script type="text/javascript">
 $(function () {
 var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       
@@ -288,7 +314,6 @@ data:"token="+token+"&id_file_naskah="+ui.item.id_file_naskah,
 success:function(data){
 
 $("#judul").val(""); 
-
 canvas_kasir();
 }    
 });
@@ -315,7 +340,7 @@ $("#canvas_kasir").html(data);
 });
 
 
-
+tampil_grafik();
 }
 
 function hapus_datakasir(id){
@@ -663,17 +688,24 @@ $('td:eq(0)', row).html(index);
 
 
 </script>    
-<div class="container"  style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   " >
+<div class="container mt-2 mb-2 p-2 card" >
 <form action="<?php echo base_url('G_dashboard/buat_laporan') ?>"  method="post" class="form-inline" style="position: absolute;">
 <div class="form-group mx-sm-3 mb-2">
-<input type="hidden" class="form-control" name="token"  value="<?php echo $this->security->get_csrf_hash(); ?>" placeholder="token">
-
-<input type="text" class="form-control" name="dates"  placeholder="Tanggal">
+<input type="hidden"  class="form-control" name="<?php echo $this->security->get_csrf_token_name();?>"  value="<?php echo $this->security->get_csrf_hash(); ?>">
+<input type="text" class="form-control" name="dates"  value="">
 </div>
 <button type="submit" class="btn btn-primary mb-2">Buat Laporan <span class="fa fa-list-alt"></span></button>
 </form> <h4 align="center"> Data Seluruh Penjualan  </h4>
 
 <hr>
+
+<style>
+.modal-lg {
+    max-width: 971px;
+}    
+</style>    
+
+
 <table id="data_penjualan" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
 <th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
@@ -688,22 +720,19 @@ $('td:eq(0)', row).html(index);
 </thead>
 <tbody align="center">
 </table>
-
-
 </div>
-
-
 <script type="text/javascript">
 $(function() {
 $('input[name="dates"]').daterangepicker({
 locale :{
-format:'DD/MM/YYYY'
+format:'YYYY-MM-DD'
 },   
 opens: 'right'
 }, function(start, end, label) {
-console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
 });
 });
+
+
 
 function edit_status(data){
 var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       
@@ -731,7 +760,7 @@ type:"POST",
 url:"<?php echo base_url('G_dashboard/update_status_penjualan') ?>",
 data:"token="+token+"&status_penjualan="+value+"&resi_pengiriman="+value2+"&id_data_penjualan="+data,
 success:function(data){
-    
+
 swal({
 title:"", 
 text:"Update berhasil",
@@ -741,7 +770,7 @@ showConfirmButton: true,
 window.location.href = '<?php echo base_url('G_dashboard/laporan_penjualan') ?>';
 });     
 }
-    
+
 });
 }else{
 reject('Resi Pengiriman belum di masukan :(');
@@ -762,4 +791,48 @@ reject('Anda Harus Memilih Selesai :)');
 
 }
 
-</script>                    
+</script>
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Penjualan Guepedia</h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body" id="popdata">  
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar </button>
+<a id="id_print" href="" ><button type="button" class="btn btn-primary">Print Penjualan <span class="fa fa-print"></span></button></a>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<script type="text/javascript">
+function data_penjualan(param){
+var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>";    
+
+$.ajax({
+type:"POST",
+url:"<?php echo base_url('G_dashboard/get_penjualan') ?>",
+data:"token="+token+"&id_data_penjualan="+param,
+success:function(data){
+document.getElementById("popdata").innerHTML = data;
+$("#id_print").attr("href", "<?php echo base_url('G_dashboard/print_penjualan/') ?>"+param);
+}
+});
+
+
+}
+
+
+
+</script>

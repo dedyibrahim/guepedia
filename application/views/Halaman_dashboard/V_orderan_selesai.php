@@ -1,4 +1,3 @@
-<div class="container" style="background-color: #fff;">
     
 <script type="text/javascript">
 $(document).ready(function() {
@@ -15,10 +14,10 @@ return {
 };
 };
 
-var t = $("#data_penulis").dataTable({
+var t = $("#data_orderan").dataTable({
 initComplete: function() {
 var api = this.api();
-$('#data_penulis')
+$('#data_orderan')
 .off('.DT')
 .on('keyup.DT', function(e) {
 if (e.keyCode == 13) {
@@ -44,13 +43,14 @@ columns: [
 },
 {"data": "invoices_toko"},
 {"data": "nama_penerima"},
+{"data": "nomor_kontak"},
 {"data": "nomor_resi"},
 {"data": "status"},
-{"data": "view"},
+{"data": "view"}
 
 
 ],
-order: [[1, 'desc']],
+order: [[0, 'desc']],
 rowCallback: function(row, data, iDisplayIndex) {
 var info = this.fnPagingInfo();
 var page = info.iPage;
@@ -62,23 +62,23 @@ $('td:eq(0)', row).html(index);
 });
 
 
-</script>    
-<div class="container" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-
+</script>     
+<div class="container">
+<div class=" card p-3 mt-2 mb-2">
 <h4 align="center"><span class=" fa-3x fa fa-color fa-check-square-o"></span> <br>Data seluruh orderan Store guepedia </h4><hr>
 
-<table id="data_penulis" class="table table-striped table-condensed  table-hover table-sm"><thead>
+<table id="data_orderan" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">
 <th  align="center"    aria-controls="datatable-fixed-header"  >No</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Invoices</th>
-<th  align="center"     aria-controls="datatable-fixed-header"  >Pembeli</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >No Invoices</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Nama Customer</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Tanggal Transaksi</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nomor Resi</th>
-<th   align="center"     aria-controls="datatable-fixed-header"  >Status</th>
-<th style="width: 15%;" align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
+<th  align="center"     aria-controls="datatable-fixed-header"  >Status</th>
+<th style="width: 25%;" align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
 </thead>
 <tbody align="center">
 </table>
 
 </div>
-
 </div>

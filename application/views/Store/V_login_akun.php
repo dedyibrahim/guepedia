@@ -1,18 +1,40 @@
-<div class="container" style="background-color: #fff; margin-top: 6.5%; margin-bottom:1%; ">
-<h4 align="center"><span class="fa fa-lock fa-3x fa-color"></span><br>Login akun</h4>  
-<div class="offset-3 col-md-6">
-    Jika anda belum pernah bertransaksi  di <a style="text-decoration: none;" href="<?php echo base_url(); ?>"> guepedia.com </a> silahkan anda melakukan proses pendaftaran terlebih dahulu dengan cara  klik belum punya akun atau klik <a style="text-decoration: none;" href="<?php echo base_url('Store/daftar_akun') ?>">di sini</a><hr>    
+<div class="container batas_header">
+    <div class="row ">
+        <div class="col mt-3 d-none d-sm-block d-md-block">
+            <img src="<?php echo base_url('assets/img/pg_login.png') ?>">  
+           
+        </div>       
+<div class="col-md-4 mt-3  mb-3">
+<div class="card ">
+<div class="card-header">
+<h4 align="center"><span class="fa fa-lock fa-3x fa-color"></span><br>Login akun</h4>
+</div>
+<div class="card-body">
+
 <label>Email :</label>
 <input type="text" id="email_login" placeholder="Email . . ." class="form-control">    
 <label>Password :</label>
 <input type="password" id="password_login" placeholder="Password . . ." class="form-control">    
-<hr>
-<a  class="float-right" style="text-decoration:none; " href="<?php echo base_url('Store/lupa_sandi') ?>">Lupa Kata sandi ?</a>
-<a  style="text-decoration:none; " href="<?php echo base_url('Store/daftar_akun') ?>">Belum Punya akun ?</a>
-<hr>
-<button class="btn btn-success form-control" onclick="login_akun();"> Login <span class="fa fa-sign-in"></span></button>
+
+<div class="row">
+<div class="col text-right"><a  class="" style="text-decoration: none; color: #28a745;"href="<?php echo base_url('Store/lupa_sandi') ?>">Lupa Kata sandi ?</a>
+</div>    
+
 </div>
 </div>
+<div class="card-footer text-muted">
+<button class="btn btn-success form-control" onclick="login_akun();"> Masuk <span class="fa fa-sign-in"></span></button>
+<hr>
+<a href="<?php echo $google_login_url ?>"<button class="btn btn-danger form-control"> Masuk dengan akun Google <span class="fa fa-google"></span></button></a>
+<hr>
+<p>Belum Punnya Akun Guepedia ? <a style="text-decoration: none; color: #28a745;" href="<?php echo base_url('Store/daftar_akun') ?>">Daftar</a></p>
+</div>
+</div>
+
+
+</div>
+</div>
+    </div>        
 
 <script type="text/javascript">
 function login_akun(){

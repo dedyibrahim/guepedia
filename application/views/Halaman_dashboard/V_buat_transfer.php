@@ -1,10 +1,9 @@
 
 <?php $data = $data_penulis->row_array(); ?>
-<div class="container"  style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-<div class="col">
-<h4 align="center"> Data  <?php echo $data['nama_lengkap'] ?></h4><hr>
+<div class="container">
 <div class="row">
-<div class="col-md-6">
+
+<div class="col-md-6 card m-2 p-2">
 <table class="table table-striped table-hover table-condensed ">
 <h4 align="center">Data Umum</h4>
 <hr>
@@ -34,7 +33,7 @@
 
 </table>     
 </div>
-<div class="col">
+<div class="col card m-2 p-2">
 <h4 align="center">Data Khusus</h4><hr>
 
 Royalti Belum di tarik : Rp.<?php echo number_format($data['royalti_diperoleh']) ?>
@@ -57,54 +56,44 @@ Jumlah Naskah : <?php echo $total_naskah->num_rows(); ?>
 
 </div>
 </div>
-</div>
 
-<div class="container"  style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">
-<h4 align="center">Transfer Royalti </h4><hr>
+<div class="container">
 <div class="row">
-<div class="col">
-<label>Royalti :</label>
-<input type="text" readonly="" id="royalti" value="<?php echo $data['royalti_diperoleh'] ?>" class="form-control">
-</div>
-<div class="col">
-<label>Biaya admin :</label>
-<input type="text" id="biaya_admin" placeholder="Biaya admin . . . " class="form-control">
-</div>
-<div class="col">
-<label>royalti Bersih :</label>
-<input type="text" id="royalti_bersih" readonly="" class="form-control">
-</div>
+<div class="col-md-6  p-2 m-2 card">
+<?php $data_bukti = $data_bukti->row_array(); ?> 
+<h5 align="center">Nomor Penarikan <?php echo $data_bukti['nomor_penarikan'] ?></h5>
+<hr>    
 
-<div class="col">
+<table class="table-striped table-condensed">
+<tr><td>Bagi Hasil</td><td> Rp. <?php echo  number_format($data_bukti['royalti_sebelumnya']) ?> </td></tr>
+<tr><td>Biaya Admin</td><td> Rp.<?php echo number_format($data_bukti['biaya_admin'])?> </td></tr>
+<tr><td>Penarikan </td><td> Rp.<?php echo number_format($data_bukti['royalti_ditarik'])?> </td></tr>
+<tr><td>Jumlah Penarikan</td><td> Rp.<?php echo number_format($data_bukti['jumlah_penarikan'])?> </td></tr>
+<tr><td>Sisa Bagi Hasil</td><td> Rp.<?php echo number_format($data_bukti['royalti_diperoleh'])?> </td></tr>
+</table>
+</div>
+<div class="col p-2 m-2 card">
+<?php if($data_bukti['status'] != "Selesai"){ ?>
 <label>Bukti Transfer :</label>
-<input type="file" name="bukti_transfer" id="bukti_transfer"  value="">
-</div>
-
-
-<div class="col">
-<label>&nbsp;</label>
+<input type="file" class="form-control" name="bukti_transfer" id="bukti_transfer"  value="">
+<hr>
 <button class="btn btn-success form-control" id="btn_transfer">Transfer <span class="fa fa-exchange"></span></button>   
+<?php } else{ ?>
+<h3 align="center">Royalti Telah behasil ditarik <br>
+Nomor Penarikan <?php echo $data_bukti['nomor_penarikan'] ?>
+</h3>
+<?php }?>
 </div>
-
 </div>
 
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
 
-$("#biaya_admin").keyup(function(){
-var royalti        = $("#royalti").val();
-var biaya_admin    = $("#biaya_admin").val();
-var royalti_bersih = $("#royalti_bersih").val();
 
-$("#royalti_bersih").val(royalti - biaya_admin);  
-});
 
 $("#btn_transfer").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>";           
-var royalti        = $("#royalti").val();
-var biaya_admin    = $("#biaya_admin").val();
-var royalti_bersih = $("#royalti_bersih").val();
 
 var bukti_transfer = $('#bukti_transfer')[0];
 
@@ -115,12 +104,9 @@ formData.append('bukti_transfer',file);
 });
 
 formData.append('token',token);
-formData.append('royalti',royalti);
-formData.append('biaya_admin',biaya_admin);
-formData.append('royalti_bersih',royalti_bersih);
-formData.append('id_account',"<?php echo $this->uri->segment(3); ?>");
+formData.append('id_data_pengajuan',"<?php echo $this->uri->segment(4); ?>");
 
-if (royalti !='' && biaya_admin !='' && royalti_bersih  !='' && bukti_transfer !=''){
+if (bukti_transfer !=''){
 $.ajax({
 method: 'POST',
 url:"<?php echo base_url('G_dashboard/simpan_transfer_royalti') ?>",

@@ -1,5 +1,5 @@
 <body class="bg_dashboard_admin">
-<nav class="navbar navbar-expand-lg"style="background-color:#2c3e50; color:#fff; border-bottom:4px solid #fff;  ">
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color:#2c3e50; color:#fff; border-bottom:4px solid #fff;  ">
 <a class="navbar-brand" href="<?php echo base_url('G_dashboard') ?>"><img style="height:30px; " src="<?php echo base_url() ?>assets/img/logo.png" alt=""/></a>
 
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,7 +18,7 @@
 </nav>
 
 
-<div class="container" style="background-color:#eee; border-radius:0px 0px  10px 10px; border-bottom:4px solid  #2c3e50;">
+<div class="container card mt-2 p-2" >
 <div class="row" style="text-align: center;">
 <div class="col"  ><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard'); ?>"><span class="fa fa-book fa-3x"></span><br> Kategori</a></div>        
 <div class="col"><a style="text-decoration:none;  color: #2c3e50;" href="<?php echo base_url('G_dashboard/orderan_masuk'); ?>"> <span class="fa fa-gears fa-3x"></span><br> Pengaturan Toko</a></div>  
@@ -30,28 +30,48 @@
 </div>
 </div>
 <?php if($this->session->userdata('level') == 'Super Admin'){ ?>
-<div class="container" style="background-color:#eee; border-radius:5px;  margin-top:1%;  ">
+<div class="container " >
 
 <div class="row">
-<div class="col " style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff;   ">
+<div class="col  rounded" style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff;   ">
 <span class="fa fa-shopping-cart fa-4x " style="position:absolute; "> </span>
-<h3 class="text-right">Item</h3><br>
-<div class="text-center"><?php echo $this->db->get('data_jumlah_penjualan')->num_rows() ?></div>
+<h5 class="text-right">Buku terjual  di <br><?php echo date('F') ?></h5><br>
+<div class="text-center"><?php 
+$awal  = date('Y-m-d',strtotime("first day of this month"));
+$akhir = date('Y-m-d',strtotime("last day of this month"));
+
+
+$this->db->select('*');
+$this->db->where('data_penjualan.tanggal_transaksi >=',$awal);
+$this->db->where('data_penjualan.tanggal_transaksi <=',$akhir);
+$this->db->from('data_penjualan');
+$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$query2 = $this->db->get()->num_rows() ;
+echo $query2;        
+        ?></div>
 </div>
-<div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff; ">
+<div class="col rounded" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff; ">
 <span class="fa fa-money fa-4x " style="position:absolute; "> </span>
-<h3 class="text-right">Keuntungan</h3><br>
-<div class="text-center">Rp. <?php $query =  $this->db->get('data_penjualan');
+<h5 class="text-right">Keuntungan di<br><?php echo date('F') ?> </h5><br>
+<div class="text-center">Rp. <?php
+
+$this->db->from('data_penjualan');
+$this->db->where('tanggal_transaksi >=',$awal);
+$this->db->where('tanggal_transaksi <=',$akhir);
+
+$query =  $this->db->get();
+
 $total_bersih = 0;
 foreach ($query->result_array() as $bersih ){
 $total_bersih +=$bersih['total_bersih'];   
 }
 echo number_format($total_bersih);
-?></div>
+?>
+</div>
 </div> 
-<div class="col" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff;  ">
+<div class="col rounded" style="background-color: #2c3e50; margin:1%; padding:1%; color: #fff;  ">
 <span class="fa fa-magic fa-4x " style="position:absolute; "> </span>
-<h3 class="text-right">Bagi Hasil</h3><br>
+<h5 class="text-right">Bagi Hasil</h5><br>
 <div class="text-center">Rp. <?php $query =  $this->db->get_where('akun_penulis',array('royalti_diperoleh !='=>'0'));
 $royalti = 0;
 foreach ($query->result_array() as $bersih ){
@@ -60,9 +80,9 @@ $royalti +=$bersih['royalti_diperoleh'];
 echo number_format($royalti);
 ?></div>
 </div> 
-<div class="col" style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff; ">
+<div class="col rounded" style="background-color: #2c3e50; margin:1%; padding:1%;  color: #fff; ">
 <span class="fa fa-book fa-4x " style="position:absolute; "> </span>
-<h3 class="text-right">Naskah</h3><br>
+<h5 class="text-right">Naskah terpublish</h5><br>
 <div class="text-center"><?php echo $this->db->get_where('file_naskah_penulis',array('status'=>'Publish'))->num_rows() ?></div>
 </div>
 </div>

@@ -384,7 +384,7 @@ $config['sess_cookie_name'] = 'guepedia';
 $config['sess_expiration'] = 7200;
 $config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;
-$config['sess_time_to_update'] = 300;
+$config['sess_time_to_update'] = 7000;
 $config['sess_regenerate_destroy'] = FALSE;
 
 /*
@@ -453,7 +453,7 @@ $config['global_xss_filtering'] = FALSE;
 $config['csrf_protection']   = TRUE;
 $config['csrf_token_name']   = 'token';
 $config['csrf_cookie_name']  = 'csrf_cookie_name';
-$config['csrf_expire']       = 7200;
+$config['csrf_expire']       = 10000;
 $config['csrf_regenerate']   = FALSE;
 $config['csrf_exclude_uris'] = array();
 

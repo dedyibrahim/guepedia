@@ -15,21 +15,21 @@ text-decoration: none;
 }
 .list-inline li a:hover{
 margin-top:3%;    
-color: #a8cf45;
+color:#28a745;
 text-decoration: none;
 }
 </style>
 
-<div class="col">
+<div class="col-md-3">
 <h5 align="center">Bantuan  <span class="fa fa-question"></span> <hr></h5>
 <ul class="list-inline">
-<li><a href="<?php echo base_url('Store/konfirmasi_pembayaran'); ?>">Konfirmasi Pembayaran</a></li>   
-<li><a href="<?php echo base_url('Penulis'); ?>">Menjadi Penulis</a></li>   
+<li><a href="<?php echo base_url('Store/cara_beli_buku'); ?>">Cara Membeli Buku</a></li>   
+<li><a href="<?php echo base_url('Penulis'); ?>">Cara Menjadi Penulis</a></li>   
 <li><a href="<?php echo base_url('Store/hubungi_kami'); ?>">Hubungi Kami</a></li>   
 </ul>
 </div>
 
-<div class="col">
+<div class="col-md-3">
 <h5 align="center">Tentang Guepedia <span class="fa fa-info"></span><hr></h5>
 <ul class="list-inline">
 <li><a href="<?php echo base_url('Store/tentang_kami'); ?>">Tentang Kami</a></li>   
@@ -38,7 +38,7 @@ text-decoration: none;
 </ul>
 </div>
 
-<div class="col">
+<div class="col-md-3">
 <h5 align="center">Guepedia tersedia di <span class="fa fa-home"></span><hr></h5>
 <ul class="list-inline">
 <li><a href="https://www.tokopedia.com/guepedia"> <img src="<?php echo base_url('assets/img/tokopedia.png') ?>"> Tokopedia.com</a></li>   
@@ -48,7 +48,7 @@ text-decoration: none;
 </ul>
 </div>
 
-<div class="col">
+<div class="col-md-3">
 <h5 align="center">Sosial Media <span class="fa fa-internet-explorer"></span><hr></h5>
 <ul class="list-inline">
 <li><a href="https://www.facebook.com/guepediapublisher"><span class="fa fa-facebook fa-2x"></span> Facebook</a></li>   

@@ -120,6 +120,8 @@ columns: [
 {"data": "nama_kupon"},
 {"data": "nilai_kupon"},
 {"data": "syarat_kupon"},
+{"data": "status_kupon"},
+{"data": "tanggal_expired"},
 {"data": "view"},
 
 
@@ -146,6 +148,8 @@ $('td:eq(0)', row).html(index);
 <th  align="center"     aria-controls="datatable-fixed-header"  >Kupon</th>
 <th  align="center"     aria-controls="datatable-fixed-header"  >Nilai</th>
 <th   align="center"     aria-controls="datatable-fixed-header"  >Minimal</th>
+<th   align="center"     aria-controls="datatable-fixed-header"  >Status Kupon</th>
+<th   align="center"     aria-controls="datatable-fixed-header"  >Tanggal Expired</th>
 <th style="width: 15%;" align="center"     aria-controls="datatable-fixed-header"  >Aksi</th>
 </thead>
 <tbody align="center">

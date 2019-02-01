@@ -2,13 +2,16 @@
 
 <div class="container card  p-2 mt-2 mb-2">
 <h4 align="center">Ajukan Penarikan Bagi Hasil <span class="fa fa-exchange"></span> </h4><hr>
-<?php if ($static['royalti_diperoleh'] < 20000){ ?>
+<?php  if ($static['id_bank'] == NULL){ ?>
+<H4 align="center" ><span style="color:#ffc107;"> <span class="fa fa-warning fa-3x"></span><br> Anda belum bisa melakukan penarikan</span>  <br>Harap Perbaharui Akun Bank anda terlebih dahulu</H4>
+
+<?php } else if ($static['royalti_diperoleh'] < 20000){ ?>
 <H4 align="center" ><span style="color:#ffc107;"> <span class="fa fa-warning fa-3x"></span><br> Anda belum bisa melakukan penarikan</span>  <br> karena bagi hasil anda kurang dari Rp.20.000</H4>
 <?php }else{ ?>
 <div class="row">
 <div class="col">
 <label>Jumlah Penarikan</label>
-<input type="text" id="jumlah_penarikan" value="0" class="form-control">
+<span>Rp.<input type="text"  id="jumlah_penarikan" class="form-control money"></span>
 </div>
 
 <?php 
@@ -32,11 +35,15 @@ if($static['id_bank'] != 1){
 </div>
 <?php } ?>
 </div>
+
 <script type="text/javascript">
 $(document).ready(function(){
+$('.money').simpleMoneyFormat();    
+    
 $("#ajukan").click(function(){
 var <?php echo $this->security->get_csrf_token_name();?>    = "<?php echo $this->security->get_csrf_hash(); ?>"   
-var jumlah_penarikan = $("#jumlah_penarikan").val();
+var jumlah = $("#jumlah_penarikan").val();
+var jumlah_penarikan = jumlah.replace(/[^\d\.]/g, '');;
 
 if($.isNumeric(jumlah_penarikan) == true && jumlah_penarikan !=0){
 $.ajax({
@@ -49,7 +56,7 @@ swal({
 type:"success",
 html:"Pengajuan Royalti Berhasil"
 });
-
+$("#jumlah_penarikan").val("");
 }else{
 swal({
 type:"error",
@@ -143,7 +150,7 @@ $('td:eq(0)', row).html(index);
 
 </script>    
 <div class="container card p-2 mt-2 mb-2" >
-<h4 align="center"> Data Transferan Bagi Hasil Yang Selesai</h4><hr>
+<h4 align="center"> Data Pengajuan Penarikan Bagi Hasil</h4><hr>
 
 <table id="data_transfer" class="table table-striped table-condensed  table-hover table-sm"><thead>
 <tr role="row">

@@ -1,153 +1,187 @@
 
 <div class="container" style="margin-top:1%; margin-bottom:1%;  ">
 <div class="row">    
-<div class="col" style="background-color: #eee; padding:1%; ">
-<h4 align="center"> Upload Naskah <?php echo $this->session->userdata('nama_lengkap') ?></h4><hr>
-<p>Jika Anda mengalami kesulitan saat upload file naskah Anda. Anda bisa mengirimkan naskah Anda melalaui email ke <strong> guepedia@gmail.com</strong></p>
+<div class="col">
+<?php if ($this->session->flashdata('hasil_upload')) { ?>
+<body onload="tampil_hasil_upload()"></body>
+ 
+<script type="text/javascript">
+
+function tampil_hasil_upload(){
+var status_upload = "<?php echo $this->session->flashdata('status_upload'); ?>";
+console.log(status_upload);
+if(status_upload == 'berhasil'){
+swal({
+html:"<?php echo $this->session->flashdata('hasil_upload'); ?>",    
+type:"success"    
+});
+
+}else if (status_upload == "gagal"){
+swal({
+html:"<?php echo $this->session->flashdata('hasil_upload'); ?>",    
+type:"error"    
+});
+}
+
+}
+
+</script>
+
+<?php }?>
+<div class="card P-2">    
+<h4 align="center"> Ketentuan Upload Naskah </h4><hr>
+
+<ol>
+<li>Kata Pengantar.</li>
+<li>Daftar Isi.</li>    
+<li>Tentang Penulis.</li>    
+<li>Sinopsis sebanyak 150 - 250 kata </li>    
+<li>Sinopsis harus menggambarkan keseluruhan isi naskah secara jelas, bukan hanya penggalan dari isi naskah atau sekadar kata-kata yang tidak menceritakan isi naskah
+(Jika bagian-bagian di atas tidak ada, naskah tidak akan diproses) 
+</li>
+<li>Kata Pengantar,Daftar isi,naskah dijadikan satu file (.docx) dan di upload di halaman penulis </li>
+</ol>
 <p>Pastikan naskah yang Anda kirim sudah sesuai dengan template guepedia.<br></p>
 <p align="center"><button id="download_tamplate" class="btn btn-success">Download Tamplate <span class="fa fa-download"></span></button></p>
-
+</div>
 </div>
 
 
-<div class="col-md-6" style="background-color: #eee; margin-left: 1%;  padding:1%; ">
-<h4  class="text-center">Form upload </h4>
-<hr>   
-<label>Judul :</label>
-<input type="text" id="judul" placeholder="Judul . . ." value="" class="form-control"  data-toggle="tooltip" title="Judul Buku yang ditulis">
-<label>Penulis :</label>
-<input type="text" id="penulis" placeholder="Penulis . . ."  value="<?php echo $this->session->userdata('nama_lengkap'); ?>" class="form-control" data-toggle="tooltip" title="Nama Penulis ">
+<div class="col-md-7 card ml-1 p-4">
+<h4  class="text-center"> <span class="fa fa-upload fa-2x"></span> <br> Upload Naskah</h4>
+<hr>
+<?php echo validation_errors(); ?>
+<form method="POST"  action="<?php echo base_url('Halaman_penulis/proses_upload') ?>"  enctype="multipart/form-data" class="needs-validation" novalidate>
+<input type="hidden" name="<?php echo  $this->security->get_csrf_token_name()?>" value="<?php echo   $this->security->get_csrf_hash();?>" />
+<div class="form-group">
+<label for="judul">Judul Naskah</label>
+<input type="text" id="judul" required="" name="judul" placeholder="Judul . . ." value="<?php echo set_value('judul'); ?>" class="form-control form-control-danger"  data-toggle="tooltip" title="Judul Buku yang ditulis">
+</div>
 
-<label>Sinopsis :</label>
-<textarea id="sinopsis" rows="5" placeholder="Sinopsis . . ." value="" class="form-control" data-toggle="tooltip" title="Untuk dibelakang Buku dan untuk Promosi"></textarea>
-<label>Kategori :</label>
-<select class="form-control" id="kategori" data-toggle="tooltip" title="Kategori Buku">
+<div class="form-group">
+<label for="penulis">Penulis </label>
+<input type="text" id="penulis" required="" name="penulis" placeholder="Penulis . . ."  value="<?php echo set_value('judul'); ?> <?php echo $this->session->userdata('nama_lengkap'); ?>" class="form-control" data-toggle="tooltip" title="Nama Penulis ">
+</div>
+<div class="form-group">
+<label for="sinopsis">Sinopsis </label>
+<textarea id="sinopsis" rows="10" required="" name="sinopsis" placeholder="Sinopsis . . ." value="<?php echo set_value('sinopsis'); ?> " class="form-control" data-toggle="tooltip" title="Untuk dibelakang Buku dan untuk Promosi"></textarea>
+</div>
+<div class="form-group">
+<label for="kategori">Kategori </label>
+<select class="form-control" required="" name="kategori" id="kategori" data-toggle="tooltip" title="Kategori Buku">
 <?php 
 foreach ($kategori->result_array() as $kate){
 echo "<option value=".$kate['id_kategori_naskah'].">".$kate['nama_kategori']."</option>";    
 }
 ?>   
 </select>
-<label>File Naskah :</label><br>
-<input type="file" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu Dan hannya Menerima Dalam bentuk Microsoft Word (.docx)"><br>
-<label>File Cover :</label><br>
-<input type="file" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."  data-toggle="tooltip" title="Note : Jika ada Dan hannya Menerima Dalam bentuk Photoshop (.PSD)" ><br>
-
+</div>
 <hr>
-<div class="checkbox">
-<label>
-<input type="checkbox" id="ketentuan"  data-toggle="modal" data-target=".bd-example-modal-lg" value="setuju"  > Saya menyetujui dan mematuhi <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><strong><u>syarat dan ketentuan </u></strong></a> ( Perjanjian Guepedia dan Penulis ) dari guepedia.com<br>
+<label for="file_naskah">File Naskah </label>
+<input type="file" required="" class="form-control" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu Dan hannya Menerima Dalam bentuk Microsoft Word (.docx)">
+<!---
+//<label for="file_cover">File Cover </label>
+//<input type="file" class="form-control" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."  data-toggle="tooltip" title="Note : Bila memiliki dile cover sendiri upload dalam bentuk photoshop (.PSD)" >
+--->
+<hr>
+<div class="form-group">
+<div class="form-check">
+<input data-toggle="modal" data-target=".bd-example-modal-lg" class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+<label class="form-check-label" for="invalidCheck">
+Saya menyetujui dan mematuhi <a href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><strong><u>syarat dan ketentuan </u></strong></a> ( Perjanjian Guepedia dan Penulis ) dari guepedia.com
+<hr>
 Jika Anda sudah memberikan centang pada pernyataan di atas, kami anggap Anda sudah membaca dan memahami segala syarat dan ketentuan yang diberlakukan di guepedia.com, dan ini  sebagai dokumen sah perjanjian
 antara Guepedia dan Penulis.
+
 </label>
+<div class="invalid-feedback">
+Anda Harus Menyetujui syarat dan ketentuan yang berlaku di guepedia.com
 </div>
-<hr>
-<button class="btn btn-success float-right" id="btn_upload" > Upload <span class="fa fa-upload"></span></button>
 </div>
+</div>
+
+<hr>    
+<button class="btn btn-success form-control float-right" id="btn_upload" > Simpan Upload <span class="fa fa-upload"></span></button>
+</form>
+
+
+
+</div>
+
 <script type="text/javascript">
-$("#btn_upload").click(function(){
-var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       
-var setuju      = $("#ketentuan:checked").val();
-var judul       = $("#judul").val();
-var penulis     = $("#penulis").val();
-var file_naskah = $("#file_naskah").val();
-var file_cover  = $("#file_cover").val();
-var sinopsis    = $("#sinopsis").val();
-var kategori    = $("#kategori").val();
+$(document).ready(function(){
+var fileNaskah      = $('#file_naskah')[0];
+var fileCover       = $('#file_cover')[0];
 
-if(judul !='' && penulis !='' && file_naskah !='' && sinopsis !='' && kategori !=''){
-
-if(setuju == "setuju"){
-
-var fileNaskah = $('#file_naskah')[0];
-var fileCover = $('#file_cover')[0];
-var formData = new FormData();
-
-$.each(fileNaskah.files, function(k,file){   
-formData.append('file_naskah',file);
-});
-
-$.each(fileCover.files, function(k,file){   
-formData.append('file_cover',file);
-});
-
-formData.append('token',token);
-formData.append('id_kategori_naskah',kategori);
-formData.append('judul',judul);
-formData.append('penulis',penulis);
-formData.append('sinopsis',sinopsis);
-
-
-$.ajax({
-method: 'POST',
-url:"<?php echo base_url('Halaman_penulis/proses_upload') ?>",
-data: formData,
-dataType: 'text',
-contentType: false,
-processData: false,
-success:function(data){
-if(data == "berhasil"){
+$("#file_cover").change(function(){
+if(fileCover.files[0].size > 20000000){
 swal({
-title:"", 
-text:"Upload Naskah Berhasil",
-type:"success",
-showConfirmButton: true,
-}).then(function() {
-window.location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>';
-});
-} else{
-
-swal({
-title:"", 
-html :data,
-type :"error",
-showConfirmButton: true
-}).then(function() {
-window.location.href = '<?php echo base_url('Halaman_penulis/upload_naskah')  ?>';
-});
-
-}
-}
-
-
-});
-
-
-}else{
-swal({
-title:"", 
-text:"Syarat dan ketentuan Belum di pilih.",
+text:"Maksimal upload file cover 20 MB",
 type:"warning",
-showConfirmButton: true,
-});   
-}
+showConfirmButton: false,
+});
+$('#file_cover').val("");
+} 
+});
 
-}else{
+$("#file_naskah").change(function(){
+if(fileNaskah.files[0].size > 10000000){
 swal({
-title:"", 
-text:"Masih ada data yg harus di isi",
-type:"error",
-showConfirmButton: true,
-});      
-
-}
+text:"Maksimal upload file naskah 10 MB",
+type:"warning",
+showConfirmButton: false,
+});
+$('#file_naskah').val("");
+} 
+});
 
 });
+
+
+
+
 
 $(document).ready(function(){
-
 $("#download_tamplate").click(function(){
 window.location="<?php echo base_url('Halaman_penulis/download_tamplate'); ?>"
-
+});
 });
 
 
 
+</script>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+'use strict';
+window.addEventListener('load', function() {
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+var forms = document.getElementsByClassName('needs-validation');
+// Loop over them and prevent submission
+var validation = Array.prototype.filter.call(forms, function(form) {
+form.addEventListener('submit', function(event) {
+if (form.checkValidity() === false) {
+event.preventDefault();
+event.stopPropagation();
+}
+form.classList.add('was-validated');
+}, false);
 });
+}, false);
+})();
+</script>
+ <script>
+    CKEDITOR.replace( 'sinopsis', {
+	toolbarGroups: [
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+ 		{ name: 'links' },
+                { name: 'paragraph', groups: [  'align',  'paragraph' ] },
 
+	]
 
-
-</script>    
+});
+            </script>
 </div>
 </div>
 

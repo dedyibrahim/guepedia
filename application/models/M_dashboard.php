@@ -63,7 +63,8 @@ $this->datatables->select('id_file_naskah,'
 
 $this->datatables->from('file_naskah_penulis');
 $this->datatables->join('kategori_naskah','kategori_naskah.id_kategori_naskah = file_naskah_penulis.id_kategori_naskah');
-$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/lihat_naskah/$1"></a> || <a class="btn btn-sm btn-danger fa fa-trash " href="'.base_url().'G_dashboard/hapus_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
+//$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/lihat_naskah/$1"></a> || <a class="btn btn-sm btn-danger fa fa-trash " href="'.base_url().'G_dashboard/hapus_naskah/$1"></a>', 'base64_encode(id_file_naskah)');
+$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-eye " href="'.base_url().'G_dashboard/lihat_naskah/$1"></a> || <button class="btn btn-sm btn-danger fa fa-trash "  onclick=hapus_naskah("$1") ></button>', 'base64_encode(id_file_naskah)');
 return $this->datatables->generate();
 
 
@@ -159,10 +160,20 @@ $this->datatables->select('id_data_penjualan,'
 .'data_penjualan.penjualan as penjualan,'
 .'data_penjualan.jumlah_biaya_lain as ongkir,'        
 );
-
 $this->datatables->from('data_penjualan');
-$this->datatables->add_column('view','<a class="btn btn-sm btn-success fa fa-print " href="'.base_url().'G_dashboard/print_penjualan/$1"></a> || <a class="btn btn-sm btn-warning fa fa-print " href="'.base_url().'G_dashboard/cetak_label/$1"> Cetak Label </a> || <button class="btn btn-sm btn-warning fa fa-edit  " onclick=edit_status("$1") > Edit </button>', 'base64_encode(id_data_penjualan)');
+$this->datatables->add_column('view','<button data-toggle="modal" data-target=".bd-example-modal-lg" onclick=data_penjualan("$1") class="btn btn-sm btn-success fa fa-eye"></button> || <a class="btn btn-sm btn-warning fa fa-print " href="'.base_url().'G_dashboard/cetak_label/$1"> Cetak Label </a> || <button class="btn btn-sm btn-warning fa fa-edit  " onclick=edit_status("$1") > Edit </button>', 'base64_encode(id_data_penjualan)');
 return $this->datatables->generate();
+}
+
+function get_penjualan($id){
+$this->db->select('*');
+$this->db->from('data_penjualan');
+$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$this->db->where('data_penjualan.id_data_penjualan', base64_decode($id));
+$query = $this->db->get();
+return $query;
+
+
 
 
 }
@@ -180,6 +191,7 @@ $this->db->from("akun_penulis");
 $this->db->limit(15);
 $array = array('nama_lengkap' => $term);
 $this->db->like($array);
+$this->db->where('status_akun','aktif');
 $query = $this->db->get();
 
 if($query->num_rows() >0 ){
@@ -246,6 +258,9 @@ function set_laris($data){
 $this->db->insert('buku_terlaris',$data);   
     
 }
+function set_diskon_produk($data,$param){
+$this->db->update('file_naskah_penulis',$data,array('id_file_naskah'=>$param));    
+}
 
 function data_produk_laris(){
 $this->db->select('buku_terlaris.id_file_naskah');
@@ -253,6 +268,10 @@ $this->db->select('judul');
 $this->db->from('buku_terlaris');
 $this->db->join('file_naskah_penulis', 'file_naskah_penulis.id_file_naskah = buku_terlaris.id_file_naskah');
 $query = $this->db->get();
+return $query;
+}
+function data_produk_diskon(){
+$query = $this->db->get_where('file_naskah_penulis',array('status'=>'Produk Diskon'));
     
 return $query;    
 }
@@ -361,9 +380,10 @@ return $this->datatables->generate();
       
 }
 
-function simpan_transfer($data){
+function simpan_transfer($data,$id){
 
-$this->db->insert('data_transfer_royalti',$data);    
+$this->db->update('data_pengajuan_royalti',$data,array('id_data_pengajuan'=> base64_decode($id)));
+    
 }
 
 function json_transfer_royalti(){
@@ -393,9 +413,6 @@ $this->datatables->select('data_jumlah_penjualan_toko.id_penjualan_toko,'
 .'data_jumlah_penjualan_toko.nomor_resi as nomor_resi,'
         
 );
-$this->datatables->where('status','selesai');
-$this->datatables->or_where('status','expired');
-$this->datatables->or_where('status','tolak');
 $this->datatables->from('data_jumlah_penjualan_toko');
 $this->datatables->add_column('view','<a href='. base_url('G_dashboard/download_invoices/$1').' class="btn btn-sm btn-success fa fa-download "> Download invoices </a>', 'base64_encode(id_penjualan_toko)');
 return $this->datatables->generate();
@@ -417,7 +434,7 @@ return $query;
 }
 
 function orderan_terima(){
-
+         $this->db->order_by('tanggal_terima','DESC');
 $query = $this->db->get_where('data_jumlah_penjualan_toko',array('status'=>'terima'));
 
 return $query;
@@ -467,6 +484,8 @@ $this->datatables->select('data_kode_kupon.id_data_kupon,'
 .'data_kode_kupon.nama_kupon as nama_kupon,'
 .'data_kode_kupon.nilai_kupon as nilai_kupon,'
 .'data_kode_kupon.syarat_kupon as syarat_kupon,'
+.'data_kode_kupon.status_kupon as status_kupon,'
+.'data_kode_kupon.tanggal_expired as tanggal_expired,'
 );
 
 $this->datatables->from('data_kode_kupon');
@@ -533,11 +552,62 @@ $this->datatables->select('data_pengajuan_royalti.id_account,'
 .'akun_penulis.email as email,'
         
 );
-$this->datatables->where('data_pengajuan_royalti.id_account',$this->session->userdata('id_account'));
+$this->datatables->where('data_pengajuan_royalti.status','Pending');
 $this->datatables->from('data_pengajuan_royalti');
 $this->datatables->join('akun_penulis','akun_penulis.id_account = data_pengajuan_royalti.id_account');
-$this->datatables->add_column('view','<a href='.base_url('G_dashboard/buat_transfer/$1/$2').'  class="btn btn-sm btn-success fa fa-exchange "> Buat Transferan </a>', 'base64_encode(id_account),base64_encode(id_data_pengajuan)');
+$this->datatables->add_column('view','<a href='.base_url('G_dashboard/buat_transfer/$1/$2').'  class="btn btn-sm btn-success fa fa-exchange "> </a> || <a href='.base_url('G_dashboard/download_bukti/$2').'  class="btn btn-sm btn-success fa fa-download "> </a>', 'base64_encode(id_account),base64_encode(id_data_pengajuan)');
 return $this->datatables->generate();
       
 }
+function json_data_pengajuan_bagi_hasil_selesai(){
+$this->datatables->select('data_pengajuan_royalti.id_account,'
+.'data_pengajuan_royalti.id_data_pengajuan as id_data_pengajuan,'
+.'data_pengajuan_royalti.nomor_penarikan as nomor_penarikan,'
+.'data_pengajuan_royalti.biaya_admin as biaya_admin,'
+.'data_pengajuan_royalti.royalti_ditarik as royalti_ditarik,'
+.'data_pengajuan_royalti.status as status,'
+.'data_pengajuan_royalti.jumlah_penarikan as jumlah_penarikan,'
+.'akun_penulis.nama_lengkap as nama_lengkap,'
+.'akun_penulis.nomor_kontak as nomor_kontak,'
+.'akun_penulis.email as email,'
+        
+);
+$this->datatables->where('data_pengajuan_royalti.status','Selesai');
+$this->datatables->from('data_pengajuan_royalti');
+$this->datatables->join('akun_penulis','akun_penulis.id_account = data_pengajuan_royalti.id_account');
+$this->datatables->add_column('view','<a href='.base_url('G_dashboard/buat_transfer/$1/$2').'  class="btn btn-sm btn-success fa fa-exchange "> </a> || <a href='.base_url('G_dashboard/download_bukti/$2').'  class="btn btn-sm btn-success fa fa-download "> </a>', 'base64_encode(id_account),base64_encode(id_data_pengajuan)');
+return $this->datatables->generate();
+      
+}
+public function data_bukti($id_data_transfer){
+ 
+$this->db->select('*');
+$this->db->from('data_pengajuan_royalti');
+$this->db->join('akun_penulis', 'akun_penulis.id_account = data_pengajuan_royalti.id_account');
+$this->db->where('id_data_pengajuan',base64_decode($id_data_transfer));
+$query = $this->db->get();
+return $query;
+}
+
+public function cek_data_kode_kupon($id_account){
+$query = $this->db->get_where('data_kode_kupon',array('id_account'=>$id_account,'status_kupon'=>"Permanen"));
+return $query;
+}
+public function input_kode_kupon($data){
+$this->db->insert('data_kode_kupon',$data);    
+}
+
+public function simpan_banner($data){
+$this->db->insert('banner', $data);
+}
+public function data_banner(){
+$query = $this->db->get('banner');
+return $query;
+    
+}
+public function hapus_banner($id){
+
+$this->db->delete('banner',array('id_banner'=> base64_decode($id)));    
+}
+
 }

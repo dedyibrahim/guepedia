@@ -1,6 +1,15 @@
-<div class="container" style="background-color: #fff; margin-top: 6.5%;">
-<h4 align="center"><span class=" fa-3x fa fa-list-alt"></span> <br> Daftar transaksi </h4><hr>
+<div class="container batas_header p-2">
+<ul class="nav nav-tabs mt-2 mb-2" role="tablist">
+<li class="nav-item">
+<a class="nav-link nav-link active show" href="#transaksi" role="tab" aria-selected="true" data-toggle="tab">Daftar Transaksi</a>
+</li>
 
+
+</ul>
+
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane fade in active show p-3" id="transaksi">
+    <div class="card p-2">    
 <script type="text/javascript">
 $(document).ready(function() {
 $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
@@ -75,5 +84,8 @@ $('td:eq(0)', row).html(index);
 </thead>
 <tbody align="center">
 </table>
-<hr>
+</div>
+</div>
+
+</div>
 </div>

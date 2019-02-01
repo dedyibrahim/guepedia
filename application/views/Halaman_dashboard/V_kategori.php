@@ -1,17 +1,19 @@
-<div class="container" style="margin-top:1%; margin-bottom:1%; ">
+<div class="container mb-2 mt-2">
 <div class="row">
-<div class="col" style="background-color:#eee; padding: 1%;">
+<div class="col " >
+<div class="card p-2">
 <h4 align="center">Buat Kategori <span class="fa fa-list-alt"></span></h4>
 <hr>
 <div class="form-group">
 <label>Buat Kategori :</label>    
 <input type="text" class="form-control" id="nama_kategori" placeholder="Nama kategori . . "><br>
 <button class="fa fa-save btn btn-success float-right" id="btn_kategori"> Simpan</button>
-<div class="clearfix"></div><hr>  
-</div>
 
 </div>
-<div class="col-md-7" style="background-color:#eee; margin-left:1%;  padding:1%;  ">
+    </div>
+</div>
+    
+<div class="col-md-7 card p-2" >
 <h4 align="center">Data Kategori <span class="fa fa-list"></span></h4><hr>
 <table class="table table-bordered table-condensed table-striped table-sm table-hover">
 <tr>

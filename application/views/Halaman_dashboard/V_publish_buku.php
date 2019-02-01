@@ -71,7 +71,15 @@ $('#email_penulis').val(ui.item.email_penulis);
 
 </script>
 <script>
-CKEDITOR.replace( 'sinopsis' );
+    CKEDITOR.replace( 'sinopsis', {
+	toolbarGroups: [
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+ 		{ name: 'links' },
+                { name: 'paragraph', groups: [  'align',  'paragraph' ] },
+
+	]
+
+});
 </script>
 <script type="text/javascript">
 $("#btn_publish").click(function(){

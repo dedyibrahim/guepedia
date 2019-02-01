@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
 require APPPATH.'libraries/dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
-
 class Halaman_penulis extends CI_Controller {
 function __construct() {
 parent::__construct();
@@ -10,14 +10,15 @@ parent::__construct();
 $this->load->helper('download');
 $this->load->library('upload');
 $this->load->model('M_halaman_penulis');
-if(!$this->session->userdata('nama_lengkap')  && !$this->session->userdata('id_account') ){
+ $this->load->library('form_validation');
+ if(!$this->session->userdata('nama_lengkap')  && !$this->session->userdata('id_account') ){
 redirect(base_url('Penulis')); 
 }
 }
 
 public function index(){
 $data_penulis = $this->M_halaman_penulis->data_penulis();
- 
+
 
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_penulis/V_menu');
@@ -51,7 +52,7 @@ redirect('Penulis');
 public function simpan_rekening(){
 if($this->input->post('nama_bank')){
 $input = $this->input->post();
-    
+
 $data= array(
 'id_account'            =>$this->session->userdata('id_account'),    
 'nama_pemilik_rekening' =>$input['pemilik_rekening'],
@@ -71,76 +72,106 @@ redirect(404);
 
 function upload_naskah(){
 $kategori = $this->M_halaman_penulis->data_kategori_naskah();    
-    
+
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_penulis/V_menu');
 $this->load->view('Halaman_penulis/V_upload_naskah',['kategori'=>$kategori]);
 $this->load->view('Umum/V_footer');
-   
-    
+
+
 }
 
 public function proses_upload(){
-$input = $this->input->post();
+
+if($this->input->post()){
     
+$input = $this->input->post();    
+$this->form_validation->set_rules('judul', 'Judul', 'required');
+$this->form_validation->set_rules('penulis', 'Penulis', 'required');
+$this->form_validation->set_rules('sinopsis', 'Sinopsis', 'required');
+$this->form_validation->set_rules('kategori', 'Kategori', 'required');
+
+if ($this->form_validation->run() == FALSE){
+$kategori = $this->M_halaman_penulis->data_kategori_naskah();    
+$this->load->view('Umum/V_header');
+$this->load->view('Halaman_penulis/V_menu');
+$this->load->view('Halaman_penulis/V_upload_naskah',['kategori'=>$kategori]);
+$this->load->view('Umum/V_footer');    
+
+   
+}else{
+    
+$input = $this->input->post();
 $config2['upload_path']          = './uploads/dokumen_naskah/';
 $config2['allowed_types']        = 'docx|doc';
-$config2['file_size']            = "2004800";
+$config2['file_size']            = "100000";
 $config2['encrypt_name']         = TRUE;
 
 $config3['upload_path']          = './uploads/file_cover/';
 $config3['allowed_types']        = 'psd';
-$config3['file_size']            = "2004800";
+$config3['file_size']            = "100000";
 $config3['encrypt_name']         = TRUE;
 
 
 $this->upload->initialize($config2);
+
 if (!$this->upload->do_upload('file_naskah')){
-echo $this->upload->display_errors();
+
+ $this->session->set_flashdata('hasil_upload', $this->upload->display_errors());    
+$this->session->set_flashdata('status_upload', 'gagal');    
+
+redirect(base_url('Halaman_penulis/upload_naskah'));  
 
 }else{     
 $file_naskah = $this->upload->data('file_name');
 $this->upload->initialize($config3);
 
 if($this->upload->do_upload('file_cover') != NULL){
-    
+
 $data = array(
 'id_account'        => $this->session->userdata('id_account'),
 'judul'             => $input['judul'],
 'penulis'           => $input['penulis'],
 'sinopsis'          => $input['sinopsis'],
-'id_kategori_naskah'=> $input['id_kategori_naskah'],
+'id_kategori_naskah'=> $input['kategori'],
 'file_naskah'       => $file_naskah,
 'file_cover'        => $this->upload->data('file_name'),
-'tanggal_upload'    => date('d/m/Y'),
-'status'           => 'Pending',
- );
+'tanggal_upload'    => date('Y/m/d'),
+'status'           => 'Dalam Antrian',
+);
+
 
 $this->M_halaman_penulis->simpan_naskah($data);
 $this->email_upload_naskah($input);
-
 }else{ 
 $data = array(
 'id_account'        => $this->session->userdata('id_account'),
 'judul'             => $input['judul'],
 'penulis'           => $input['penulis'],
 'sinopsis'          => $input['sinopsis'],
-'id_kategori_naskah'=> $input['id_kategori_naskah'],
+'id_kategori_naskah'=> $input['kategori'],
 'file_naskah'       => $file_naskah,
-'tanggal_upload'    =>date('d/m/Y'),
-'status'           => 'Pending',
+'tanggal_upload'    =>date('Y/m/d'),
+'status'           => 'Dalam Antrian',
 );
-
 $this->M_halaman_penulis->simpan_naskah($data);
 $this->email_upload_naskah($input);
 }
 
 }
+}    
+    
+}else{
+redirect(404);    
+}    
+    
+ 
+
 
 }
 
 public function email_upload_naskah($input){
- 
+
 $config['protocol'] = 'sendmail';
 $config['mailpath'] = '/usr/sbin/sendmail';
 $config['charset']  = 'utf-8';
@@ -157,26 +188,27 @@ $this->email->subject('Naskah '.$input['judul']);
 $html = "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>Naskah Berhasil di Upload</h3>"; 
 
 $html .="<h4 align='center'>Berikut data naskah yang Anda Upload </h4><hr>
-    
+
 Judul Buku :".$input['judul']."<hr>
 Penulis :".$input['penulis']."<hr>
-Status : Pending <br><hr><br>
+Status : Dalam Antrian <br><hr><br>
 
-"."<p>Naskah Anda telah kami terima. Naskah akan segera kami terbitkan setelah verifikasi dan mendapatkan ISBN dari guepedia.com.<br>" 
-."Naskah yang Anda berikan dipromosikan melalui toko buku online guepedia.com dan media promosi lainnya. 
-Anda bisa melakukan pemesanan melewati buku online guepedia.com</p></h3><br>
+"."<p>Naskah Anda telah behasil di upload,untuk selajutnya mohon menunggu informasi dari kami atau dapat melihat perkembangan naskah melalui halaman penulis dan melihat status naskah tersebut.<br>" 
+."Jika Naskah anda sudah terbit Anda bisa melakukan pemesanan melewati buku online guepedia.com</p></h3><br>
 
 ";
-        
+
 
 $this->email->message($html);
 
 if (!$this->email->send()){    
 echo $this->email->print_debugger();
-}else{    
-echo "berhasil";    
+}else{
+$this->session->set_flashdata('hasil_upload', 'Naskah Berhasil di upload silahkan cek email anda atau klik menu naskah saya');    
+$this->session->set_flashdata('status_upload', 'berhasil');    
+redirect(base_url('Halaman_penulis/upload_naskah'));   
 }  
-    
+
 }
 
 public function json_file_naskah(){
@@ -197,7 +229,7 @@ $this->load->view('Umum/V_header');
 $this->load->view('Halaman_penulis/V_menu');
 $this->load->view('Halaman_penulis/V_tarik_royalti',['data_rekening'=>$data_rekening]);
 $this->load->view('Umum/V_footer');
-        
+
 }
 public function saldo_royalti(){
 $id_account =  $this->session->userdata('id_account'); 
@@ -216,7 +248,7 @@ force_download('./assets/tamplate/tamplateguepedia.zip', NULL);
 public function input_penarikan(){
 if($this->input->post('jumlah_penarikan') !=''){
 $id_account =  $this->session->userdata('id_account'); 
-    
+
 $saldo_royalti = $this->M_halaman_penulis->saldo_royalti($id_account)->row_array();
 $input = $this->input->post();
 
@@ -230,39 +262,39 @@ echo "melebihi";
 
 
 }
-    
+
 
 
 }else{
-    
-    redirect(404);    
+
+redirect(404);    
 }
-    
-    
+
+
 }
 
 public function hitung_penarikan(){
 if($this->input->post('jumlah_penarikan') !=''){
-    $input = $this->input->post();
- echo "<label>Jumlah penarikan :</label><br>Rp. ".number_format($input['jumlah_penarikan']);   
-    
+$input = $this->input->post();
+echo "<label>Jumlah penarikan :</label><br>Rp. ".number_format($input['jumlah_penarikan']);   
+
 }else{
 redirect(404);    
 }
-    
+
 }
 public function json_penjualan(){
 echo $this->M_halaman_penulis->json_penjualan();       
 }
 
 public function laporan_penjualan(){
-    
+
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_penulis/V_menu');
 $this->load->view('Halaman_penulis/V_laporan_penjualan');
 $this->load->view('Umum/V_footer');
-    
-    
+
+
 }
 function print_penjualan(){
 
@@ -288,16 +320,16 @@ $html .="Alamat lengkap :".$data_static['alamat_lengkap']."<br><br>";
 
 
 $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
-        . '<tr>'
-        . '<th>Judul Buku</th>'
-        . '<th>Penulis</th>'
-        . '<th>Harga</th>'
-        . '<th>Qty</th>'
-        . '<th>Jumlah</th>'
-        . '<th>Diskon</th>'
-        . '<th>Nilai Diskon</th>'
-        . '<th>Bagi Hasil</th>'
-        . '</tr>';
+. '<tr>'
+. '<th>Judul Buku</th>'
+. '<th>Penulis</th>'
+. '<th>Harga</th>'
+. '<th>Qty</th>'
+. '<th>Jumlah</th>'
+. '<th>Diskon</th>'
+. '<th>Nilai Diskon</th>'
+. '<th>Bagi Hasil</th>'
+. '</tr>';
 
 foreach ($data->result_array() as $penjualan){
 $html .= '<tr>
@@ -313,7 +345,7 @@ $html .= '<tr>
 }
 
 $html.= '</table>';
-    
+
 $dompdf = new Dompdf(array('enable_remote'=>true));
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'landscape');
@@ -328,38 +360,40 @@ $bukti_transfer = $this->M_halaman_penulis->data_bukti($this->uri->segment(3))->
 
 $html  ="<img src='".base_url('assets/img/logo-toko.png')."'>";
 $html .="<h2 style='position:fixed;' align='right'><br>Data Penarikan Bagi Hasil</h2><hr>";
-$html .="<p >Nomor Penarikan : ".$bukti_transfer['nomor_penarikan']."<br>"
-        . "Akun Penulis : ".$bukti_transfer['nama_lengkap']."<br>"
-        . "Nomor Kontak : ".$bukti_transfer['nomor_kontak']."<br>"
-        . "Tanggal Pengajuan : ".$bukti_transfer['tanggal_pengajuan']."<br>"
-        . "Nama Rekening : ".$bukti_transfer['nama_pemilik_rekening']."<br>"
-        . "Nomor Rekening : ".$bukti_transfer['nomor_rekening']."<br>"
-        . "Nama Bank : ".$bukti_transfer['nama_bank']."<br>"
-        . "</p>";
+$html .="<table>"
+. "<tr><td>Nomor Penarikan</td><td>: ".$bukti_transfer['nomor_penarikan']."</td></tr>"
+. "<tr><td>Akun Penulis</td><td>: ".$bukti_transfer['nama_lengkap']."</td></tr>"
+. "<tr><td>Nomor Kontak</td><td>: ".$bukti_transfer['nomor_kontak']."</td></tr>"
+. "<tr><td>Tanggal Pengajuan</td><td>: ".$bukti_transfer['tanggal_pengajuan']."</td></tr>"
+. "<tr><td>Nama Rekening</td><td>: ".$bukti_transfer['nama_pemilik_rekening']."</td></tr>"
+. "<tr><td>Nomor Rekening</td><td>: ".$bukti_transfer['nomor_rekening']."</td></tr>"
+. "<tr><td>Nama Bank</td><td>: ".$bukti_transfer['nama_bank']."</td></tr>"
+. "</table>";
+
 
 $html .="<h2 align='center'>Detail Penarikan <br> Status Penarikan ".$bukti_transfer['status']."</h2>";
 $html .= '<table style="width:100%; text-align:center;" border="1" cellspacing="0" cellpadding="2"  >'
-        . '<tr>'
-        . '<th>Bagi Hasil</th>'
-        . '<th>Biaya Admin</th>'
-        . '<th>Di Tarik</th>'
-        . '<th>Jumlah Penarikan</th>'
-        . '<th>Sisa Bagi Hasil</th>'
-        . '</tr>';
+. '<tr>'
+. '<th>Bagi Hasil</th>'
+. '<th>Biaya Admin</th>'
+. '<th>Di Tarik</th>'
+. '<th>Jumlah Penarikan</th>'
+. '<th>Sisa Bagi Hasil</th>'
+. '</tr>';
 $html  .="<tr>"
-        . "<td>Rp.".number_format($bukti_transfer['royalti_sebelumnya'])."</td>"
-        . "<td>Rp.".number_format($bukti_transfer['biaya_admin'])."</td>"
-        . "<td>Rp.".number_format($bukti_transfer['royalti_ditarik'])."</td>"
-        . "<td>Rp.".number_format($bukti_transfer['jumlah_penarikan'])."</td>"
-        . "<td>Rp.".number_format($bukti_transfer['royalti_diperoleh'])."</td>"
-        . "</tr>"
-        . "</table>"
-        . "<hr>"
-        . "<i>Note:</i> Proses Penarikan hannya akan di proses pada tanggal 5-10 di setiap Bulannya";
+. "<td>Rp.".number_format($bukti_transfer['royalti_sebelumnya'])."</td>"
+. "<td>Rp.".number_format($bukti_transfer['biaya_admin'])."</td>"
+. "<td>Rp.".number_format($bukti_transfer['royalti_ditarik'])."</td>"
+. "<td>Rp.".number_format($bukti_transfer['jumlah_penarikan'])."</td>"
+. "<td>Rp.".number_format($bukti_transfer['royalti_diperoleh'])."</td>"
+. "</tr>"
+. "</table>"
+. "<hr>"
+. "<i>Note:</i> Proses Penarikan hannya akan di proses pada tanggal 5-10 di setiap Bulannya";
 
 if($bukti_transfer['bukti_transfer'] != NULL){
-  $html.="<hr> Note : Bukti Transfer<br>"
-          . "<img src=". base_url('uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer']).">";  
+$html.="<hr> Note : Bukti Transfer<br>"
+. "<img style='width:300px; heght:auto;' src=". base_url('uploads/bukti_transfer/'.$bukti_transfer['bukti_transfer']).">";  
 }
 
 
@@ -378,7 +412,7 @@ $data= array(
 'id_bank'               =>'',   
 );
 $this->M_halaman_penulis->simpan_rekening_penulis($data,$this->session->userdata('id_account'));    
- 
+
 
 redirect(base_url('Halaman_penulis'));
 }
@@ -403,7 +437,7 @@ if($jumlah_ditarik > $data['royalti_diperoleh']){
 echo "Saldo Bagi Hasil Tidak Mencukupi";    
 
 }else{
-    
+
 $data_penarikan = $this->M_halaman_penulis->hitung_jumlah_penarikan();
 $angka = 6;
 $nomor_penarikan = "GP/PNRKN/".$this->session->userdata('id_account')."/".str_pad($data_penarikan, $angka ,"0",STR_PAD_LEFT);
@@ -420,7 +454,7 @@ $input = array(
 );
 $this->M_halaman_penulis->input_pengajuan($input);    
 echo "berhasil";
-    
+
 }
 
 }else{

@@ -1,7 +1,11 @@
-<div class="container" style="background-color: #fff; margin-top: 6.5%;">
-<h4 align="center"><span class=" fa-3x fa fa-check-circle-o"></span> <br> Konfirmasi pembayaran </h4><hr>
-
+<div class="container batas_header p-3">
+   
+<?php if($konfirmasi->num_rows() >0){ ?>    
+    
 <?php foreach ($konfirmasi->result_array() as $konfir) { ?>
+    
+    
+    
 <div class="row">
 <div class="card card-body">
 <h4 align="center">Rincian Pesanan No.invoices <?php echo $konfir['invoices_toko'] ?></h4>
@@ -70,23 +74,40 @@ $d = 1 ;foreach ($data_orderan->result_array() as $data){
 </div>
 </div>
 <label>Jumlah bayar</label>
-<input type="text" id="jumlah_bayar<?php echo $konfir['id_penjualan_toko'] ?>" placeholder="Jumlah bayar . . . " class="form-control">
+<input type="text" id="jumlah_bayar<?php echo $konfir['id_penjualan_toko'] ?>" placeholder="Jumlah bayar . . . " class="form-control money">
 <hr>
 <button class="btn btn-success"  onclick="konfirmasi(<?php echo $konfir['id_penjualan_toko'] ?>)">Konfirmasi <span class="fa fa-check-square-o"></span> </button>
 </div>
 </div>
 
 </div><hr>
+<?php } }else{ ?>
+<div class="container batas_header">
+    <div class="text-center"><h3><span class="fa color-swatch fa-credit-card fa-5x text-center"></span><br>Tidak ada pembayaran <br> yang perlu di konfirmasi </h3></div>
+    
+    
+</div>
+
 <?php } ?>
  
 </div>
 <script type="text/javascript">
+$(document).ready(function(){
+$('.money').simpleMoneyFormat();        
+});
+
+    
 function konfirmasi(inv){
+
 var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>"       
 var harus_bayar  = $("#harus_bayar"+inv).val();
-var jumlah_bayar = $("#jumlah_bayar"+inv).val();
+var jumlah       = $("#jumlah_bayar"+inv).val();
 var cek_bukti    = $('#bukti_bayar'+inv).val();
 var bukti_bayar  = $('#bukti_bayar'+inv)[0];
+
+var jumlah_bayar = jumlah.replace(/[^\d\.]/g, '');
+
+
 if (jumlah_bayar !='' && cek_bukti != ''){
 
 if(parseInt(harus_bayar) > parseInt(jumlah_bayar) ){
@@ -125,7 +146,7 @@ text:"Terimakasih anda telah melakukan konfirmasi pembayaran, pembayaran anda ak
 type:"success",
 showConfirmButton: true,
 }).then(function() {
-window.location.href = '<?php echo base_url('Store')  ?>';
+window.location.href = '<?php echo base_url('Store/daftar_transakssi')  ?>';
 });
 } else {
 

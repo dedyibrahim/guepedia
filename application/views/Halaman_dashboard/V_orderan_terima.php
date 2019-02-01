@@ -35,7 +35,7 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 <td colspan="3">Rp.<?php echo number_format($konfir['total_belanja']) ?> </td>    
 </tr>
 <tr>
-<td colspan="2">Ongkir </td>    
+<td colspan="2">Ongkir <?php echo $konfir['service'] ?> </td>    
 <td  colspan="3">Rp.<?php echo number_format($konfir['ongkir']) ?> </td>    
 </tr>
 <?php if($konfir['nilai_kupon']){ ?>
@@ -63,10 +63,14 @@ $d=1 ;foreach ($data_orderan->result_array() as $data){
 <button onclick="kirim(<?php echo $konfir['id_penjualan_toko'] ?>);" class="btn btn-primary form-control">Input Resi <span class="fa fa-pencil-square-o"></span></button>
 <hr>
 <a href='<?php echo base_url('G_dashboard/download_invoices/'.base64_encode($konfir['id_penjualan_toko'])); ?>'><button class="btn btn-dark form-control" type="button" >Download invoices <span class="fa fa-download"></span></button></a>
-    
+<hr>   
 <div class="card card-body">
+<?php 
+if($konfir['bukti_transfer'] !=''){ ?>
 <img  class="cover3" id="zoom<?php echo $konfir['id_penjualan_toko'] ?>" data-zoom-image="<?php echo base_url('./uploads/bukti_bayar/'.$konfir['bukti_transfer']) ?>" src="<?php echo base_url('./uploads/bukti_bayar/'.$konfir['bukti_transfer']) ?>">
-
+<?php }else{  ?>    
+<img  src="<?php echo base_url('./assets/img/not_found.png') ?>">
+<?php } ?>
 </div>
 </div>
 

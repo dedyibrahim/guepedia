@@ -31,12 +31,13 @@
 <label>Status :</label>
 <select  class="form-control" disabled="" id="status" value="" placeholder="Status Buku . . .">
     <option><?php echo $data['status'] ?></option>
-    <option>Pending</option>  
+    <option>Dalam Antrian</option>  
+    <option>Di Revisi</option> 
     <option>Proses</option> 
     <option>Publish</option>
     <option>Di tarik</option>  
     <option>Di tolak</option>  
-       </select>
+    </select>
 
 
 </div>
@@ -85,7 +86,7 @@
 </div> 
 </div>
 <hr>
-<button style="display:none;" class="btn btn-success float-right" id="btn_publish">Publish Buku <span class="fa fa-save"></span></button>
+<button style="display:none;" class="btn btn-success float-right" id="btn_publish">Simpan Perubahan <span class="fa fa-save"></span></button>
 <button  class="btn btn-warning float-right" id="edit_naskah">Edit Naskah <span class="fa fa-edit"></span></button>
 
 <button  class="btn btn-success" id="infokan" >Infokan Status Naskah <span class="fa fa-send-o"></span></button>
@@ -283,7 +284,14 @@ showConfirmButton: true,
 </script>
 <script type="text/javascript">
 $(document).ready(function(){
-CKEDITOR.replace('sinopsis', {readOnly:true});    
+CKEDITOR.replace('sinopsis', {readOnly:true,
+             toolbarGroups: [
+               { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+ 		{ name: 'links' },
+                { name: 'paragraph', groups: [  'align',  'paragraph' ] },
+	]});    
  
 });
+
 </script>
+

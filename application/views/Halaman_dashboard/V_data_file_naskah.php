@@ -63,6 +63,48 @@ $('td:eq(0)', row).html(index);
 });
 
 
+function hapus_naskah(id_file_naskah){
+var nama_admin = "<?php echo $this->session->userdata('nama_admin') ?>";
+var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->security->get_csrf_hash(); ?>" ;      
+var id_naskah = id_file_naskah;
+var table = $('#data_file_naskah').dataTable().api();
+swal({
+title:  "Yakin mau hapus naskah ini",
+text: "Kalo " + nama_admin + " sudah yakin tekan hapus ya",
+type: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Hapus'
+}).then((id_file_naskah) => {
+
+
+if (id_file_naskah) {
+$.ajax({
+type:"POST",
+url:"<?php echo base_url('G_dashboard/hapus_naskah') ?>",
+data:"token="+token+"&id_file_naskah="+id_naskah,
+success:function(data){
+
+if(data == "berhasil"){
+ swal({
+title : "Hore ..!",
+text  : nama_admin + " Sudah berhasil hapus naskah penulis",
+type:'success',
+}).then((data)=>{
+window.location.href = '<?php echo base_url('G_dashboard/data_file_naskah') ?>';
+});
+}
+}
+});      
+
+
+
+}
+})
+}
+
+
 </script>    
 <div class="container">
 <div class="col" style=" background-color:#fff;  padding:1%; margin-top:1%; margin-bottom:1%;   ">

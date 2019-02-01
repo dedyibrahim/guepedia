@@ -1,12 +1,12 @@
 <body class="bg_dashboard_admin">
 
-<div class="offset-4 col-md-4" style="margin-top:3%;" id="login">
-<div style="background-color:#a8cf45; padding:5%; border:1px solid #eee; color:#000000;  ">
+<div class=" offset-5 col-md-3" style="margin-top:3%;" id="login">
+<div style="background-color:#a8cf45; padding:5%; border:1px solid #eee; color:#fff;  ">
 <h1><span class="fa fa-sign-in fa-2x float-right"></span></h1>
-<h2>Sign in</h2>
-<h5>To Dashboard Page</h5>
+<h3>Sign in</h3>
+<h6>To Dashboard Page</h6>
 </div>
-<div style="background-color:#eee; padding:5%; ">    
+<div style="background-color:#fafafa; padding:5%; ">    
 <label>Email :</label>
 <input type="text" class="form-control" value="" id="email_login" placeholder="Masukan Email . . ." data-toggle="tooltip" title="Email yang didaftarkan">
 <label>Password :</label>

@@ -1,9 +1,9 @@
 <?php  $alamat = $data_alamat->row_array(); ?>
-<div class="container" style="background-color: #fff; margin-top: 6.5%;">
-
+<div class="container batas_header">
 <h4 align="center"><span class="fa fa-list-ul fa-3x fa-color"></span><br>Checkout</h4><hr>
 <div class="row">
 <div class="col-md-4">
+<div class="card p-3 mt-2">  
 <h4 align='center'>Alamat pengiriman</h4><hr>
 <?php if(!$alamat){ ?>    
 <label>Nomor kontak</label>
@@ -42,19 +42,18 @@ Alamat lengkap : <?php echo $alamat['alamat_lengkap'] ?>
 
 <?php } ?>
 <hr>    
-
+</div>
 </div>
 
 
 <div class="col">
+    <div class="card p-3 mt-2">    
 <h4 align='center'>Kurir Pengiriman</h4><hr>
-
 <?php if(!$this->session->userdata('ongkir')){ ?>
 <label>Nama Kurir</label>
 <select <?php  if(!$alamat){ echo "disabled='' "; }  ?> class="form-control" id="kurir" onchange="cek_cost();">
 <option ></option>    
-<option value="jne">JNE</option>    
-<option value="wahana">WAHANA</option>    
+<option value="jne">JNE</option>  
 </select>
 <div id="data_kost">
 </div>
@@ -67,38 +66,75 @@ Biaya Ongkir Rp. <?php echo number_format($this->session->userdata('ongkir')) ?>
 <hr>
 <?php } ?>
 </div>
-
+</div>
+    
 <div class="col-md-4">
+    <div class="card p-3 mt-2">    
 <h4 align='center'>Ringkasan Belanja </h4><hr> 
-Total harga  <b  class="float-right">Rp.<?php echo number_format($this->cart->total()) ?></b>
-<hr>
-<?php if ($this->session->userdata('ongkir')){ ?>
-Ongkos kirim  <b  class="float-right">Rp.<?php echo number_format($this->session->userdata('ongkir')) ?></b>
-<hr>
-<?php } ?>
+<div class="row">
+<div class="col">Total harga </div>    
+<div class="col text-right"><b>Rp.<?php echo number_format($this->cart->total()) ?></b>
+</div>    
+</div>
 
 <?php if ($this->session->userdata('hasil_kupon')){ ?>
-Kupon <?php echo $this->session->userdata('nama_kupon') ?> <?php echo $this->session->userdata('nilai_kupon') ?> %  <b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
+<div class="row">
+<div class="col">Potongan Kupon </div>    
+<div class="col text-right"> <b style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_kupon')) ?></b>
+</div>    
+</div>
 <hr>
 <?php } ?>
 
 <?php if ($this->session->userdata('hasil_promo')){ ?>
-Promo <?php echo $this->session->userdata('nama_promo') ?> <?php echo $this->session->userdata('nilai_promo') ?> %<b  class="float-right" style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_promo')) ?></b>
+<div class="row">
+<div class="col">Potongan Promo </div>    
+<div class="col text-right"> <b  style="color:#dc3545;"> - Rp.<?php echo number_format($this->session->userdata('hasil_promo')) ?></b>
+</div>    
+</div>
 <hr>
+<?php } ?>
+
+<?php if ($this->session->userdata('hasil_promo') || $this->session->userdata('hasil_kupon')){ ?>
+<div class="row">
+<div class="col-md-8">Harga setelah diskon</div>    
+<div class="col text-right"> <b>Rp.<?php echo number_format($this->cart->total()-$this->session->userdata('hasil_promo')-$this->session->userdata('hasil_kupon')) ?></b>
+</div>    
+</div>
+<hr>
+<?php } ?>
+
+
+<?php if ($this->session->userdata('ongkir')){ ?>
+<div class="row">
+<div class="col">Ongkos Kirim</div>    
+<div class="col text-right"> <b>Rp.<?php echo number_format($this->session->userdata('ongkir')) ?></b></div>    
+</div>
 <?php } ?>
 
 <?php if ($this->session->userdata('ongkir')){ ?>
-
-Total bayar <b  class="float-right">Rp.<?php echo number_format($this->session->userdata('ongkir') + $this->cart->total() - $this->session->userdata('hasil_kupon') - $this->session->userdata('hasil_promo')) ?></b>
 <hr>
-<button data-toggle="modal" data-target="#metode"  class="form-control btn btn-success">Bayar <span class=" fa fa-money"></span></button>
-<hr>
-<h5 align='center'><span style="text-align: center;"><a href="#"  data-toggle="modal" data-target="#exampleModal" style="text-decoration: none;"><span class=" fa fa-percent"></span> Gunakan Kode Kupon Atau Promo</a></span></h5>
-<hr>
-<?php } ?>
-
+<div class="row p-2 m-2" style="color: #28a745; border: 2px #dc3545 solid; ">
+    <div class="col text-center"><b>Total yang harus dibayar</b> <br>
+    <b>Rp.<?php echo number_format($this->session->userdata('ongkir') + $this->cart->total() - $this->session->userdata('hasil_kupon') - $this->session->userdata('hasil_promo')) ?></b>
+    </div>    
+   
 </div>
 <hr>
+<button data-toggle="modal" data-target="#metode"  class="form-control btn btn-success">Pilih Metode Pembayaran <span class=" fa fa-money"></span></button>
+
+
+<?php } ?>
+
+<?php if(!$this->session->userdata('nilai_kupon') && !$this->session->userdata('nilai_promo')){ ?>
+<hr>
+<button class="btn btn-dark form-control" data-toggle="modal" data-target="#exampleModal"></span> Gunakan Kode Kupon Atau Promo</button>
+<?php } ?>
+
+<hr>
+</div>
+<hr>
+</div>
 </div>
 <hr>
 </div>

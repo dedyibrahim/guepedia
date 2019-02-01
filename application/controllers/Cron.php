@@ -132,7 +132,7 @@ $data_orderan = $this->db->get_where('data_penjualan_toko',array('invoices_toko'
 
 
 
-$html ="<h3 align='center'>Informasi Dibatalkan konfirmasi pembayaran Guepedia.com  </h3>";
+$html ="<h3 align='center'>Informasi Expired konfirmasi pembayaran Guepedia.com  </h3>";
 $html .= "Hai Kakak , Pesanan kakak telah kami batalkan, informasi ini untuk mengingatkan kakak untuk tidak melakukan konfirmasi pembayaran." ;
 $html .= "<h3 style='padding: 2%; color: #000; background-color: rgb(168, 207, 69);' align='center'>RINCIAN PESANAN  ".$static['invoices_toko']."</h3>"; 
 
@@ -196,34 +196,14 @@ $this->M_cron->set_expired($datax,$expire['invoices_toko']);
 }
 }   
 }
-
-function migrasi(){
-/*    
-$query = $this->db->get('mzt_withdraw');
-
-foreach ($query->result_array() as $data){
-
-if ($data['stat'] > 0){
- echo "ada";   
-}else{
-echo "ga ada";    
+function kupon_expired(){
+$data_expir = $this->M_cron->kupon_expired(); 
+ 
+foreach ($data_expir->result_array() as $data){
+ 
+$this->M_cron->hapus_kupon($data['id_data_kupon']);    
 }
-}*/
-
-}
-
-function input_balance(){
-/*$query  = $this->db->get('data_sisa_balance');
-
-foreach ($query->result_array() as $data){
     
-$array = array(
-'royalti_diperoleh' => $data['sisa_balance']    
-);
-
-$this->db->update('akun_penulis',$array,array('email'=>$data['email']));
-}
-*/
 }
 
 }
