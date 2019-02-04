@@ -51,8 +51,8 @@ type:"error"
 <h4  class="text-center"> <span class="fa fa-upload fa-2x"></span> <br> Upload Naskah</h4>
 <hr>
 <?php echo validation_errors(); ?>
-<form method="POST"  action="<?php echo base_url('Halaman_penulis/proses_upload') ?>"  enctype="multipart/form-data" class="needs-validation" novalidate>
-<input type="hidden" name="<?php echo  $this->security->get_csrf_token_name()?>" value="<?php echo   $this->security->get_csrf_hash();?>" />
+<form method="POST" action="<?php echo base_url('Halaman_penulis/proses_upload') ?>" enctype="multipart/form-data" class="needs-validation" novalidate>
+<input type="hidden" id="token"  name="<?php echo  $this->security->get_csrf_token_name()?>" value="<?php echo   $this->security->get_csrf_hash();?>" />
 <div class="form-group">
 <label for="judul">Judul Naskah</label>
 <input type="text" id="judul" required="" name="judul" placeholder="Judul . . ." value="<?php echo set_value('judul'); ?>" class="form-control form-control-danger"  data-toggle="tooltip" title="Judul Buku yang ditulis">
@@ -78,11 +78,16 @@ echo "<option value=".$kate['id_kategori_naskah'].">".$kate['nama_kategori']."</
 </div>
 <hr>
 <label for="file_naskah">File Naskah </label>
-<input type="file" required="" class="form-control" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu Dan hannya Menerima Dalam bentuk Microsoft Word (.docx)">
-<!---
-//<label for="file_cover">File Cover </label>
-//<input type="file" class="form-control" id="file_cover" name="file_cover" value="" placeholder="FIle Cover . . ."  data-toggle="tooltip" title="Note : Bila memiliki dile cover sendiri upload dalam bentuk photoshop (.PSD)" >
---->
+<input type="file" onchange="simpan_naskah();" required="" class="form-control" id="file_naskah" name="file_naskah" value="" placeholder="File Naskah . . ." data-toggle="tooltip" title="Note : Naskah utama,Daftar Isi,Kata Pengantar,Sinopsis, Dijadikan satu Dan hannya Menerima Dalam bentuk Microsoft Word (.docx)">
+<div class="progress progress_naskah mt-1" style="display: none;">
+<div class="progress-bar progress-bar-striped bg-success  progress-bar-animated" id="progress_naskah" role="progressbar" style="width:0%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<hr>
+<label for="file_naskah">File Cover </label>
+<input type="file" onchange="simpan_cover();" class="form-control" id="file_cover" name="file_cover" value="" placeholder="File Cover . . ." data-toggle="tooltip" title="Note : Hanya menerima dalam bentuk PSD">
+<div class="progress progress_cover mt-1" style="display: none;">
+<div class="progress-bar progress-bar-striped bg-success  progress-bar-animated" id="progress_cover" role="progressbar" style="width:0%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
 <hr>
 <div class="form-group">
 <div class="form-check">
@@ -99,32 +104,17 @@ Anda Harus Menyetujui syarat dan ketentuan yang berlaku di guepedia.com
 </div>
 </div>
 </div>
+<hr>
 
-<hr>    
-<button class="btn btn-success form-control float-right" id="btn_upload" > Simpan Upload <span class="fa fa-upload"></span></button>
+<button class="btn btn-success form-control float-right"   id="btn_simpan" > Simpan Upload <span class="fa fa-upload"></span></button>
 </form>
-
-
-
 </div>
 
 <script type="text/javascript">
-$(document).ready(function(){
+
+function simpan_naskah(){
 var fileNaskah      = $('#file_naskah')[0];
-var fileCover       = $('#file_cover')[0];
 
-$("#file_cover").change(function(){
-if(fileCover.files[0].size > 20000000){
-swal({
-text:"Maksimal upload file cover 20 MB",
-type:"warning",
-showConfirmButton: false,
-});
-$('#file_cover').val("");
-} 
-});
-
-$("#file_naskah").change(function(){
 if(fileNaskah.files[0].size > 10000000){
 swal({
 text:"Maksimal upload file naskah 10 MB",
@@ -132,13 +122,147 @@ type:"warning",
 showConfirmButton: false,
 });
 $('#file_naskah').val("");
-} 
+}else{
+$(".progress_naskah").show();
+var file_naskah = $('#file_naskah').get(0).files[0];
+var token       = $('#token').val();
+formData = new FormData();
+formData.append('file_naskah',file_naskah);
+formData.append('token',token);         
+$.ajax( {
+url        : '<?php echo base_url('halaman_penulis/simpan_naskah') ?>',
+type       : 'POST',
+contentType: false,
+cache      : false,
+processData: false,
+data       : formData,
+xhr        : function ()
+{
+var jqXHR = null;
+if ( window.ActiveXObject ){
+jqXHR = new window.ActiveXObject( "Microsoft.XMLHTTP" );
+}else{
+jqXHR = new window.XMLHttpRequest();
+}
+
+jqXHR.upload.addEventListener( "progress", function ( evt ){
+if ( evt.lengthComputable ){
+var percentComplete = Math.round( (evt.loaded * 100) / evt.total );
+
+console.log( 'Uploaded percent', percentComplete );
+$("#progress_naskah").attr('style',  'width:'+percentComplete+'%');
+}
+
+}, false );
+jqXHR.addEventListener( "progress", function ( evt ){
+if ( evt.lengthComputable ){
+var percentComplete = Math.round( (evt.loaded * 100) / evt.total );
+console.log( 'Downloaded percent', percentComplete );
+
+}
+}, false );
+return jqXHR;
+},
+success    : function ( data ){
+ console.log(data);
+         
+if(data == "berhasil"){
+swal({
+title:"File naskah tersimpan",
+type:"success",
+});
+$(".progress_naskah").hide();
+}else{
+swal({
+title:data,
+type:"error",
+});    
+$(".progress_naskah").hide();
+}
+
+}
 });
 
+}
+}
+
+function simpan_cover(){
+var fileCover       = $('#file_cover')[0];
+if(fileCover.files[0].size > 20000000){
+swal({
+text:"Maksimal upload file cover 20 MB",
+type:"warning",
+showConfirmButton: false,
 });
+$('#file_cover').val("");
+}else{ 
+$(".progress_cover").show();
+var file_cover = $('#file_cover').get(0).files[0];
+var token       = $('#token').val();
+formData = new FormData();
+formData.append('file_cover',file_cover);
+formData.append('token',token);         
+$.ajax( {
+url        : '<?php echo base_url('halaman_penulis/simpan_cover') ?>',
+type       : 'POST',
+contentType: false,
+cache      : false,
+processData: false,
+data       : formData,
+xhr        : function ()
+{
+var jqXHR = null;
+if ( window.ActiveXObject ){
+jqXHR = new window.ActiveXObject( "Microsoft.XMLHTTP" );
+}else{
+jqXHR = new window.XMLHttpRequest();
+}
 
+jqXHR.upload.addEventListener( "progress", function ( evt ){
+if ( evt.lengthComputable ){
+var percentComplete = Math.round( (evt.loaded * 100) / evt.total );
 
+console.log( 'Uploaded percent', percentComplete );
+$("#progress_cover").attr('style',  'width:'+percentComplete+'%');
+}
 
+}, false );
+jqXHR.addEventListener( "progress", function ( evt ){
+if ( evt.lengthComputable ){
+var percentComplete = Math.round( (evt.loaded * 100) / evt.total );
+console.log( 'Downloaded percent', percentComplete );
+
+}
+}, false );
+return jqXHR;
+},
+success    : function ( data ){
+ console.log(data);
+         
+if(data == "berhasil"){
+swal({
+title:"File Cover tersimpan",
+type:"success",
+});
+$(".progress_cover").hide();
+}else{
+swal({
+title:data,
+type:"error",
+});    
+$(".progress_cover").hide();
+}
+
+}
+});
+}
+}
+
+        
+
+</script>    
+
+<script type="text/javascript">
 
 
 $(document).ready(function(){
@@ -146,24 +270,22 @@ $("#download_tamplate").click(function(){
 window.location="<?php echo base_url('Halaman_penulis/download_tamplate'); ?>"
 });
 });
-
-
-
 </script>
 
 <script>
-// Example starter JavaScript for disabling form submissions if there are invalid fields
 (function() {
 'use strict';
 window.addEventListener('load', function() {
-// Fetch all the forms we want to apply custom Bootstrap validation styles to
 var forms = document.getElementsByClassName('needs-validation');
-// Loop over them and prevent submission
 var validation = Array.prototype.filter.call(forms, function(form) {
 form.addEventListener('submit', function(event) {
+
 if (form.checkValidity() === false) {
 event.preventDefault();
 event.stopPropagation();
+}else{
+
+
 }
 form.classList.add('was-validated');
 }, false);
@@ -171,19 +293,19 @@ form.classList.add('was-validated');
 }, false);
 })();
 </script>
- <script>
-    CKEDITOR.replace( 'sinopsis', {
-	toolbarGroups: [
-		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
- 		{ name: 'links' },
-                { name: 'paragraph', groups: [  'align',  'paragraph' ] },
-
-	]
-
+<script>
+CKEDITOR.replace( 'sinopsis', {
+toolbarGroups: [
+{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+{ name: 'links' },
+{ name: 'paragraph', groups: [  'align',  'paragraph' ] },
+]
 });
-            </script>
+</script>
 </div>
 </div>
+
+
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg">
@@ -315,3 +437,5 @@ Peraturan Perundang-undangan.  </li>
 </div>
 </div>
 </div>
+
+

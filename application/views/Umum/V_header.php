@@ -31,6 +31,7 @@
 <link href="<?php echo base_url(); ?>assets/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"/>
 <script src="<?php echo base_url(); ?>assets/select2/js/select2.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>assets/jquery/simple.money.format.js" type="text/javascript"></script>
+<script src="<?php echo base_url(); ?>assets/jquery/jquery.form.min.js" type="text/javascript"></script>
 </head>
 <script type="text/javascript">
 $(document).ajaxStart(function(){

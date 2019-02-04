@@ -4,11 +4,9 @@ class Penulis extends CI_Controller {
 function __construct() {
 parent::__construct();
 $this->load->model('M_penulis');
-
 if($this->session->userdata('nama_lengkap')  && $this->session->userdata('id_account') ){
 redirect(base_url('Halaman_penulis')); 
 }
-
 }
 
 public function index(){

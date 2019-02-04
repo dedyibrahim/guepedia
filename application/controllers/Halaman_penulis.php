@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 require APPPATH.'libraries/dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 class Halaman_penulis extends CI_Controller {
@@ -77,96 +76,93 @@ $this->load->view('Umum/V_header');
 $this->load->view('Halaman_penulis/V_menu');
 $this->load->view('Halaman_penulis/V_upload_naskah',['kategori'=>$kategori]);
 $this->load->view('Umum/V_footer');
-
-
 }
-
-public function proses_upload(){
-
-if($this->input->post()){
+function simpan_naskah(){
     
-$input = $this->input->post();    
-$this->form_validation->set_rules('judul', 'Judul', 'required');
-$this->form_validation->set_rules('penulis', 'Penulis', 'required');
-$this->form_validation->set_rules('sinopsis', 'Sinopsis', 'required');
-$this->form_validation->set_rules('kategori', 'Kategori', 'required');
-
-if ($this->form_validation->run() == FALSE){
-$kategori = $this->M_halaman_penulis->data_kategori_naskah();    
-$this->load->view('Umum/V_header');
-$this->load->view('Halaman_penulis/V_menu');
-$this->load->view('Halaman_penulis/V_upload_naskah',['kategori'=>$kategori]);
-$this->load->view('Umum/V_footer');    
-
-   
-}else{
-    
-$input = $this->input->post();
-$config2['upload_path']          = './uploads/dokumen_naskah/';
+$config2['upload_path']          = './uploads/dokumen_naskah_sementara/';
 $config2['allowed_types']        = 'docx|doc';
 $config2['file_size']            = "100000";
 $config2['encrypt_name']         = TRUE;
-
-$config3['upload_path']          = './uploads/file_cover/';
-$config3['allowed_types']        = 'psd';
-$config3['file_size']            = "100000";
-$config3['encrypt_name']         = TRUE;
-
-
 $this->upload->initialize($config2);
 
 if (!$this->upload->do_upload('file_naskah')){
-
- $this->session->set_flashdata('hasil_upload', $this->upload->display_errors());    
-$this->session->set_flashdata('status_upload', 'gagal');    
-
-redirect(base_url('Halaman_penulis/upload_naskah'));  
-
-}else{     
-$file_naskah = $this->upload->data('file_name');
+echo $this->upload->display_errors() ; 
+}else{
+    
+$data_naskah = array (
+'file_naskah' => $this->upload->data('file_name')    
+);
+$this->session->set_userdata($data_naskah);    
+echo "berhasil";    
+}  
+}
+function simpan_cover(){
+    
+$config3['upload_path']          = './uploads/file_cover_sementara/';
+$config3['allowed_types']        = 'psd';
+$config3['file_size']            = "100000";
+$config3['encrypt_name']         = TRUE;
 $this->upload->initialize($config3);
 
-if($this->upload->do_upload('file_cover') != NULL){
-
-$data = array(
-'id_account'        => $this->session->userdata('id_account'),
-'judul'             => $input['judul'],
-'penulis'           => $input['penulis'],
-'sinopsis'          => $input['sinopsis'],
-'id_kategori_naskah'=> $input['kategori'],
-'file_naskah'       => $file_naskah,
-'file_cover'        => $this->upload->data('file_name'),
-'tanggal_upload'    => date('Y/m/d'),
-'status'           => 'Dalam Antrian',
-);
-
-
-$this->M_halaman_penulis->simpan_naskah($data);
-$this->email_upload_naskah($input);
-}else{ 
-$data = array(
-'id_account'        => $this->session->userdata('id_account'),
-'judul'             => $input['judul'],
-'penulis'           => $input['penulis'],
-'sinopsis'          => $input['sinopsis'],
-'id_kategori_naskah'=> $input['kategori'],
-'file_naskah'       => $file_naskah,
-'tanggal_upload'    =>date('Y/m/d'),
-'status'           => 'Dalam Antrian',
-);
-$this->M_halaman_penulis->simpan_naskah($data);
-$this->email_upload_naskah($input);
-}
-
-}
-}    
+if (!$this->upload->do_upload('file_cover')){
+echo $this->upload->display_errors() ; 
+}else{
     
+$data_cover = array (
+'file_cover' => $this->upload->data('file_name')    
+);
+$this->session->set_userdata($data_cover);    
+echo "berhasil";    
+}  
+}
+public function proses_upload(){
+if($this->input->post()){
+$input = $this->input->post();   
+if($this->session->userdata('file_naskah')){
+$data = array(
+'id_account'        => $this->session->userdata('id_account'),
+'judul'             => $input['judul'],
+'penulis'           => $input['penulis'],
+'sinopsis'          => $input['sinopsis'],
+'id_kategori_naskah'=> $input['kategori'],
+'file_cover'        => $this->session->userdata('file_cover'),
+'file_naskah'       => $this->session->userdata('file_naskah'),
+'tanggal_upload'    => date('Y/m/d'),
+'status'            => 'Dalam Antrian',
+);
+
+$this->M_halaman_penulis->simpan_naskah($data);
+
+
+$destinasi_naskah  = './uploads/dokumen_naskah/'.$this->session->userdata('file_naskah');
+$lokasi_awal_naskah = './uploads/dokumen_naskah_sementara/'.$this->session->userdata('file_naskah');
+copy($lokasi_awal_naskah,$destinasi_naskah);
+unlink($lokasi_awal_naskah);
+
+$destinasi_cover  = './uploads/file_cover/'.$this->session->userdata('file_cover');
+$lokasi_awal_cover = './uploads/file_cover_sementara/'.$this->session->userdata('file_cover');
+copy($lokasi_awal_cover,$destinasi_cover);
+unlink($lokasi_awal_cover);
+$unset = array(
+'file_cover', 
+'file_naskah',
+);
+$this->session->unset_userdata($unset);
+
+$this->email_upload_naskah($input);
+
+
+
+}else{
+$status_upload = array(
+'status_upload' => "gagal",
+'hasil_upload'  => "File Naskah Belum di lampirkan",    
+);
+$this->session->set_usedata($status_upload);
+}
 }else{
 redirect(404);    
-}    
-    
- 
-
+}
 
 }
 
