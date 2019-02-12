@@ -1,21 +1,29 @@
-<body class="bg_dashboard_admin">
-
-<div class=" offset-5 col-md-3" style="margin-top:3%;" id="login">
-<div style="background-color:#a8cf45; padding:5%; border:1px solid #eee; color:#fff;  ">
-<h1><span class="fa fa-sign-in fa-2x float-right"></span></h1>
-<h3>Sign in</h3>
-<h6>To Dashboard Page</h6>
-</div>
-<div style="background-color:#fafafa; padding:5%; ">    
+<body  style="background: rgba(3,84,138,1);
+background: -moz-linear-gradient(-45deg, rgba(3,84,138,1) 0%, rgba(145,232,66,1) 100%);
+background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(3,84,138,1)), color-stop(100%, rgba(145,232,66,1)));
+background: -webkit-linear-gradient(-45deg, rgba(3,84,138,1) 0%, rgba(145,232,66,1) 100%);
+background: -o-linear-gradient(-45deg, rgba(3,84,138,1) 0%, rgba(145,232,66,1) 100%);
+background: -ms-linear-gradient(-45deg, rgba(3,84,138,1) 0%, rgba(145,232,66,1) 100%);
+background: linear-gradient(135deg, rgba(3,84,138,1) 0%, rgba(145,232,66,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03548a', endColorstr='#91e842', GradientType=1 );">
+<div class="row mt-5">
+    <div class="col-md-3 mx-auto">   
+    <div class="card m-3" >
+        <div class="card-header" style="color: #2c3e50;">
+    <h1><span class="fa fa-sign-in fa-2x float-right"></span></h1>
+    <h1>login</h1>To Dashboard Page</div>
+<div class="card-body p-2">
 <label>Email :</label>
 <input type="text" class="form-control" value="" id="email_login" placeholder="Masukan Email . . ." data-toggle="tooltip" title="Email yang didaftarkan">
 <label>Password :</label>
 <input type="password" class="form-control" value="" id="password_login" placeholder="Masukan Password . . ." data-toggle="tooltip" title="Password yang di buat">
-<hr>
-<button class="btn btn-success float-right" id="btn_login" >Sign in <span class="fa fa-sign-in"></span></button>
-<div class="clearfix"></div><br>
+</div>
+<div class="card-footer">            
+<button class="btn btn-success btn-block" id="btn_login" >Masuk <span class="fa fa-sign-in"></span></button>
 </div>
 </div>
+    </div>    
+</div>  
 <script type="text/javascript">
 $(document).ready(function(){
 $("#btn_login").click(function(){
@@ -23,7 +31,7 @@ var <?php echo $this->security->get_csrf_token_name();?>  = "<?php echo $this->s
 var email= $("#email_login").val();    
 var password= $("#password_login").val();     
 if (email == '' && password == ''){
- 
+
 swal({
 title:"", 
 text:"Email atau Password Masih Kosong",
@@ -61,7 +69,7 @@ window.location.href = '<?php echo base_url('G_login') ?>';
 }    
 
 }
-    
+
 });
 }    
 });        

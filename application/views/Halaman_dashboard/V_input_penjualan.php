@@ -691,11 +691,21 @@ $('td:eq(0)', row).html(index);
 <div class="container mt-2 mb-2 p-2 card" >
 <form action="<?php echo base_url('G_dashboard/buat_laporan') ?>"  method="post" class="form-inline" style="position: absolute;">
 <div class="form-group mx-sm-3 mb-2">
+
+    
 <input type="hidden"  class="form-control" name="<?php echo $this->security->get_csrf_token_name();?>"  value="<?php echo $this->security->get_csrf_hash(); ?>">
+
+
+
 <input type="text" class="form-control" name="dates"  value="">
+<select class="form-control" name="tipe">
+    <option value="PDF">PDF</option>        
+    <option value="EXCEL">EXCEL</option>        
+</select>
 </div>
 <button type="submit" class="btn btn-primary mb-2">Buat Laporan <span class="fa fa-list-alt"></span></button>
-</form> <h4 align="center"> Data Seluruh Penjualan  </h4>
+</form> 
+    <h4 align="right"> Data Seluruh Penjualan  </h4>
 
 <hr>
 

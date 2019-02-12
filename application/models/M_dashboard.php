@@ -550,12 +550,11 @@ $this->datatables->select('data_pengajuan_royalti.id_account,'
 .'akun_penulis.nama_lengkap as nama_lengkap,'
 .'akun_penulis.nomor_kontak as nomor_kontak,'
 .'akun_penulis.email as email,'
-        
 );
 $this->datatables->where('data_pengajuan_royalti.status','Pending');
 $this->datatables->from('data_pengajuan_royalti');
 $this->datatables->join('akun_penulis','akun_penulis.id_account = data_pengajuan_royalti.id_account');
-$this->datatables->add_column('view','<a href='.base_url('G_dashboard/buat_transfer/$1/$2').'  class="btn btn-sm btn-success fa fa-exchange "> </a> || <a href='.base_url('G_dashboard/download_bukti/$2').'  class="btn btn-sm btn-success fa fa-download "> </a>', 'base64_encode(id_account),base64_encode(id_data_pengajuan)');
+$this->datatables->add_column('view','<a href='.base_url('G_dashboard/download_bukti/$2').'  class="btn btn-sm btn-success fa fa-download "> </a> || <button class="btn btn-warning" onclick=edit_pengajuan("$1","$2")>   <span class="fa fa-edit"></span></button>', 'base64_encode(id_account),base64_encode(id_data_pengajuan)');
 return $this->datatables->generate();
       
 }
@@ -576,6 +575,25 @@ $this->datatables->where('data_pengajuan_royalti.status','Selesai');
 $this->datatables->from('data_pengajuan_royalti');
 $this->datatables->join('akun_penulis','akun_penulis.id_account = data_pengajuan_royalti.id_account');
 $this->datatables->add_column('view','<a href='.base_url('G_dashboard/buat_transfer/$1/$2').'  class="btn btn-sm btn-success fa fa-exchange "> </a> || <a href='.base_url('G_dashboard/download_bukti/$2').'  class="btn btn-sm btn-success fa fa-download "> </a>', 'base64_encode(id_account),base64_encode(id_data_pengajuan)');
+return $this->datatables->generate();
+      
+}
+function json_data_pengajuan_bagi_hasil_dibatalkan(){
+$this->datatables->select('data_pengajuan_royalti.id_account,'
+.'data_pengajuan_royalti.id_data_pengajuan as id_data_pengajuan,'
+.'data_pengajuan_royalti.nomor_penarikan as nomor_penarikan,'
+.'data_pengajuan_royalti.biaya_admin as biaya_admin,'
+.'data_pengajuan_royalti.royalti_ditarik as royalti_ditarik,'
+.'data_pengajuan_royalti.status as status,'
+.'data_pengajuan_royalti.jumlah_penarikan as jumlah_penarikan,'
+.'akun_penulis.nama_lengkap as nama_lengkap,'
+.'akun_penulis.nomor_kontak as nomor_kontak,'
+.'akun_penulis.email as email,'
+        
+);
+$this->datatables->where('data_pengajuan_royalti.status','Dibatalkan');
+$this->datatables->from('data_pengajuan_royalti');
+$this->datatables->join('akun_penulis','akun_penulis.id_account = data_pengajuan_royalti.id_account');
 return $this->datatables->generate();
       
 }
@@ -609,5 +627,28 @@ public function hapus_banner($id){
 
 $this->db->delete('banner',array('id_banner'=> base64_decode($id)));    
 }
+public function data_akun($id){
+         $this->db->select('nama_lengkap');
+         $this->db->select('email');
+$query = $this->db->get_where('akun_penulis',array('id_account'=> base64_decode($id)));
+
+return $query;
+    
+}
+
+public function data_email($id_account){
+$query = $this->db->get_where('riwayat_email',array('id_account'=> base64_decode($id_account))); 
+return $query;    
+}
+public function tampil_email($id_account,$number,$offset){
+    
+         $this->db->where(array('id_account'=> base64_decode($id_account))); 
+$query = $this->db->get('riwayat_email',$number,$offset);    
+
+    
+return $query;
+    
+}
+
 
 }

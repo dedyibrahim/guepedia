@@ -1,6 +1,6 @@
 <?php $data = $data_naskah->row_array(); ?>
 
-<div class="container" style="background-color:#fff; margin-top:1%; ">
+<div class="container" style="background-color:#fff; margin-top:1%;  ">
     <div class="clearfix"></div><hr>
 
 <h4 align="center">Publish Buku <span class="fa fa-bookmark-o"></span></h4><hr>

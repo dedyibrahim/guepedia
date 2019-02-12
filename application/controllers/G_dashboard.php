@@ -3,6 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH.'libraries/dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 
+require('vendor/autoload.php');
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class G_dashboard extends CI_Controller{
 public function __construct() {
 parent::__construct();
@@ -10,6 +14,7 @@ $this->load->library('upload');
 $this->load->helper('download');
 $this->load->library('Datatables');
 $this->load->model('M_dashboard');
+$this->load->library('pagination');
 if(!$this->session->userdata('nama_admin')  && !$this->session->userdata('id_admin') ){
 redirect(base_url()); 
 }
@@ -1192,75 +1197,20 @@ $dompdf->stream('INV.pdf',array('Attachment'=>0));
 
 public function buat_laporan(){
 if ($this->input->post('dates')){
- ini_set('memory_limit', '500M');
+ini_set('memory_limit', '500M');
 $tanggal = $this->input->post('dates');
 $range = explode(' ', $tanggal);
+$range1 = $range[0];
+$range2 = $range[2];
+if($this->input->post('tipe') == "PDF"){
 
+$this->buat_laporan_pdf($range1, $range2);
+}else{
+$this->buat_laporan_excel($range1, $range2);
 
-$dari   = date("d F o", strtotime($range[0]));
-$sampai = date("d F o", strtotime($range[2]));
-
-$this->db->select('*');
-$this->db->where('data_penjualan.tanggal_transaksi >=',$range[0]);
-$this->db->where('data_penjualan.tanggal_transaksi <=',$range[2]);
-$this->db->from('data_penjualan');
-$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
-$query = $this->db->get();
-
-
-$html  = "<h2 align='center'>Laporan Penjualan ".$dari." Sampai ".$sampai."</h2>"; 
-
-$html .= '<table style="width:100%; font-size:10px;" border="1" cellspacing="0" e cellspading="2"  >'
-. '<tr>'
-. '<th align="center" style="">No invoices</th>'
-. '<th align="center" style="">Customer</th>'
-. '<th align="center" style="">Dari</th>'
-. '<th align="center" style="">Judul Buku</th>'
-. '<th align="center" style="">Harga</th>'
-. '<th align="center" style="">Qty</th>'
-. '<th align="center" style="">Jumlah</th>'
-. '<th align="center" style="">Diskon</th>'
-. '<th align="center" style="">Nilai Diskon</th>'
-. '<th align="center" style="">Bagi Hasil</th>'
-. '<th align="center" style="">Bersih</th>'
-. '</tr>';
-
-$bagi_hasil =0 ;
-$bersih     =0 ;
-foreach ($query->result_array() as $penjualan){
-$html .= '<tr>
-<td align="center" style="">' . $penjualan['no_invoices'] . '</td>
-<td align="center" style="">' . $penjualan['nama_customer'] . '</td>
-<td align="center" style="">' . $penjualan['penjualan'] . '</td>
-<td align="center" style="">' . $penjualan['judul_buku'] . '</td>
-<td align="center" style="">Rp.' . number_format($penjualan['harga']) . '</td>
-<td align="center" style="">' . $penjualan['qty'].'</td>
-<td align="center" style="">Rp.' . number_format($penjualan['jumlah']) . '</td>
-<td align="center" style="">' . $penjualan['diskon'] . ' %</td>
-<td align="center" style="">Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
-<td align="center" style="">Rp.' . number_format($penjualan['royalti']) . '</td>
-<td align="center" style="">Rp.' . number_format($penjualan['bersih']) . '</td>
-</tr>';
-
-$bagi_hasil += $penjualan['royalti'];
-$bersih     += $penjualan['bersih'];
-}
-$html .="<tr>"
-      ."<td colspan='9'>Total</td>"
-      ."<td colspan='1'>Rp. ". number_format($bagi_hasil)."</td>"
-      ."<td colspan='1'>Rp. ". number_format($bersih)."</td>"
-      ."</tr>";
-
-
-$html .="</table>";
-
-$dompdf = new Dompdf(array('enable_remote'=>true));
-$dompdf->loadHtml($html);
-$dompdf->setPaper('F4', 'landscape');
-$dompdf->render();
-$dompdf->stream('INV.pdf',array('Attachment'=>0));
-
-
+    
+}    
+    
 }else{
 redirect(404);    
 }
@@ -2196,6 +2146,18 @@ if (!$this->email->send()){
 echo $this->email->print_debugger();
 }else{
 echo "berhasil";    
+
+$data = array(
+'nama'      =>$data_info['nama_lengkap'],
+'email'     =>$data_info['email'],
+'id_account'=>$data_info['id_account'],
+'isi_email' =>$this->input->post('informasi'),
+'subjek'    =>"Informasi Status Naskah",
+    
+);
+$this->db->insert('riwayat_email',$data);
+
+
 }
 }else{
 redirect(404);    
@@ -2222,23 +2184,60 @@ $this->M_dashboard->hapus_naskah($this->input->post('id_file_naskah'));
 echo "berhasil";
 }else{
 redirect(404);    
+}   
 }
 
-    
-}
 
 public function halaman_email(){
+$data_akun = $this->M_dashboard->data_akun($this->uri->segment(3));
+$total_email = $this->M_dashboard->data_email($this->uri->segment(3));
+
+$config['base_url']         = base_url('G_dashboard/halaman_email/'.$this->uri->segment(3));
+$config['total_rows']       = $total_email->num_rows();
+$config['per_page']         = 5;
+
+$config['full_tag_open']    = '<ul class="pagination">';
+$config['full_tag_close']   = '</ul>';
+$config['attributes']       = ['class' => 'page-link'];
+$config['first_link']       = false;
+$config['last_link']        = false;
+$config['first_tag_open']   = '<li class="page-item">';
+$config['first_tag_close']  = '</li>';
+$config['prev_link']        = '&laquo';
+$config['num_links']        = 3;
+$config['prev_tag_open']    = '<li class="page-item">';
+$config['prev_tag_close']   = '</li>';
+$config['next_link']        = '&raquo';
+$config['next_tag_open']    = '<li class="page-item">';
+$config['next_tag_close']   = '</li>';
+$config['last_tag_open']    = '<li class="page-item">';
+$config['last_tag_close']   = '</li>';
+$config['cur_tag_open']     = '<li class="page-item active"><a href="#" class="page-link">';
+$config['cur_tag_close']    = '<span class="sr-only">(current)</span></a></li>';
+$config['num_tag_open']     = '<li class="page-item">';
+$config['num_tag_close']    = '</li>';
+
+$this->pagination->initialize($config);
+
+$data_email= $this->M_dashboard->tampil_email($this->uri->segment(3),$config['per_page'],$this->uri->segment(4));
+
 $this->load->view('Umum/V_header');
 $this->load->view('Halaman_dashboard/V_menu');
-$this->load->view('Halaman_dashboard/V_halaman_email');
+$this->load->view('Halaman_dashboard/V_halaman_email',['data_akun'=>$data_akun,'data_email'=>$data_email]);
+
 $this->load->view('Umum/V_footer');   
 }
 
 public function json_data_pengajuan_royalti(){
 echo $this->M_dashboard->json_data_pengajuan_royalti();       
 }
+
 public function json_data_pengajuan_bagi_hasil_selesai(){
 echo $this->M_dashboard->json_data_pengajuan_bagi_hasil_selesai();       
+}
+
+public function json_data_pengajuan_bagi_hasil_dibatalkan(){
+echo $this->M_dashboard->json_data_pengajuan_bagi_hasil_dibatalkan();       
 }
 
 public function get_penjualan(){
@@ -2440,5 +2439,235 @@ echo "kosong";
 }
 }
 
+public function batalkan_penarikan(){
+if($this->input->post()){    
+$input = $this->input->post();
+$query1 = $this->db->get_where('data_pengajuan_royalti',array('id_data_pengajuan'=>base64_decode($input['id_data_pengajuan'])))->row_array();    
+$query2 = $this->db->get_where('akun_penulis',array('id_account'=> base64_decode($input['id_account'])))->row_array();    
+
+$data = array(
+'royalti_diperoleh' => $query2['royalti_diperoleh']+$query1['biaya_admin']+$query1['royalti_ditarik']    
+);
+
+$data2 = array(
+'status' => "Dibatalkan",
+'alasan' => $input['alasan']    
+);
+
+$this->db->update('akun_penulis',$data,array('id_account'=> base64_decode($input['id_account'])));
+$this->db->update('data_pengajuan_royalti',$data2,array('id_data_pengajuan'=>base64_decode($input['id_data_pengajuan'])));
+$kembali = $query2['royalti_diperoleh']+$query1['biaya_admin']+$query1['royalti_ditarik'];
+$this->email_batalkan_penarikan($query2,$query1,$input['alasan'],$kembali);
+
+}else{
+redirect(404);    
+}    
+}
+
+public function email_batalkan_penarikan($data,$data2,$alasan,$kembali){
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($data['email']);
+$this->email->subject('Pembatalan penarikan bagi hasil');
+
+$html = "Kepada Yth : ".$data['nama_lengkap']."<br>"
+       ."Mengenai penarikan bagi hasil yang diajukan pada ".$data2['tanggal_pengajuan']."<br>"
+       ."Dengan Nomor pnarikan : ".$data2['nomor_penarikan']."<br><br>"
+       ."Kami ingin memberitahukan bahwa pengajuan tersebut telah kami batalkan dengan alasan ".$alasan."<br><br>"
+       ."dan total yang anda tarik sejumlah <b>Rp. " .number_format($kembali)."</b> telah kami kembalikan ke saldo bagi hasil anda. <br>"
+        
+       ."Atas perhatian dan kerjasamanya kami ucapkan terimakasih  <br><br>"
+       ."Hormat kami <br><br>"
+       ."Admin Guepedia";
+
+$this->email->message($html);
+
+if (!$this->email->send()){    
+echo $this->email->print_debugger();
+}else{
+echo "berhasil";    
+}
+
+}
+public function buat_laporan_excel($range1,$range2){
+    
+$this->db->select('*');
+$this->db->where('data_penjualan.tanggal_transaksi >=',$range1);
+$this->db->where('data_penjualan.tanggal_transaksi <=',$range2);
+$this->db->from('data_penjualan');
+$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$query = $this->db->get();
+  
+$header = array("No invoices","Resi", "Customer", "Dari", "Judul Buku","Harga","Qty", "Jumlah","Diskon","Nilai Diskon","Bagi Hasil","Ongkir","Bersih");
+
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$no=2;
+$sheet->fromArray([$header], NULL, 'A1');
+
+foreach ($query->result_array() as $penjualan){
+$dataarray = array(
+$penjualan['no_invoices'],
+$penjualan['resi_pengiriman'],
+$penjualan['nama_customer'] ,
+$penjualan['penjualan'],
+$penjualan['judul_buku'],
+$penjualan['harga'],
+$penjualan['qty'],
+$penjualan['jumlah'],
+$penjualan['diskon'],
+$penjualan['nilai_diskon'],
+$penjualan['royalti'],
+$penjualan['jumlah_biaya_lain'],
+$penjualan['bersih']
+    
+);    
+$sheet->fromArray([$dataarray], NULL, 'A'.$no++.'');    
+}
+
+$writer = new Xlsx($spreadsheet);
+header('Content-type: application/vnd.ms-excel');
+header('Content-Disposition: attachment; filename="Laporan Penjualan.xlsx"');
+$writer->save('php://output');  
+    
+}
+public function buat_laporan_pdf($range1,$range2){
+$dari   = date("d F o", strtotime($range1));
+$sampai = date("d F o", strtotime($range2));
+
+$this->db->select('*');
+$this->db->where('data_penjualan.tanggal_transaksi >=',$range1);
+$this->db->where('data_penjualan.tanggal_transaksi <=',$range2);
+$this->db->from('data_penjualan');
+$this->db->join('data_jumlah_penjualan', 'data_jumlah_penjualan.no_invoices = data_penjualan.no_invoices');
+$query = $this->db->get();
+
+$html = "
+<style>    
+@page {
+ margin: 1cm 0.5cm ;
+
+}
+</style>
+";
+$html  .= "<h2 align='center'>Laporan Penjualan ".$dari." Sampai ".$sampai."</h2>"; 
+
+$html .= '<table style="width:100%; font-size:13px;" border="1" cellspacing="0" e cellspading="2"  >'
+. '<tr>'
+. '<th align="center" style="">Invoices</th>'
+. '<th align="center" style="">Resi</th>'
+. '<th align="center" style="">Customer</th>'
+. '<th align="center" style="">Dari</th>'
+. '<th align="center" style="">Judul Buku</th>'
+. '<th align="center" style="">Harga</th>'
+. '<th align="center" style="">Qty</th>'
+. '<th align="center" style="">Jumlah</th>'
+. '<th align="center" style="">Diskon</th>'
+. '<th align="center" style="">Nilai Diskon</th>'
+. '<th align="center" style="">Bagi Hasil</th>'
+. '<th align="center" style="">Ongkir </th>'
+. '<th align="center" style="">Bersih</th>'
+. '<th align="center" width="5%" style="">Ket</th>'
+. '</tr>';
+
+$bagi_hasil =0 ;
+$bersih     =0 ;
+$ongkir     =0 ;
+foreach ($query->result_array() as $penjualan){
+$html .= '<tr>
+<td align="center" style="">' . $penjualan['no_invoices'] . '</td>
+<td align="center" style="">' . $penjualan['resi_pengiriman'] . '</td>
+<td align="center" style="">' . $penjualan['nama_customer'] . '</td>
+<td align="center" style="">' . $penjualan['penjualan'] . '</td>
+<td align="center" style="">' . $penjualan['judul_buku'] . '</td>
+<td align="center" style="">Rp.' . number_format($penjualan['harga']) . '</td>
+<td align="center" style="">' . $penjualan['qty'].'</td>
+<td align="center" style="">Rp.' . number_format($penjualan['jumlah']) . '</td>
+<td align="center" style="">' . $penjualan['diskon'] . ' %</td>
+<td align="center" style="">Rp.' . number_format($penjualan['nilai_diskon']) . '</td>
+<td align="center" style="">Rp.' . number_format($penjualan['royalti']) . '</td>
+<td align="center" style="">Rp.' . number_format($penjualan['jumlah_biaya_lain']) . '</td>
+<td align="center" style="">Rp.' . number_format($penjualan['bersih']) . '</td>
+<td align="center" style=""> </td>
+</tr>';
+
+$bagi_hasil += $penjualan['royalti'];
+$bersih     += $penjualan['bersih'];
+$ongkir     += $penjualan['jumlah_biaya_lain'];
+}
+
+$html .="<tr>"
+      ."<td colspan='10'>Total</td>"
+      ."<td colspan='1'>Rp. ". number_format($bagi_hasil)."</td>"
+      ."<td colspan='1'>Rp. ". number_format($ongkir)."</td>"
+      ."<td colspan='2'>Rp. ". number_format($bersih)."</td>"
+      ."</tr>";
+
+
+$html .="</table>";
+
+$dompdf = new Dompdf(array('enable_remote'=>true));
+$dompdf->loadHtml($html);
+$dompdf->setPaper('F4', 'landscape');
+$dompdf->render();
+$dompdf->stream('INV.pdf',array('Attachment'=>0));
+
+
+    
+}
+
+public function kirim_email(){
+
+if($this->input->post('email')){
+$input = $this->input->post();
+
+$config['protocol'] = 'sendmail';
+$config['mailpath'] = '/usr/sbin/sendmail';
+$config['charset']  = 'utf-8';
+$config['mailtype'] = 'html';
+$config['wordwrap'] = TRUE;
+
+$this->load->library('email',$config);
+
+$this->email->set_newline("\r\n");
+$this->email->set_mailtype("html");
+$this->email->from('admin@guepedia.com', 'Admin Guepedia.com');
+$this->email->to($input['email']);
+$this->email->subject($input['subjek']);
+
+$html = $input['data_isi_email'];
+
+$this->email->message($html);
+
+if (!$this->email->send()){    
+echo $this->email->print_debugger();
+}else{
+$data = array(
+'nama'      =>$input['nama'],
+'email'     =>$input['email'],
+'id_account'=>base64_decode($input['id_account']),
+'isi_email' =>$input['data_isi_email'],
+'subjek'    =>$input['subjek'],
+    
+);
+$this->db->insert('riwayat_email',$data);
+
+echo "berhasil";    
+}    
+}else{
+redirect(404);    
+}
+    
+}
 
 }
